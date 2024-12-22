@@ -43,6 +43,18 @@ Retrieve the head and syllabus of a specific module for a given course.
 {
     "CourseCode": "CS101",
     "Module": 1,
-    "Head": "Introduction to Python",
-    "Syllabus": "Basics of Python, variables, data types, and more."
+    "SubjectName": "Programming In Python",
+    "Heading": "Introduction to Python",
+    "Syllabus": "The os and sys modules, NumPy - Basics, Creating arrays, Arithmetic, Slicing, Matrix Operations, Random numbers. Plotting and visualization. Matplotlib - Basic plot, Ticks, Labels, and Legends. Working with CSV files. – Pandas - Reading, Manipulating, and Processing Data. Introduction to Micro services using Flask.",
+    "Topics": [
+        "The os and sys modules, NumPy - Basics, Creating arrays, Arithmetic, Slicing, Matrix Operations, Random numbers",
+        "Plotting and visualization",
+        "Matplotlib - Basic plot, Ticks, Labels, and Legends",
+        "Working with CSV files",
+        "Pandas - Reading, Manipulating, and Processing Data",
+        "Introduction to Micro services using Flask"
+    ]
+
 }
+
+
