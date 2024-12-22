@@ -1,0 +1,16 @@
+1. GET /api/getTopicsSyllabus/CSL362/1/
+{
+"CourseCode": "CSL362",
+"Module": 5,
+"SubjectName": "Programming In Python",
+"Heading": "Data Processing",
+"Syllabus": "The os and sys modules, NumPy - Basics, Creating arrays, Arithmetic, Slicing, Matrix Operations, Random numbers. Plotting and visualization. Matplotlib - Basic plot, Ticks, Labels, and Legends. Working with CSV files. – Pandas - Reading, Manipulating, and Processing Data. Introduction to Micro services using Flask.",
+"Topics": [
+"The os and sys modules, NumPy - Basics, Creating arrays, Arithmetic, Slicing, Matrix Operations, Random numbers",
+"Plotting and visualization",
+"Matplotlib - Basic plot, Ticks, Labels, and Legends",
+"Working with CSV files",
+"Pandas - Reading, Manipulating, and Processing Data",
+"Introduction to Micro services using Flask"
+]
+}
