@@ -58,3 +58,34 @@ Retrieve the head and syllabus of a specific module for a given course.
 }
 
 
+## **2. POST /api/QuestionsToTopic/` **
+
+---
+
+## **Request Format**
+
+### **Headers**
+- `Content-Type: application/json`
+
+### **Body**
+The request body should contain the following fields:
+
+| Field         | Type   | Description                                            |
+|---------------|--------|--------------------------------------------------------|
+| `course_code` | String | The course code for which the questions are provided.  |
+| `questions`   | Array  | A list of questions to map to topics.                  |
+| `module_info` | Array  | A list of module numbers corresponding to each question. |
+| `marks_info`  | Array  | A list of marks corresponding to each question.        |
+
+#### Example Request Body
+```json
+{
+  "course_code": "CST205",
+  "questions": [
+    "What is polymorphism in OOP?",
+    "Explain the concept of inheritance with an example."
+  ],
+  "module_info": [1, 1],
+  "marks_info": [5, 10]
+}
+

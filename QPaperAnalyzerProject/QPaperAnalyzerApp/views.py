@@ -9,6 +9,7 @@ from .models import Course
 import re
 import json
 import pandas as pd
+from transformers import pipeline
 
 class QPaperModule:
     def topicsFromSyllabus(syllabus):
@@ -86,6 +87,14 @@ class QPaperModule:
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
 
+    def ClassifyQuestion(question, topics):
+        try:
+            classifier = pipeline("zero-shot-classification", model="./bart-large-mnli")
+        except:
+            classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+        result = classifier(question, topics)
+        return result["labels"][0]
+
 def dataEntryFunc(request):
     QPaperModule.process_csv_rows("dataEntry/Syllabus_Dataset.csv")
     return HttpResponse("Sucess")
@@ -127,30 +136,33 @@ def API_question_to_topic(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-
             course_code = data.get('course_code')
             questions = data.get('questions', [])
             module_info = data.get('module_info', [])
             marks_info = data.get('marks_info', [])
+
+            resultArray = []
 
             for i in range(len(questions)):
                 question = questions[i]
                 module = module_info[i]
                 mark = marks_info[i]
                 api_response = API_get_topics_syllabus(request, course_code, module)
-                
                 if isinstance(api_response, JsonResponse):
                     api_response_content = api_response.content.decode('utf-8')
                     api_response = json.loads(api_response_content)
                     data = api_response["Topics"]
-                
                 topics = data
+
+                resultTopic = QPaperModule.ClassifyQuestion(question, topics)
+                resultArray.append(resultTopic)
+                print(resultTopic)
 
                 # genAI(question, topics)
             return JsonResponse({
                 'status': 'success',
                 'message': 'Data received successfully',
-                
+                'result_topics': resultArray,
             }, status=200)
 
         except json.JSONDecodeError:
