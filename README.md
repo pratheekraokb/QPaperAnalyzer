@@ -39,7 +39,8 @@ Retrieve the head and syllabus of a specific module for a given course.
 - **Status Code**: `200 OK`
 - **Format**: JSON
 - **Example**:
-```json
+
+
 {
     "CourseCode": "CS101",
     "Module": 1,
@@ -54,7 +55,6 @@ Retrieve the head and syllabus of a specific module for a given course.
         "Pandas - Reading, Manipulating, and Processing Data",
         "Introduction to Micro services using Flask"
     ]
-
 }
 
 
@@ -88,4 +88,5 @@ The request body should contain the following fields:
   "module_info": [1, 1],
   "marks_info": [5, 10]
 }
+
 
