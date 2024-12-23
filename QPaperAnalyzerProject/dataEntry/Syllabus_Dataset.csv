@@ -1,0 +1,732 @@
+Semester,Sl No,Course_Code,Subject Name,Module1 Heading,Module1 Syllabus,Module2 Heading,Module2 Syllabus,Module3 Heading,Module3 Syllabus,Module4 Heading,Module4 Syllabus,Module5 Heading,Module5 Syllabus,Module6 heading,Module6 syllabus
+S6,1,CSL 362,Programming In Python,Programming Environment and Python Basics,"Getting started with Python programming – Interactive shell, IDLE, iPython Notebooks, Detecting and correcting syntax errors, How Python works. The software development process – A case study. Basic coding skills – strings, assignment, and comments, Numeric data types and character sets, Expressions, Using inbuilt functions and modules. Control statements – Iteration with for/while loop, Formatting text for output, A case study, Selection structure (if-else, switch-case), Conditional iteration with while, A case study, Testing control statements, Lazy evaluation.",Building Python Programs,"Strings and text files – Accessing characters, substrings, Data encryption, Strings and number system, String methods, Text files, A case study on text analysis. Design with Functions – Functions as Abstraction Mechanisms, Problem-solving with top-down design, Design with recursive functions, Managing a program’s namespace, Higher-Order Functions. Lists - Basic list Operations and functions, List of lists, Slicing, Searching and sorting list, List comprehension. Work with tuples. Sets. Work with dates and times, A case study with lists. Dictionaries - Dictionary functions, dictionary literals, adding and removing keys, accessing and replacing values, traversing dictionaries, reverse lookup. Case Study – Data Structure Selection. 
+",Graphics,"Graphics – Terminal-based programs, Simple Graphics using Turtle, Operations, 2D Shapes, Colors and RGB Systems, A case study. Image Processing – Basic image processing with inbuilt functions. Graphical User Interfaces – Event-driven programming, Coding simple GUI-based programs : Windows, Labels, Displaying images, Input text entry, Popup dialog boxes, Command buttons, A case study. ",Object Oriented Programming,"Design with classes - Objects and Classes, Methods, Instance variables, Constructor, Accessor and Mutator, Data-Modeling Examples, Structuring classes with inheritance and polymorphism. Abstract classes, Interfaces, Exceptions - Handle a single exception, handle multiple exceptions.  ",Data Processing,"The os and sys modules, NumPy - Basics, Creating arrays, Arithmetic, Slicing, Matrix Operations, Random numbers. Plotting and visualization. Matplotlib - Basic plot, Ticks, Labels, and Legends. Working with CSV files. – Pandas - Reading, Manipulating, and Processing Data. Introduction to Micro services using Flask.",,
+S6,2,CST 304,Computer Graphics and Image Processing,Basics of Computer graphics and Algorithms,"Basics of Computer Graphics and its applications. Video Display devices- Refresh Cathode Ray Tubes, Random Scan Displays and systems, Raster scan displays and systems. Line drawing algorithms- DDA, Bresenham’s algorithm. Circle drawing algorithms- Midpoint Circle generation algorithm, Bresenham’s algorithm.",Filled Area Primitives and transformations,"Filled Area Primitives- Scan line polygon filling, Boundary filling and flood filling. Two dimensional transformations-Translation, Rotation, Scaling, Reflection and Shearing, Composite transformations, Matrix representations and homogeneous coordinates. Basic 3D transformations. ",Clipping and Projections,"Window to viewport transformation. Cohen Sutherland Line clipping algorithm. Sutherland Hodgeman Polygon clipping algorithm. Three dimensional viewing pipeline. Projections- Parallel and Perspective projections. Visible surface detection algorithms- Depth buffer algorithm, Scan line algorithm.",Fundamentals of Digital Image Processing,"Introduction to Image processing and applications. Image as 2D data. Image representation in Gray scale, Binary and Colour images. Fundamental steps in image processing. Components of image processing system. Coordinate conventions. Sampling and quantization. Spatial and Gray Level Resolution. Basic relationship between pixels– neighbourhood, adjacency, connectivity. Fundamentals of spatial domain-convolution operation.",Image Enhancement in Spatial Domain and Image Segmentation,"Basic gray level transformation functions - Log transformations, Power-Law transformations, Contrast stretching. Histogram equalization. Basics of spatial filtering - Smoothing spatial filterLinear and nonlinear filters, and Sharpening spatial filters-Gradient and Laplacian. Fundamentals of Image Segmentation. Thresholding - Basics of Intensity thresholding and Global Thresholding. Region based Approach - Region Growing, Region Splitting and Merging. Edge Detection - Edge Operators- Sobel and Prewitt.",,
+S6,3,CST 306,Algorithm Analysis And  Design,Introduction to Algorithm Analysis,"Characteristics of Algorithms, Criteria for Analysing Algorithms, Time and Space Complexity - Best, Worst, and Average Case Complexities, Asymptotic Notations - Big-Oh (O), Big- Omega (Ω), Big-Theta (Θ), Little-oh (o) and Little- Omega (ω) and their properties. Classifying functions by their asymptotic growth rate, Time and Space Complexity Calculation of simple algorithms. Analysis of Recursive Algorithms: Recurrence Equations, Solving Recurrence Equations – Iteration Method, Recursion Tree Method, Substitution method, and Master’s Theorem (Proof not required).",Advanced-Data Structures and Graph Algorithms,"Self Balancing Tree - AVL Trees (Insertion and deletion operations with all rotations in detail, algorithms not expected); Disjoint Sets- Disjoint set operations, Union and find algorithms. DFS and BFS traversals - Analysis, Strongly Connected Components of a Directed graph, Topological Sorting.  ",Divide & Conquer and Greedy Strategy,"The Control Abstraction of Divide and Conquer- 2-way Merge sort, Strassen’s Algorithm for Matrix Multiplication-Analysis. The Control Abstraction of Greedy Strategy- Fractional Knapsack Problem, Minimum Cost Spanning Tree Computation- Kruskal’s Algorithms ,Analysis, Single Source Shortest Path Algorithm - Dijkstra’s Algorithm ,Analysis.","Dynamic Programming, Back Tracking and Branch & Bound","The Control Abstraction- The Optimality Principle- Matrix Chain Multiplication-Analysis, All Pairs Shortest Path Algorithm - Floyd-Warshall Algorithm-Analysis. The Control Abstraction of Back Tracking – The N Queen’s Problem. Branch and Bound Algorithm for Travelling Salesman Problem.",Introduction to Complexity Theory,"Tractable and Intractable Problems, Complexity Classes – P, NP, NP- Hard and NP-Complete Classes- NP Completeness proof of Clique Problem and Vertex Cover Problem- Approximation algorithms- Bin Packing, Graph Coloring. Randomized Algorithms (Definitions of Monte Carlo and Las Vegas algorithms), Randomized version of Quick Sort algorithm with analysis.",,
+S6,4,CST302,Compiler design,Introduction to compilers and lexical analysis,"Analysis of the source program - Analysis and synthesis phases, Phases of a compiler. Compiler 
+writing tools. Bootstrapping. Lexical Analysis - Role of Lexical Analyser, Input Buffering, 
+Specification of Tokens, Recognition of Tokens.",Introduction to Syntax Analysis,"Role of the Syntax Analyser – Syntax error handling. Review of Context Free Grammars - 
+Derivation and Parse Trees, Eliminating Ambiguity. Basic parsing approaches - Eliminating left 
+recursion, left factoring. Top-Down Parsing - Recursive Descent parsing, Predictive Parsing,
+LL(1) Grammars.
+Module - 3 (Bottom-Up Parsing)
+Handle Pruning. Shift Reduce parsing. Operator precedence parsing (Concept only). LR p",Bottom-Up Parsing,"Handle Pruning. Shift Reduce parsing. Operator precedence parsing (Concept only). LR parsing - 
+Constructing SLR, LALR and canonical LR parsing tables.","Syntax directed translation and Intermediate code generation
+","Syntax directed translation - Syntax directed definitions, S-attributed definitions, L-attributed 
+definitions, Bottom-up evaluation of S-attributed definitions. Run-Time Environments - Source 
+Language issues, Storage organization, Storage-allocation strategies. Intermediate Code 
+Generation - Intermediate languages, Graphical representations, Three-Address code, Quadruples, 
+Triples. ",Code Optimization and Generation,"Code Optimization - Principal sources of optimization, Machine dependent and machine 
+independent optimizations, Local and global optimizations. Code generation - Issues in the design 
+of a code generator, Target Language, A simple code generator.",,
+S6,5,CST312,Foundations of Machine Learning,Linear algebra,"Systems of Linear Equations – Matrices, Solving Systems of Linear Equations. Vector Spaces- Linear Independence, Basis and Rank, Linear Mappings.",Linear algebra,"Norms - Inner Products, Lengths and Distances, Angles and Orthogonality. OrthonormalBasis, Orthogonal Complement, Orthogonal Projections. Matrix Decompositions -Eigenvalues and Eigenvectors, Eigen decomposition and Diagonalization.",Probability and distribution,"Probability Space - Sample Spaces, Probability Measures, Computing Probabilities, 
+Conditional Probability, Baye’s Rule, Independence. Random Variables - Discrete Random 
+Variables (Bernoulli Random Variables, Binomial Distribution, Geometric and Poisson 
+Distribution, Continuous Random Variables (Exponential Density, Gamma Density, Normal 
+Distribution, Beta Density)",Random variables,"Module 4 (RANDOM VARIABLES) 
+Functions of a Random Variable. Joint Distributions - Independent Random Variables, 
+Conditional Distributions, Functions of Jointly Distributed Random Variables. 
+Expected Values - Expected Value of a Random Variable, Expectations of Functions of 
+Random Variables, Expectations of Linear Combinations of Random Variables, Variance and 
+Standard Deviation, Covariance and Correlation, Conditional Expectation ",Limit theories,"Moment-Generating Function. Limit Theorems(Proof not expected) - Law of Large Numbers, 
+Convergence in Distribution and the Central Limit Theorem. Distributions derived from the 
+Normal Distribution - Chi-square, t, and F Distributions, Sample Mean and the Sample 
+Variance.",,
+S6,6,CST332,Foundations of security in computing,Modular Arithmetic,"Integer arithmetic - Integer division, Divisibility, Greatest Common Divisor (GCD), Euclid's algorithm for GCD, Extended Euclid’s algorithm, Linear Diophantine Equations. Modular  arithmetic - Operations, Properties. Algebraic structures - Groups, Rings, Fields, Finite fields, 
+GF(p), GF (2n)
+",Prime Numbers and Factorization,"Prime numbers - Prime numbers and prime-power factorization, Fermat and Mersenne primes, 
+Fermat’s theorem, Applications, Euler’s theorem, Euler’s totient function, Applications. 
+Primality testing – Deterministic algorithms and Probabilistic algorithms. Factorization - 
+Fermat’s factorization, Pollard p-1 method","Linear Congruence, Primitive Roots and Elliptic Curve Arithmetic","Linear congruence - Simultaneous linear congruence, Chinese Remainder Theorem (CRT). 
+Congruence with a prime - Power modulus, Arithmetic modulo p, Pseudoprimes and Carmichael 
+numbers, Solving congruence modulo prime powers. Primitive roots - Existence of primitive 
+roots for primes, Discrete logarithms. Elliptic curve arithmetic – Prime curves, Binary curves, 
+Addition of two points, Multiplication of a point by a constant.",Computer and Program Security,"Introduction to computer security – Threats, Vulnerabilities, Controls. Browser attack types, Web 
+attacks targeting users, Email attack types. Introduction to program security - Non-malicious 
+programming oversights, Malware.",Operating System and Database Security,"Operating system security – Security in operating system, Security in design of operating system. 
+Database security – Security requirements of databases, Reliability and integrity, Database 
+disclosure.",,
+S5,7,CST301,Formal languages and automata theory,Introduction to Formal Language Theory and Regular Languages,"Introduction to formal language theory– Alphabets, Strings, Concatenation of strings, 
+Languages.
+Regular Languages - Deterministic Finite State Automata (DFA) (Proof of correctness of 
+construction not required), Nondeterministic Finite State Automata (NFA), Equivalence of 
+DFA and NFA, Regular Grammar (RG), Equivalence of RGs and DFA. ",More on Regular Languages,"Regular Expression (RE), Equivalence of REs and DFA, Homomorphisms, Necessary 
+conditions for regular languages, Closure Properties of Regular Languages, DFA state 
+minimization (No proof required). ",Myhill-Nerode Relations and Context Free Grammars,"Myhill-Nerode Relations (MNR)- MNR for regular languages, Myhill-Nerode Theorem (MNT) 
+(No proof required), Applications of MNT. 
+Context Free Grammar (CFG)- CFG representation of Context Free Languages (proof of 
+correctness is required), derivation trees and ambiguity, Normal forms for CFGs. 
+",More on Context-Free Languages,"Nondeterministic Pushdown Automata (PDA), Deterministic Pushdown Automata (DPDA), 
+Equivalence of PDAs and CFGs (Proof not required), Pumping Lemma for Context-Free 
+Languages (Proof not required), Closure Properties of Context Free Languages.","Context Sensitive Languages, Turing Machines","Context Sensitive Languages - Context Sensitive Grammar (CSG), Linear Bounded Automata.
+Turing Machines - Standard Turing Machine, Robustness of Turing Machine, Universal Turing 
+Machine, Halting Problem, Recursive and Recursively Enumerable Languages. 
+Chomsky classification of formal languages.",,
+S5,8,CST303,Computer Networks,Introduction and Physical Layer,"Introduction – Uses of computer networks, Network hardware, Network software. Reference 
+models – The OSI reference model, The TCP/IP reference model, Comparison of OSI and 
+TCP/IP reference models. 
+Physical Layer – Modes of communication, Physical topologies, Signal encoding, Repeaters and 
+hub, Transmission media overview. Performance indicators – Bandwidth, Throughput, Latency, 
+Queuing time, Bandwidth–Delay product. ",Data Link Layer,"Data link layer - Data link layer design issues, Error detection and correction, Sliding window 
+protocols, High-Level Data Link Control(HDLC)protocol. Medium Access Control (MAC) 
+sublayer –Channel allocation problem, Multiple access protocols, Ethernet, Wireless LANs - 
+802.11, Bridges & switches - Bridges from 802.x to 802.y, Repeaters, Hubs, Bridges, Switches, 
+Routers and Gateways. 
+Module - 3 (Network Layer)
+Network layer design issues. Routing algorithms - The Optimality Principle, Shortest path 
+routing, Flooding, Distance Vector Routing, Link State Routing, Multicast routing, Routing for 
+mobile hosts. Congestion control algorithms. Quality of Service (QoS) - requirements,
+Techniques for achieving good QoS. 
+Module - 4 (Network Layer in the Internet)
+IP protocol, IP addresses, Internet Control Message Protocol (ICMP), Address Resolution 
+Protocol (ARP), Reverse Address Resolution Protocol (RARP), Bootstrap Protocol (BOOTP), 
+Dynamic Host Configuration Protocol (DHCP). Open Shortest Path First(OSPF) Protocol, 
+Border Gateway Protocol (BGP), Internet multicasting, IPv6, ICMPv6. 
+Module – 5 (Transport Layer and Application Layer) 
+Transport service – Services provided to the upper layers, Transport service primitives. User 
+Datagram Protocol (UDP). Transmission Control Protocol (TCP) – Overview of TCP, TCP 
+segment header, Connection establishment &release, Connection management modeling, TCP 
+retransmission policy, TCP congestion control. 
+Application Layer –File Transfer Protocol (FTP), Domain Name System (DNS), Electronic 
+mail, Multipurpose Internet Mail Extension (MIME), Simple Network Management Protocol
+",Network Layer,"Network layer design issues. Routing algorithms - The Optimality Principle, Shortest path 
+routing, Flooding, Distance Vector Routing, Link State Routing, Multicast routing, Routing for 
+mobile hosts. Congestion control algorithms. Quality of Service (QoS) - requirements,
+Techniques for achieving good QoS. 
+",Network Layer in the Internet,"IP protocol, IP addresses, Internet Control Message Protocol (ICMP), Address Resolution 
+Protocol (ARP), Reverse Address Resolution Protocol (RARP), Bootstrap Protocol (BOOTP), 
+Dynamic Host Configuration Protocol (DHCP). Open Shortest Path First(OSPF) Protocol, 
+Border Gateway Protocol (BGP), Internet multicasting, IPv6, ICMPv6. ",Transport Layer and Application Layer,"
+Transport service – Services provided to the upper layers, Transport service primitives. User 
+Datagram Protocol (UDP). Transmission Control Protocol (TCP) – Overview of TCP, TCP 
+segment header, Connection establishment &release, Connection management modeling, TCP 
+retransmission policy, TCP congestion control. 
+Application Layer –File Transfer Protocol (FTP), Domain Name System (DNS), Electronic 
+mail, Multipurpose Internet Mail Extension (MIME), Simple Network Management Protocol  (SNMP), World Wide Web(WWW) – Architectural overview",,
+S5,9,CST305,System software,Introduction,"System Software vs Application Software, Different System Software– Assembler, Linker, 
+Loader, Macro Processor, Text Editor, Debugger, Device Driver, Compiler, Interpreter, 
+Operating System (Basic Concepts only). SIC & SIC/XE Architecture, Addressing modes, SIC & 
+SIC/XE Instruction set , Assembler Directives.",Assembly language programming and Assemblers,"SIC/XE Programming, Basic Functions of Assembler, Assembler Output Format – Header, Text 
+and End Records. Assembler Data Structures, Two Pass Assembler Algorithm, Hand Assembly 
+of SIC/XE Programs.",Assembler Features and Design Options,"Machine Dependent Assembler Features-Instruction Format and Addressing Modes, Program 
+Relocation. Machine Independent Assembler Features –Literals, Symbol Defining Statements, 
+Expressions, Program Blocks, Control Sections and Program Linking. Assembler Design 
+Options- One Pass Assembler, Multi Pass Assembler. Implementation Example-MASM 
+Assembler.
+",Loader and Linker,"
+Basic Loader Functions - Design of Absolute Loader, Simple Bootstrap Loader. Machine 
+Dependent Loader Features- Relocation, Program Linking, Algorithm and Data Structures of 
+Two Pass Linking Loader. Machine Independent Loader Features -Automatic Library Search, 
+Loader Options. Loader Design Options.
+","Macro Preprocessor ,Device driver, Text Editor and Debuggers ","
+Macro Preprocessor - Macro Instruction Definition and Expansion, One pass Macro processor 
+Algorithm and data structures, Machine Independent Macro Processor Features, Macro processor 
+design options. Device drivers - Anatomy of a device driver, Character and block device drivers, 
+General design of device drivers. Text Editors- Overview of Editing, User Interface, Editor Structure. Debuggers - Debugging Functions and Capabilities, Relationship with other parts of 
+the system, Debugging Methods- By Induction, Deduction and Backtracking.
+",,
+S5,10,CST307,Microprocessor  and Microcontrollers,Evolution of microprocessors,"8085 microprocessor (-Basic Architecture only). 8086 microprocessor – Architecture and 
+signals, Physical Memory organization, Minimum and maximum mode of 8086 system 
+and timings. Comparison of 8086 and 8088.Machine language Instruction format. ",Addressing modes and instructions,"Addressing Modes of 8086. Instruction set – data copy /transfer instructions, arithmetic 
+instructions, logical instructions, string manipulation instructions, branch instructions, 
+unconditional and conditional branch instruction, flag manipulation and processor control 
+instructions. Assembler Directives and operators. Assembly Language Programming with 
+8086. ",Stack and interrupts,"Stack structure of 8086, programming using stack- Interrupts - Types of Interrupts and 
+Interrupt Service Routine- Handling Interrupts in 8086- Interrupt programming.Programmable Interrupt Controller - 8259, Architecture (Just mention the control word, no 
+need to memorize the control word)- Interfacing Memory with 8086.
+",Interfacing chips,"Programmable Peripheral Input/output port 8255 - Architecture and modes of operation-
+Programmable interval timer 8254-Architecture and modes of operation- DMA controller 
+8257 Architecture (Just mention the control word, no need to memorize the control word 
+of 8254 and 8257) 
+",Microcontrollers,"
+8051 Architecture- Register Organization- Memory and I/O addressing- Interrupts and 
+Stack- 8051 Addressing Modes- Instruction Set- data transfer instructions, arithmetic 
+instructions, logical instructions, Boolean instructions, control transfer instructions-
+Simple programs.",,
+S5,11,CST309,Management of software systems,Introduction to Software Engineering,"Introduction to Software Engineering - Professional software development, Software engineering 
+ethics. Software process models - The waterfall model, Incremental development. Process 
+activities - Software specification, Software design and implementation, Software validation, 
+Software evolution. Coping with change - Prototyping, Incremental delivery, Boehm's Spiral 
+Model. Agile software development - Agile methods, agile manifesto - values and principles. 
+Agile development techniques, Agile Project Management. Case studies : An insulin pump 
+control system. Mentcare - a patient information system for mental health care.", Requirement Analysis and Design,"Functional and non-functional requirements, Requirements engineering processes. Requirements 
+elicitation, Requirements validation, Requirements change, Traceability Matrix. Developing use 
+cases, Software Requirements Specification Template, Personas, Scenarios, User stories, Feature 
+identification. Design concepts - Design within the context of software engineering, Design 
+Process, Design concepts, Design Model. Architectural Design - Software Architecture, 
+Architectural Styles, Architectural considerations, Architectural Design Component level design 
+- What is a component?, Designing Class-Based Components, Conducting Component level 
+design, Component level design for web-apps. Template of a Design Document as per “IEEE Std 
+1016-2009 IEEE Standard for Information Technology Systems Design Software  Design Descriptions"".Case study:The Ariane 5 launcher failure",Implementation and Testing,"Object-oriented design using the UML, Design patterns, Implementation issues, Open-source 
+development - Open-source licensing - GPL, LGPL, BSD. Review Techniques - Cost impact of 
+Software Defects, Code review and statistical analysis. Informal Review, Formal Technical 
+Reviews, Post-mortem evaluations. Software testing strategies - Unit Testing, Integration 
+Testing, Validation testing, System testing, Debugging, White box testing, Path testing, Control 
+Structure testing, Black box testing, Testing Documentation and Help facilities. Test automation, 
+Test-driven development, Security testing. Overview of DevOps and Code Management - Code 
+management, DevOps automation, Continuous Integration, Delivery, and Deployment 
+(CI/CD/CD). Software Evolution - Evolution processes, Software maintenance.
+
+",Software Project Management,"
+Software Project Management - Risk management, Managing people, Teamwork. Project 
+Planning, Software pricing, Plan-driven development, Project scheduling, Agile planning. 
+Estimation techniques, COCOMO cost modeling. Configuration management, Version 
+management, System building, Change management, Release management, Agile software 
+management - SCRUM framework. Kanban methodology and lean approaches. ","Software Quality, Process Improvement and Technology trends ","
+Software Quality, Software Quality Dilemma, Achieving Software Quality Elements of 
+Software Quality Assurance, SQA Tasks , Software measurement and metrics. Software Process 
+Improvement(SPI), SPI Process CMMI process improvement framework, ISO 9001:2000 for 
+Software. Cloud-based Software - Virtualisation and containers, Everything as a service(IaaS, 
+PaaS), Software as a service. Microservices Architecture - Microservices, Microservices 
+architecture, Microservice deploymen",,
+S5,12,MCN301,Disaster Management,Module 1,"Systems of earth 
+Lithosphere- composition, rocks, soils; Atmosphere-layers, ozone layer, greenhouse effect, 
+weather, cyclones, atmospheric circulations, Indian Monsoon; hydrosphere- Oceans, inland water 
+bodies; biosphere 
+Definition and meaning of key terms in Disaster Risk Reduction and Management- disaster, 
+hazard, exposure, vulnerability, risk, risk assessment, risk mapping, capacity, resilience, disaster 
+risk reduction, disaster risk management, early warning systems, disaster preparedness, disaster 
+prevention, disaster mitigation, disaster response, damage assessment, crisis counselling, needs 
+assessment. 
+",Module 2 ,"
+Hazard types and hazard mapping; Vulnerability types and their assessment- physical, social, 
+economic and environmental vulnerability. 
+Disaster risk assessment –approaches, procedures ","
+Module 3 ","
+Disaster risk management -Core elements and phases of Disaster Risk Management 
+Measures for Disaster Risk Reduction – prevention, mitigation, and preparedness. 
+Disaster response- objectives, requirements; response planning; types of responses. 
+Relief; international relief organizations. ",Module 4 ,"
+
+Participatory stakeholder engagement; Disaster communication- importance, methods, barriers; 
+Crisis counselling 
+Capacity Building: Concept – Structural and Non-structural Measures, Capacity Assessment; 
+Strengthening Capacity for Reducing Risk",Module 5 ,"
+Common disaster types in India; Legislations in India on disaster management; National disaster 
+management policy; Institutional arrangements for disaster management in India. 
+The Sendai Framework for Disaster Risk Reduction- targets, priorities for action, guiding 
+principles",,
+S1,13,MAT101,Linear Alebra and Calculus,Linear algebra,"
+
+Systems of linear equations, Solution by Gauss elimination, row echelon form and rank of a matrix, 
+fundamental theorem for linear systems (homogeneous and non-homogeneous, without proof), 
+Eigen values and eigen vectors. Diagonaliztion of matrices, orthogonal transformation, quadratic 
+forms and their canonical forms. 
+
+
+
+",multivariable calculus-Differentiation,"Concept of limit and continuity of functions of two variables, partial derivatives, Differentials, Local 
+Linear approximations, chain rule, total derivative, Relative maxima and minima, Absolute maxima 
+and minima on closed and bounded set. ",multivariable calculus-Integration,"Double integrals (Cartesian), reversing the order of integration, Change of coordinates (Cartesian to 
+polar), finding areas and volume using double integrals, mass and centre of gravity of 
+inhomogeneous laminas using double integral. Triple integrals, volume calculated as triple integral, 
+triple integral in cylindrical and spherical coordinates (computations involving spheres, cylinders).",sequences and series,"
+Convergence of sequences and series, convergence of geometric series and p-series(without proof), 
+test of convergence (comparison, ratio and root tests without proof); Alternating series and Leibnitz 
+test, absolute and conditional convergence. 
+
+Taylor series (without proof, assuming the possibility of power series expansion in appropriate 
+domains), Binomial series and series representation of exponential, trigonometric, logarithmic 
+functions (without proofs of convergence); Fourier series, Euler formulas, Convergence of Fourier 
+series (without proof), half range sine and cosine series, Parseval’s theorem (without proof).",Series representation of functions,"Taylor series (without proof, assuming the possibility of power series expansion in appropriate 
+domains), Binomial series and series representation of exponential, trigonometric, logarithmic 
+functions (without proofs of convergence); Fourier series, Euler formulas, Convergence of Fourier 
+series (without proof), half range sine and cosine series, Parseval’s theorem (without proof).",,
+S1,15,CYT100,Engineering Chemistry,Electrochemistry and Corrosion ,"
+Introduction - Differences between electrolytic and electrochemical cells - Daniel cell - redox 
+reactions - cell representation. Different types of electrodes (brief) - Reference electrodes - SHE - 
+Calomel electrode - Glass Electrode - Construction and Working. Single electrode potential - 
+definition - Helmholtz electrical double layer -Determination of E0
+ using calomel 
+electrode.Determination of pH using glass electrode.Electrochemical series and its applications. Free 
+energy and EMF - Nernst Equation - Derivation - single electrode and cell (Numericals) -Application - 
+Variation of emf with temperature. Potentiometric titration - Introduction -Redox titration 
+only.Lithiumion cell - construction and working.Conductivity- Measurement of conductivity of a 
+solution (Numericals). 
+Corrosion-Electrochemicalcorrosion – mechanism. Galvanic series- cathodic protection - electroless 
+plating –Copper and Nickel plating.",Spectroscopic Techniques and Applications ,"Introduction- Types of spectrum - electromagnetic spectrum - molecular energy levels - Beer 
+Lambert’s law (Numericals). UV-Visible Spectroscopy – Principle - Types of electronic transitions - 
+Energy level diagram of ethane, butadiene, benzene and hexatriene. Instrumentation of UV-Visible 
+spectrometer and applications.IR-Spectroscopy – Principle - Number of vibrational modes -
+Vibrational energy states of a diatomic molecule and -Determination of force constant of diatomic 
+molecule (Numericals) –Applications. 1H NMR spectroscopy – Principle - Relation between field 
+strength and frequency - chemical shift - spin-spin splitting (spectral problems ) - coupling constant 
+(definition) - applications of NMR- including MRI (brief).
+
+
+Thermal analysis –TGA- Principle, instrumentation (block diagram) and applications – TGA of 
+CaC2O4.H2O and polymers. DTA-Principle, instrumentation (block diagram) and applications - DTA of 
+CaC2O4.H2O. Chromatographic methods - Basic principles and applications of column and TLC-
+Retention factor. GC and HPLC-Principle, instrumentation (block diagram) - retention time and 
+applications. 
+Nanomaterials - Definition - Classification - Chemical methods of preparation - Hydrolysis and 
+Reduction - Applications of nanomaterials - Surface characterisation -SEM – Principle and 
+instrumentation (block diagram).
+",Instrumental Methods and Nanomaterials ,"Thermal analysis –TGA- Principle, instrumentation (block diagram) and applications – TGA of 
+CaC2O4.H2O and polymers. DTA-Principle, instrumentation (block diagram) and applications - DTA of 
+CaC2O4.H2O. Chromatographic methods - Basic principles and applications of column and TLC-
+Retention factor. GC and HPLC-Principle, instrumentation (block diagram) - retention time and 
+applications. 
+Nanomaterials - Definition - Classification - Chemical methods of preparation - Hydrolysis and 
+Reduction - Applications of nanomaterials - Surface characterisation -SEM – Principle and 
+instrumentation (block diagram).",Stereochemistry and Polymer Chemistry,"
+Isomerism-Structural, chain, position, functional, tautomerism and matamerism - Definition with 
+examples - Representation of 3D structures-Newman, Sawhorse, Wedge and Fischer projection of 
+substituted methane and ethane. Stereoisomerism - Geometrical isomerism in double bonds and 
+cycloalkanes (cis-trans and E-Z notations). R-S Notation – Rules and examples - Optical isomerism, 
+Chirality, Enantiomers and Diastereoisomers-Definition with examples.Conformational analysis of 
+ethane, butane, cyclohexane, mono and di methyl substituted cyclohexane. 
+Copolymers - Definition - Types - Random, Alternating, Block and Graft copolymers - ABS - 
+preparation, properties and applications.Kevlar-preparation, properties and applications.Conducting 
+polymers - Doping -Polyaniline and Polypyrrole - preparation properties and applications. OLED - 
+Principle, construction and advantages.
+
+
+",Water Chemistry and Sewage Water Treatment,"Water characteristics - Hardness - Types of hardness- Temporary and Permanent - Disadvantages of 
+hard water -Units of hardness- ppm and mg/L -Degree of hardness (Numericals) - Estimation of hardness-EDTA method (Numericals). Water softening methods-Ion exchange process-Principle, 
+procedure and advantages. Reverse osmosis – principle, process and advantages. Municipal water 
+treatment (brief) - Disinfection methods - chlorination, ozone andUV irradiation. 
+Dissolved oxygen (DO) -Estimation (only brief procedure-Winkler’s method), BOD and COD-
+definition, estimation (only brief procedure) and significance (Numericals). Sewage water treatment 
+- Primary, Secondary and Tertiary - Flow diagram -Trickling filter and UASB process.",,
+S1,16,EST110,Engineering Graphics,Module 1,"Introduction : Relevance of technical drawing in engineering field. Types of lines, Dimensioning, BIS 
+code of practice for technical drawing. 
+Orthographic projection of Points and Lines: Projection of points in different quadrants, Projection of 
+straight lines inclined to one plane and inclined to both planes. Trace of line. Inclination of lines with 
+reference planes True length of line inclined to both the reference planes. ",Module 2 ,"
+Orthographic projection of Solids: Projection of Simple solids such as Triangular, Rectangle, Square, 
+Pentagonal and Hexagonal Prisms, Pyramids, Cone and Cylinder. Projection of solids in simple 
+position including profile view. Projection of solids with axis inclined to one of the reference planes 
+and with axis inclined to both reference planes. 
+",Module 3 ,"
+ Sections of Solids: Sections of Prisms, Pyramids, Cone, Cylinder with axis in vertical position and cut 
+by different section planes. True shape of the sections. Also locating the section plane when the 
+true shape of the section is given. 
+Development of Surfaces: Development of surfaces of the above solids and solids cut by different 
+section planes. Also finding the shortest distance between two points on the surface. ",Module 4 ,"
+Isometric Projection: Isometric View and Projections of Prisms, Pyramids, Cone , Cylinder, Frustum of 
+Pyramid, Frustum of Cone, Sphere, Hemisphere and their combinations. 
+",Module 5 ,"
+Perspective Projection: Perspective projection of Prisms and Pyramids with axis perpendicular to the 
+ground plane, axis perpendicular to picture plane. 
+Conversion of Pictorial Views: Conversion of pictorial views into orthographic views.",,
+S1,17,HUN101,Lifeskills,Module 1,"Overview of Life Skills: Meaning and significance of life skills, Life skills identified by WHO: Self-
+awareness, Empathy, Critical thinking, Creative thinking, Decision making, problem solving, Effective 
+communication, interpersonal relationship, coping with stress, coping with emotion. 
+Life skills for professionals: positive thinking, right attitude, attention to detail, having the big 
+picture, learning skills, research skills, perseverance, setting goals and achieving them, helping 
+others, leadership, motivation, self-motivation, and motivating others, personality development, IQ, 
+EQ, and SQ 
+",Module 2 ,"
+Self-awareness: definition, need for self-awareness; Coping With Stress and Emotions, Human 
+Values, tools and techniques of SA: questionnaires, journaling, reflective questions, meditation, 
+mindfulness, psychometric tests, feedback. 
+Stress Management: Stress, reasons and effects, identifying stress, stress diaries, the four A's of 
+stress management, techniques, Approaches: action-oriented, emotion-oriented, acceptance-
+oriented, resilience, Gratitude Training, 
+Coping with emotions: Identifying and managing emotions, harmful ways of dealing with emotions, 
+PATH method and relaxation techniques.Morals, Values and Ethics: Integrity, Civic Virtue, Respect for Others, Living Peacefully. Caring, 
+Sharing, Honesty, Courage, Valuing Time, Time management, Co operation, Commitment, Empathy, 
+Self-Confidence, Character, Spirituality, Avoiding Procrastination, Sense of Engineering Ethics. 
+",Module 3 ,"21st century skills: Creativity, Critical Thinking, Collaboration, Problem Solving, Decision Making, 
+Need for Creativity in the 21st century, Imagination, Intuition, Experience, Sources of Creativity, 
+Lateral Thinking, Myths of creativity, Critical thinking Vs Creative thinking, Functions of Left Brain & 
+Right brain, Convergent & Divergent Thinking, Critical reading & Multiple Intelligence. 
+Steps in problem solving: Problem Solving Techniques, Six Thinking Hats, Mind Mapping, Forced 
+Connections. Analytical Thinking, Numeric, symbolic, and graphic reasoning. Scientific temperament 
+and Logical thinking.",Module 4 ,"Group and Team Dynamics: Introduction to Groups: Composition, formation, Cycle, thinking, 
+Clarifying expectations, Problem Solving, Consensus, Dynamics techniques, Group vs Team, Team 
+Dynamics, Virtual Teams. Managing team performance and managing conflicts, Intrapreneurship. 
+",Module 5 ,"
+Leadership: Leadership framework, entrepreneurial and moral leadership, vision, cultural 
+dimensions. Growing as a leader, turnaround leadership, managing diverse stakeholders, crisis 
+management. Types of Leadership, Traits, Styles, VUCA Leadership, Levels of Leadership, 
+Transactional vs Transformational Leaders, Leadership Grid, Effective Leaders.",,
+S1,18,EST120,Basics of civil and mechanical engineering,Module 1,"General Introduction to Civil Engineering: Relevance of Civil Engineering in the overall 
+infrastructural development of the country. Responsibility of an engineer in ensuring the safety of 
+built environment. Brief introduction to major disciplines of Civil Engineering like Transportation 
+Engineering, Structural Engineering, Geo-technical Engineering, Water Resources Engineering and 
+Environmental Engineering. 
+Introduction to buildings: Types of buildings, selection of site for buildings, components of a 
+residential building and their functions. 
+Building rules and regulations: Relevance of NBC, KBR & CRZ norms (brief discussion only). 
+Building area: Plinth area, built up area, floor area, carpet area and floor area ratio for a building as 
+per KBR.",Module 2 ,"Surveying: Importance, objectives and principles. 
+Construction materials, Conventional construction materials: types, properties and uses of building 
+materials: bricks, stones, cement, sand and timber 
+Cement concrete: Constituent materials, properties and types. 
+Steel: Steel sections and steel reinforcements, types and uses. 
+Modern construction materials:- Architectural glass, ceramics, Plastics, composite materials, 
+thermal and acoustic insulating materials, decorative panels, waterproofing materials. Modern uses 
+of gypsum, pre-fabricated building components (brief discussion only). ",Module 3 ,"Building Construction: Foundations: Bearing capacity of soil (definition only), functions of 
+foundations, types – shallow and deep (brief discussion only). Load bearing and framed structures 
+(concept only). 
+Brick masonry: - Header and stretcher bond, English bond & Flemish bond random rubble masonry. 
+Roofs and floors: - Functions, types; flooring materials (brief discussion only). 
+Basic infrastructure services: MEP, HVAC, elevators, escalators and ramps (Civil Engineering aspects 
+only), fire safety for buildings. 
+Green buildings:- Materials, energy systems, water management and environment for green 
+buildings. (brief discussion only). ",Module 4 ,"Analysis of thermodynamic cycles: Carnot, Otto, Diesel cycles, Derivation of efficiency of these 
+cycles, Problems to calculate heat added, heat rejected, net work and efficiency. IC Engines: CI, SI, 2-
+Stroke, 4-Stroke engines. Listing the parts of different types of IC Engines. Efficiencies of IC 
+Engines(Definitions only), Air, Fuel, cooling and lubricating systems in SI and CI Engines, CRDI, MPFI. 
+Concept of hybrid engines.",Module 5 ,"Refrigeration: Unit of refrigeration, reversed Carnot cycle,COP, vapour compression cycle (only 
+description and no problems); Definitions of dry, wet & dew point temperatures, specific humidity 
+and relative humidity, Cooling and dehumidification, Layout of unit and central air conditioners. 
+Description about working with sketches of: Reciprocating pump, Centrifugal pump, Pelton turbine, 
+Francis turbine and Kaplan turbine. Overall efficiency, Problems on calculation of input and output 
+power of pumps and turbines (No velocity triangles) 
+Description about working with sketches of: Belt and Chain drives, Gear and Gear trains, Single plate 
+clutches.",Module 6,"Manufacturing Process: Basic description of the manufacturing processes – Sand Casting, Forging, 
+Rolling, Extrusion and their applications. 
+Metal Joining Processes: List types of welding, Description with sketches of Arc Welding, Soldering 
+and Brazing and their applications 
+Basic Machining operations: Turning, Drilling, Milling and Grinding. 
+Description about working with block diagram of: Lathe, Drilling machine, Milling machine, CNC 
+Machine. Principle of CAD/CAM, Rapid and Additive manufacturing."
+S2,19,PHT100,Engineering Physics,Oscillations and Waves,"Harmonic oscillations, Damped harmonic motion-Derivation of differential equation and its solution, 
+Over damped, Critically damped and Under damped Cases, Quality factor-Expression, Forced 
+oscillations-Differential Equation-Derivation of expressions for amplitude and phase of forced 
+oscillations, Amplitude Resonance-Expression for Resonant frequency, Quality factor and Sharpness 
+of Resonance, Electrical analogy of mechanical oscillators 
+Wave motion- Derivation of one dimensional wave equation and its solution, Three dimensional 
+wave equation and its solution (no derivation), Distinction between transverse and longitudinal 
+waves, Transverse vibration in a stretched string, Statement of laws of vibration ",Wave Optics,"Interference of light-Principle of superposition of waves, Theory of thin films - Cosine law (Reflected 
+system), Derivation of the conditions of constructive and destructive Interference, Interference due 
+to wedge shaped films -Determination of thickness and test for optical planeness, Newton’s rings - 
+Measurement of wavelength and refractive index, Antireflection coatings 
+Diffraction of light, Fresnel and Fraunhofer classes of diffraction, Diffraction grating-Grating 
+equation, Rayleigh criterion for limit of resolution, Resolving and Dispersive power of a grating with 
+expression (no derivation)",Quantum Mechanics & Nanotechnology ,"Introduction for the need of Quantum mechanics, Wave nature of Particles, Uncertainty principle, 
+Applications-Absence of electrons inside a nucleus and Natural line broadening mechanism, 
+Formulation of time dependent and independent Schrodinger wave equations-Physical meaning of 
+wave function, Particle in a one dimensional box- Derivation for normalised wave function and 
+energy eigen values, Quantum Mechanical Tunnelling (Qualitative) 
+Introduction to nanoscience and technology, Increase in surface to volume ratio for nanomaterials, 
+Quantum confinement in one dimension, two dimension and three dimension-Nano sheets, Nano 
+wires and Quantum dots, Properties of nanomaterials-mechanical, electrical and optical, 
+Applications of nanotechnology (qualitative ideas) ",Magnetism & Electro Magnetic Theory,"Magnetic field and Magnetic flux density, Gauss’s law for Magnetic flux density, Ampere’s Circuital 
+law, Faraday’s law in terms of EMF produced by changing magnetic flux, Magnetic permeability and 
+susceptibility, Classification of magnetic materials-para, dia and ferromagnetic materials Fundamentals of vector calculus, concept of divergence, gradient and curl along with physical 
+significance, Line, Surface and Volume integrals, Gauss divergence theorem & Stokes’ theorem, 
+Equation of continuity, Derivation of Maxwell’s equations in vacuum, Comparison of displacement 
+current with conduction current. Electromagnetic waves, Velocity of Electromagnetic waves in free 
+space, Flow of energy and Poynting’s vector (no derivation) ",Superconductivity & Photonics ,"Superconducting phenomena, Meissner effect and perfect diamagnetism, Types of superconductors-
+Type I and Type II, BCS Theory (Qualitative), High temperature superconductors-Applications of 
+super conductivity 
+Introduction to photonics-Photonic devices-Light Emitting Diode, Photo detectors -Junction and PIN 
+photodiodes, Solar cells-I-V Characteristics, Optic fibre-Principle of propagation of light, Types of 
+fibres-Step index and Graded index fibres, Numerical aperture –Derivation, Fibre optic 
+communication system (block diagram), Industrial, Medical and Technological applications of optical 
+fibre, Fibre optic sensors-Intensity Modulated and Phase modulated sensors.",,
+S2,20,MAT102,"Vector calculus,Differential Equations and Transforms",Calculus of vector functions,"Vector valued function of single variable, derivative of vector function and geometrical 
+interpretation, motion along a curve-velocity, speed and acceleration. Concept of scalar and vector 
+fields , Gradient and its properties, directional derivative , divergence and curl, Line integrals of 
+vector fields, work as line integral, Conservative vector fields , independence of path and potential 
+function(results without proof).",Vector integral theorems,"Green’s theorem (for simply connected domains, without proof) and applications to evaluating line 
+integrals and finding areas. Surface integrals over surfaces of the form z = g(x, y), y = g(x, z) or x = 
+g(y, z) , Flux integrals over surfaces of the form z = g(x, y), y = g(x, z) or x = g(y, z), divergence 
+theorem (without proof) and its applications to finding flux integrals, Stokes’ theorem (without 
+proof) and its applications to finding line integrals of vector fields and work done. ",Ordinary differential equations,"Homogenous linear differential equation of second order, superposition principle,general solution, 
+homogenous linear ODEs with constant coefficients-general solution. Solution of Euler-Cauchy 
+equations (second order only).Existence and uniqueness (without proof). Non homogenous linear 
+ODEs-general solution, solution by the method of undetermined coefficients (for the right hand side 
+of the form 𝑥^n,e^kx,si𝑛𝑎𝑥,𝑐𝑜𝑠𝑎𝑥,𝑒^kx 𝑠𝑖𝑛𝑎𝑥𝑒^kx,𝑐𝑜𝑠ax and their linear combinations), methods of 
+variation of parameters. Solution of higher order equations-homogeneous and non-homogeneous 
+with constant coefficient using method of undetermined coefficient. 
+
+",Laplace transforms,"Laplace Transform and its inverse ,Existence theorem ( without proof) , linearity,Laplace transform 
+of basic functions, first shifting theorem, Laplace transform of derivatives and integrals, solution of 
+differential equations using Laplace transform, Unit step function, Second shifting theorems. Dirac 
+delta function and its Laplace transform, Solution of ordinary differential equation involving unit 
+step function and Dirac delta functions. Convolution theorem(without proof)and its application to 
+finding inverse Laplace transform of products of functions.",Fourier Tranforms,"Fourier integral representation, Fourier sine and cosine integrals. Fourier sine and cosine transforms, 
+inverse sine and cosine transform. Fourier transform and inverse Fourier transform, basic properties. 
+The Fourier transform of derivatives. Convolution theorem (without proof)",,
+S2,21,EST100,Engineering Mechanics,Module 1 ,"
+Introduction to Engineering Mechanics-statics-basic principles of statics-Parallelogram law, 
+equilibrium law, principles of superposition and transmissibility, law of action and reaction(review) 
+free body diagrams. 
+Concurrent coplanar forces-composition and resolution of forces-resultant and equilibrium 
+equations – methods of projections – methods of moments – Varignon’s Theorem of moments. 
+
+Centroid of composite areas- – moment of inertia-parallel axis and perpendicular axis theorems. 
+Polar moment of inertia,radius of gyration,mass moment of inertia-ring,cylinder and disc. 
+Theorem of Pappus Guldinus(demonstration only) 
+Forces in space - vectorial representation of forces, moments and couples –resultant and equilibrium 
+equations – concurrent forces in space (simple problems only) 
+",Module 2 ,"Friction – sliding friction - Coulomb’s laws of friction – analysis of single bodies –wedges, ladder-
+analysis of connected bodies . 
+Parallel coplanar forces – couple - resultant of parallel forces – centre of parallel forces – equilibrium 
+of parallel forces – Simple beam subject to concentrated vertical loads. General coplanar force 
+system - resultant and equilibrium equations. ",Module 3 ,"Centroid of composite areas- – moment of inertia-parallel axis and perpendicular axis theorems. 
+Polar moment of inertia,radius of gyration,mass moment of inertia-ring,cylinder and disc. 
+Theorem of Pappus Guldinus(demonstration only) 
+Forces in space - vectorial representation of forces, moments and couples –resultant and equilibrium 
+equations – concurrent forces in space (simple problems only) ",Module 4 ,"Dynamics – rectilinear translation - equations of kinematics(review) 
+ kinetics – equation of motion – D’Alembert’s principle. – motion on horizontal and inclined 
+surfaces, motion of connected bodies. Impulse momentum equation and work energy equation 
+(concepts only). 
+Curvilinear translation - equations of kinematics –projectile motion(review), kinetics – equation of 
+motion. Moment of momentum and work energy equation (concepts only). ",Module 5 ,"Rotation – kinematics of rotation- equation of motion for a rigid body rotating about a fixed axis – 
+rotation under a constant moment. 
+Plane motion of rigid body – instantaneous centre of rotation (concept only). 
+Simple harmonic motion – free vibration –degree of freedom- undamped free vibration of spring 
+mass system-effect of damping(concept only)",,
+S2,22,EST130,Basics of Electrical and Electronics Engineering,Elementary Concepts of Electric Circuits ,"
+Elementary concepts of DC electric circuits: Basic Terminology including voltage, current, power, 
+resistance, emf; Resistances in series and parallel; Current and Voltage Division Rules; Capacitors & 
+Inductors: V-I relations and energy stored. Ohms Law and Kirchhoff's laws-Problems; Star-delta 
+conversion (resistive networks only-derivation not required)-problems.
+Analysis of DC electric circuits: Mesh current method - Matrix representation - Solution of network 
+equations. Node voltage methods-matrix representation-solution of network equations by matrix 
+methods. Numerical problems. 
+
+"," Elementary Concepts of Magnetic circuits, Electromagnetic Induction and AC 
+fundamentals ","Magnetic Circuits: Basic Terminology: MMF, field strength, flux density, reluctance - comparison 
+between electric and magnetic circuits- Series and parallel magnetic circuits with composite 
+materials, numerical problems. 
+Electromagnetic Induction: Faraday's laws, problems, Lenz's law- statically induced and dynamically 
+induced emfs - Self-inductance and mutual inductance, coefficient of coupling 
+Alternating Current fundamentals: Generation of alternating voltages-Representation of sinusoidal 
+waveforms: frequency, period, Average, RMS values and form factor of waveforms-Numerical 
+Problems.",AC Circuits ,"
+ AC Circuits: Phasor representation of sinusoidal quantities. Trignometric, Rectangular, Polar and 
+complex forms. Analysis of simple AC circuits: Purely resistive, inductive & capacitive circuits; 
+Inductive and capacitive reactance, concept of impedance. Average Power Power factor. Analysis of 
+RL, RC and RLC series circuits-active, reactive and apparent power. Simple numerical problems. 
+Three phase AC systems: Generation of three phase voltages; advantages of three phase systems, 
+star and delta connections (balanced only), relation between line and phase voltages, line and phase 
+currents- Numerical problems 
+
+",Introduction to Semiconductor devices,"Evolution of electronics – Vacuum tubes to nano 
+electronics .Resistors, Capacitors and Inductors (constructional features not required): types, 
+specifications. Standard values, color coding. PN Junction diode: Principle of operation, V-I 
+characteristics, principle of avalanche breakdown. Bipolar Junction Transistors: PNP and NPN 
+structures, Principle of operation, relation between current gains in CE, CB and CC, input and 
+output characteristics of common emitter configuration.",Basic electronic circuits and instrumentation," 
+Rectifiers and power supplies: Block diagram 
+description of a dc power supply, Working of a full wave bridge rectifier, capacitor filter (no 
+analysis), working of simple zener voltage regulator. Amplifiers: Block diagram of Public Address 
+system, Circuit diagram and working of common emitter (RC coupled) amplifier with its frequency 
+response, Concept of voltage divider biasing. Electronic Instrumentation: Block diagram of an 
+electronic instrumentation system. 
+",Introduction to Communication Systems,"Evolution of communication systems – Telegraphy to 5G.Radio communication: principle of AM & FM, frequency bands used for various communication 
+systems, block diagram of super heterodyne receiver, Principle of antenna – radiation from 
+accelerated charge. Mobile communication: basic principles of cellular communications, principle 
+and block diagram of GSM."
+S2,23,HUT102,Professional Communication,Module 1,"
+Use of language in communication: Significance of technical communication Vocabulary 
+Development: technical vocabulary, vocabulary used in formal letters/emails and reports, sequence 
+words, misspelled words, compound words, finding suitable synonyms, paraphrasing, verbal 
+analogies. Language Development: subject-verb agreement, personal passive voice, numerical 
+adjectives, embedded sentences, clauses, conditionals, reported speech, active/passive voice. 
+Technology-based communication: Effective email messages, slide presentations, editing skills using 
+software. Modern day research and study skills: search engines, repositories, forums such as Git 
+Hub, Stack Exchange, OSS communities (MOOC, SWAYAM, NPTEL), and Quora; Plagiarism 
+",Module 2 ,"
+ Reading, Comprehension, and Summarizing: Reading styles, speed, valuation, critical reading, 
+reading and comprehending shorter and longer technical articles from journals, newspapers, 
+identifying the various transitions in a text, SQ3R method, PQRST method, speed reading. 
+Comprehension: techniques, understanding textbooks, marking and underlining, Note-taking: 
+recognizing non-verbal cues. ",Module 3 ,"
+
+Oral Presentation: Voice modulation, tone, describing a process, Presentation Skills: Oral 
+presentation and public speaking skills, business presentations, Preparation: organizing the material, 
+self-Introduction, introducing the topic, answering questions, individual presentation practice, 
+presenting visuals effectively. 
+Debate and Group Discussions: introduction to Group Discussion (GD), differences between GD and 
+debate; participating GD, understanding GD, brainstorming the topic, questioning and clarifying, GD 
+strategies, activities to improve GD skills ",Module 4 ,"
+
+Listening and Interview Skills Listening: Active and Passive listening, listening: for general content, to 
+fill up information, intensive listening, for specific information, to answer, and to understand. 
+Developing effective listening skills, barriers to effective listening, listening to longer technical talks, 
+listening to classroom lectures, talks on engineering /technology, listening to documentaries and 
+making notes, TED talks. 
+ Interview Skills: types of interviews, successful interviews, interview etiquette, dress code, body 
+language, telephone/online (skype) interviews, one-to-one interview & panel interview, FAQs 
+related to job interviews",Module 5 ,"
+ Formal writing: Technical Writing: differences between technical and literary style. Letter Writing 
+(formal, informal and semi formal), Job applications, Minute preparation, CV preparation 
+(differences between Bio-Data, CV and Resume), and Reports. Elements of style, Common Errors in 
+Writing: describing a process, use of sequence words, Statements of Purpose, Instructions, 
+Checklists. 
+ Analytical and issue-based Essays and Report Writing: basics of report writing; Referencing Style 
+(IEEE Format), structure of a report; types of reports, references, bibliography.",,
+S2,24,EST102,Programming in C, Basics of Computer Hardware and Software ,"
+
+Basics of Computer Architecture: processor, Memory, Input& Output devices 
+Application Software & System software: Compilers, interpreters, High level and low level languages
+Introduction to structured approach to programming, Flow chart Algorithms, Pseudo code (bubble 
+sort, linear search - algorithms and pseudocode) 
+ 
+
+
+
+","
+ Program Basics","Basic structure of C program: Character set, Tokens, Identifiers in C, Variables and Data Types , 
+Constants, Console IO Operations, printf and scanf 
+Operators and Expressions: Expressions and Arithmetic Operators, Relational and Logical Operators, 
+Conditional operator, size of operator, Assignment operators and Bitwise Operators. Operators 
+Precedence 
+Control Flow Statements: If Statement, Switch Statement, Unconditional Branching using goto 
+statement, While Loop, Do While Loop, For Loop, Break and Continue statements.(Simple programs 
+covering control flow) ","
+ Arrays and strings ","Arrays Declaration and Initialization, 1-Dimensional Array, 2-Dimensional Array 
+String processing: In built String handling functions (strlen, strcpy, strcat and strcmp, puts, gets) 
+Linear search program, bubble sort program, simple programs covering arrays and strings ","
+ Working with functions ","Introduction to modular programming, writing functions, formal parameters, actual parameters 
+Pass by Value, Recursion, Arrays as Function Parameters structure, union, Storage Classes, Scope 
+and life time of variables, simple programs using functions",Pointers and Files ,"
+Basics of Pointer: declaring pointers, accessing data though pointers, NULL pointer,array access 
+using pointers, pass by reference effect 
+File Operations: open, close, read, write, append 
+Sequential access and random access to files: In built file handlingfunctions (rewind() ,fseek(), ftell(), 
+feof(), fread(), fwrite()), simple programs covering pointers and files.",,
+S3,25,MAT203,Discrete Mathematical Structures,Fundamentals of Logic,"Mathematical logic - Basic connectives and truth table, Statements, Logical Connectives, 
+Tautology, Contradiction. Logical Equivalence - The Laws of Logic, The Principle of duality, 
+Substitution Rules . The implication - The Contrapositive, The Converse,The Inverse.Logical Implication - Rules of Inference. The use of Quantifiers - Open Statement, Quantifier. Logically Equivalent – Contrapositive, Converse , Inverse , Logical equivalences and 
+implications for quantified statement, Implications , Negation . 
+
+",Fundamentals of Counting Theory,"The Rule of Sum – Extension of Sum Rule . The Rule of Product - Extension of Product Rule . 
+Permutations. Combinations. The Binomial Theorem (without proof). Combination with 
+Repetition. The Pigeon hole Principle. The Principle of Inclusion and Exclusion Theorem (Without Proof) - Generalization of the Principle. Derangements. 
+",Relations and Functions,"Cartesian Product - Binary Relation. Function – domain , range-one to one function, Image-
+restriction. Properties of Relations- Reachability Relations, Reflexive Relations, Symmetric 
+Relations, Transitive relations, Anti-symmetric Relations, Partial Order relations, Equivalence 
+Relations, Irreflexive relations. 
+Partially ordered Set – Hasse Diagram, Maximal-Minimal Element, Least upper bound (lub), 
+Greatest Lower bound(glb) ( Topological sorting Algorithm- excluded). Equivalence Relations 
+and Partitions - Equivalence Class. 
+Lattice - Dual Lattice , Sub lattice , Properties of glb and lub , Properties of Lattice , Special 
+Lattice , Complete Lattice, Bounded Lattice, Completed Lattice , Distributive Lattice. ",Generating Functions and Recurrence Relations,"Generating Function - Definition and Examples , Calculation techniques, Exponential 
+generating function. First order linear recurrence relations with constant coefficients – 
+homogeneous, non-homogeneous Solution. Second order linear recurrence relations with 
+constant coefficients, homogeneous, non-homogeneous Solution. ",Algebraic Structures,"Algebraic system-properties- Homomorphism and Isomorphism. Semi group and monoid – 
+cyclic monoid , sub semi group and sub monoid, Homomorphism and Isomorphism of Semi 
+group and monoids. Group- Elementary properties, subgroup, symmetric group on three 
+symbols ,The direct product of two groups, Group Homomorphism, Isomorphism of groups, 
+Cyclic  group . Right cosets - Left cosets . L a g r a n g e ’ s T h e o r e m",,
+S3,26,CST201,Data Structures,Basic Concepts of Data Structures ,"
+System Life Cycle, Algorithms, Performance Analysis, Space Complexity, Time Complexity, 
+Asymptotic Notation, Complexity Calculation of Simple Algorithms 
+Arrays and Searching 
+Polynomial representation using Arrays, Sparse matrix, Stacks, Queues-Circular Queues, Priority 
+Queues, Double Ended Queues, Evaluation of Expressions 
+Linear Search and Binary Search 
+
+
+
+
+
+
+",Arrays and Searching ,"Polynomial representation using Arrays, Sparse matrix, Stacks, Queues-Circular Queues, Priority 
+Queues, Double Ended Queues, Evaluation of Expressions 
+Linear Search and Binary Search ",Linked List and Memory Management ,"Self Referential Structures, Dynamic Memory Allocation, Singly Linked List-Operations on 
+Linked List. Doubly Linked List, Circular Linked List, Stacks and Queues using Linked List, 
+Polynomial representation using Linked List 
+Memory allocation and de-allocation-First-fit, Best-fit and Worst-fit allocation schemes ",Trees and Graphs ,"Trees, Binary Trees-Tree Operations, Binary Tree Representation, Tree Traversals, Binary Search 
+Trees- Binary Search Tree Operations 
+Graphs, Representation of Graphs, Depth First Search and Breadth First Search on Graphs, 
+Applications of Graphs",Sorting and Hashing ,"Sorting Techniques – Selection Sort, Insertion Sort, Quick Sort, Merge Sort and Heap Sort 
+Hashing- Hashing Techniques, Collision Resolution, Overflow handling, Hashing functions – 
+Mid square, Division, Folding, Digit Analysis",,
+S3,27,CST203,Logic System Design,"Number systems, Operations & Codes ","
+Decimal, Binary, Octal and Hexadecimal Number Systems- Number Base Conversions. 
+Addition, Subtraction, Multiplication and Division of binary numbers. Representation of 
+negative numbers- Complements, Subtraction with complements. Addition and subtraction of 
+BCD, Octal and Hexadecimal numbers. Binary codes- Decimal codes, Error detection codes, 
+Reflected code, Character coding schemes – ASCII, EBCDIC. 
+",Boolean Algebra ,"
+Postulates of Boolean Algebra. Basic theorems and Properties of Boolean Algebra. Boolean 
+Functions - Canonical and Standard forms. Simplification of Boolean Functions- Using 
+Karnaugh- Map Method (upto five variables), Don’t care conditions, Product of sums simplification, Tabulation Method. Digital Logic Gates- Implementation of Boolean functions using basic and universal gates. 
+ 
+",Combinational Logic Circuits ,"
+Design Procedure & Implementation of combinational logic circuits- Binary adders and 
+subtractors, Binary Parallel adder, Carry look ahead adder, BCD adder, Code converter, 
+Magnitude comparator, Decoder, Demultiplexer, Encoder, Multiplexer, Parity generator/ 
+Checker. 
+",Sequential logic circuits," 
+Flip-flops- SR, JK, T and D. Triggering of flip-flops- Master slave flip- flops, Edge- triggered 
+flip- flops. Excitation table and characteristic equation. Registers- register with parallel load. 
+Counter design: Asynchronous counters- Binary and BCD counters, timing sequences and state 
+diagrams. Synchronous counters- Binary Up- down counter, BCD counter. 
+",Module 5 ,"Shift registers 
+Shift registers – Serial In Serial Out, Serial In Parallel Out, Bidirectional Shift Register with 
+Parallel load. Ring counter. Johnson counter- timing sequences and state diagrams. 
+Arithmetic algorithms 
+Algorithms for addition and subtraction of binary numbers in signed magnitude and 2’s 
+complement representations. Algorithm for addition and subtraction of BCD numbers. 
+Representation of floating point numbers, Algorithm for addition and subtraction of floating 
+point numbers. 
+Programmable Logic devices 
+ROM. Programmable Logic Array(PLA)- Implementation of simple circuits using PLA.",,
+S3,28,CST205,Object oriented prorgramming using Java,Introduction,"
+Approaches to Software Design - Functional Oriented Design, Object Oriented Design, Case 
+Study of Automated Fire Alarm System. 
+Object Modeling Using Unified Modeling Language (UML) – Basic Object Oriented concepts, 
+UML diagrams, Use case model, Class diagram, Interaction diagram, Activity diagram, State 
+chart diagram. 
+Introduction to Java - Java programming Environment and Runtime Environment, Development 
+Platforms -Standard, Enterprise. Java Virtual Machine (JVM), Java compiler, Bytecode, Java 
+applet, Java Buzzwords, Java program structure, Comments, Garbage Collection, Lexical Issues. 
+
+
+
+","
+Core Java Fundamentals"," 
+Primitive Data types - Integers, Floating Point Types, Characters, Boolean. Literals, Type 
+Conversion and Casting, Variables, Arrays, Strings, Vector class.
+Operators - Arithmetic Operators, Bitwise Operators, Relational Operators, Boolean Logical 
+Operators, Assignment Operator, Conditional (Ternary) Operator, Operator Precedence. 
+Control Statements - Selection Statements, Iteration Statements and Jump Statements. 
+Object Oriented Programming in Java - Class Fundamentals, Declaring Objects, Object 
+Reference, Introduction to Methods, Constructors, this Keyword, Method Overloading, Using 
+Objects as Parameters, Returning Objects, Recursion, Access Control, Static Members, Final 
+Variables, Inner Classes, Command Line Arguments, Variable Length Arguments. 
+Inheritance - Super Class, Sub Class, The Keyword super, protected Members, Calling Order of 
+Constructors, Method Overriding, the Object class, Abstract Classes and Methods, using final
+with Inheritance.",More features of Java,"Packages and Interfaces - Defining Package, CLASSPATH, Access Protection, Importing 
+Packages, Interfaces. 
+Exception Handling - Checked Exceptions, Unchecked Exceptions, try Block and catch Clause, 
+Multiple catch Clauses, Nested try Statements, throw, throws and finally.
+Input/Output - I/O Basics, Reading Console Input, Writing Console Output, PrintWriter Class, 
+Object Streams and Serialization, Working with Files.",Advanced features of Java," 
+Java Library - String Handling – String Constructors, String Length, Special String Operations -
+Character Extraction, String Comparison, Searching Strings, Modifying Strings, using valueOf(), 
+Comparison of StringBuffer and String. 
+Collections framework - Collections overview, Collections Interfaces- Collection Interface, List 
+Interface. 
+Collections Class – ArrayList class. Accessing a Collection via an Iterator. 
+Event handling - Event Handling Mechanisms, Delegation Event Model, Event Classes, Sources 
+of Events, Event Listener Interfaces, Using the Delegation Model. 
+Multithreaded Programming - The Java Thread Model, The Main Thread, Creating Thread, 
+Creating Multiple Threads, Synchronization, Suspending, Resuming and Stopping Threads. 
+
+
+",Graphical User Interface and Database support of Java,"Swings fundamentals - Swing Key Features, Model View Controller (MVC), Swing Controls, 
+Components and Containers, Swing Packages, Event Handling in Swings, Swing Layout 
+Managers, Exploring Swings –JFrame, JLabel, The Swing Buttons, JTextField.
+Java DataBase Connectivity (JDBC) - JDBC overview, Creating and Executing Queries – create 
+table, delete, insert, select.",,
+S3,29,MCN201,Sustainable Engineering,Module 1,"
+Sustainability: Introduction, concept, evolution of the concept; Social, environmental and economic sustainability 
+concepts; Sustainable development, Nexus between Technology and Sustainable development; Millennium Development 
+Goals (MDGs) and Sustainable Development Goals (SDGs), Clean Development Mechanism (CDM).
+
+
+
+
+
+",Module 2 ,"Environmental Pollution: Air Pollution and its effects, Water pollution and its sources, Zero waste concept and 3 R 
+concepts in solid waste management; Greenhouse effect, Global warming, Climate change, Ozone layer depletion, 
+Carbon credits, carbon trading and carbon foot print, legal provisions for environmental protection. ","
+Module 3 ","Environmental management standards: ISO 14001:2015 frame work and benefits, Scope and goal of Life Cycle Analysis 
+(LCA), Circular economy, Bio-mimicking, Environment Impact Assessment (EIA), Industrial ecology and industrial 
+symbiosis. ",Module 4 ,"
+Resources and its utilisation: Basic concepts of Conventional and non-conventional energy, General idea about solar 
+energy, Fuel cells, Wind energy, Small hydro plants, bio-fuels, Energy derived from oceans and Geothermal energy.",Module 5 ,"Sustainability practices: Basic concept of sustainable habitat, Methods for increasing energy efficiency in buildings, 
+Green Engineering, Sustainable Urbanisation, Sustainable cities, Sustainable transport.",,
+S3,30,MCN202,Professional Ethics,,,,,,,,,,,,
