@@ -40,7 +40,8 @@ Retrieve the head and syllabus of a specific module for a given course.
 - **Format**: JSON
 - **Example**:
 
-
+<!-- #### Example Request Body -->
+<!-- ```json -->
 {
     "CourseCode": "CS101",
     "Module": 1,
@@ -57,8 +58,7 @@ Retrieve the head and syllabus of a specific module for a given course.
     ]
 }
 
-
-## **2. POST /api/QuestionsToTopic/` **
+## 2. POST /api/QuestionsToTopic/ 
 
 ---
 
