@@ -42,3 +42,24 @@ class QPaperQuestions(models.Model):
 
     def __str__(self):
         return f"Question {self.ID} for QPaper {self.QPaper_ID}"
+    
+class PrivateQPaper(models.Model):
+    # EXAM_TYPE_CHOICES = 
+    PrivateQPaper_ID = models.AutoField(primary_key=True)
+    CourseCode = models.CharField(max_length = 8)
+    Max_Marks = models.IntegerField(default=100)
+    Exam_Name = models.CharField(max_length=400)
+
+    def __str__(self):
+        return f"{self.CourseCode} - {self.Exam_Name}"
+
+class PrivateQPaperQuestions(models.Model):
+    ID = models.AutoField(primary_key=True)
+    QPaper_ID = models.ForeignKey(PrivateQPaper, on_delete=models.CASCADE, related_name="questions")
+    QuestionText = models.TextField()
+    Mark = models.IntegerField(default=1)
+    Topic = models.TextField()
+    Module_Number = models.IntegerField(default=1)
+
+    def __str__(self):
+        return f"Question {self.ID} for QPaper {self.QPaper_ID}"
