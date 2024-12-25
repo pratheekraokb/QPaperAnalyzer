@@ -15,7 +15,7 @@ class Course(models.Model):
     module5Syllabus = models.TextField()  # Module 5
 
     def __str__(self):
-        return self.coursecode  # Returning course code as string representation
+        return self.coursecode 
 
 class QPaper(models.Model):
     EXAM_TYPE_CHOICES = [
@@ -63,3 +63,23 @@ class PrivateQPaperQuestions(models.Model):
 
     def __str__(self):
         return f"Question {self.ID} for QPaper {self.QPaper_ID}"
+    
+
+
+class University(models.Model):
+    University_ID = models.AutoField(primary_key=True)  # Auto increment ID
+    University_Name = models.CharField(max_length=255)  # Adjust max_length as per requirement
+    Location = models.CharField(max_length=255)  # Adjust max_length as per requirement
+
+    def __str__(self):
+        return self.University_Name
+
+
+class College(models.Model):
+    CollegeID = models.AutoField(primary_key=True)  # Auto increment ID
+    CollegeName = models.CharField(max_length=255)  # Adjust max_length as per requirement
+    University_ID = models.ForeignKey(University, on_delete=models.CASCADE)  # FK to University
+    Address = models.CharField(max_length=255)  # Adjust max_length as per requirement
+
+    def __str__(self):
+        return self.CollegeName
