@@ -83,3 +83,20 @@ class College(models.Model):
 
     def __str__(self):
         return self.CollegeName
+    
+
+class Department(models.Model):
+    Department_ID = models.AutoField(primary_key=True)  # Auto increment ID
+    Department_Name = models.CharField(max_length=255)  # Adjust max_length as per requirement
+    College_ID = models.ForeignKey('College', on_delete=models.CASCADE)  # FK to College
+
+    def __str__(self):
+        return self.Department_Name
+    
+class Department_Course_Map(models.Model):
+    Dep_Cour_ID = models.AutoField(primary_key=True)  # Auto increment ID
+    Department_ID = models.ForeignKey(Department, on_delete=models.CASCADE)  # FK to Department
+    Course_ID = models.ForeignKey(Course, on_delete=models.CASCADE)  # FK to Course
+
+    def __str__(self):
+        return f"{self.Department_ID} - {self.Course_ID}"
