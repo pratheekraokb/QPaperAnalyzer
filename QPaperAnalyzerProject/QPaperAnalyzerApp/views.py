@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from .models import Course
+from .models import Course, College
 
 import re
 import json
@@ -177,3 +177,85 @@ def API_question_to_topic(request):
     
 def index(request):
     return render(request, 'students/index.html')
+
+
+
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from .models import User, Profile, College
+
+from django.db import IntegrityError, DatabaseError
+
+def register(request):
+    colleges = College.objects.all()
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+        phone_num = request.POST.get('phone_num')
+        user_type = request.POST.get('user_type')
+        college_id = request.POST.get('college')
+
+        if password != confirm_password:
+            return render(request, 'students/register.html', {'colleges': colleges, 'error': 'Passwords do not match.'})
+
+        try:
+            user = User.objects.create_user(username=username, email=email, password=password)
+            college = College.objects.get(pk=college_id) if college_id else None
+
+            # Check if the profile exists
+            profile, created = Profile.objects.get_or_create(user=user, defaults={
+                'phone_num': phone_num,
+                'user_type': user_type,
+                'college': college
+            })
+
+            if not created:
+                # If the profile exists, update it
+                profile.phone_num = phone_num
+                profile.user_type = user_type
+                profile.college = college
+                profile.save()
+
+            return redirect('login')
+
+        except IntegrityError:
+            return render(request, 'students/register.html', {'colleges': colleges, 'error': 'User creation failed due to integrity error. Please try again.'})
+        except DatabaseError:
+            return render(request, 'students/register.html', {'colleges': colleges, 'error': 'A database error occurred. Please try again later.'})
+        except Exception as e:
+            return render(request, 'students/register.html', {'colleges': colleges, 'error': f'An unexpected error occurred: {e}'})
+
+    return render(request, 'students/register.html', {'colleges': colleges})
+
+def login_user(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            if user.profile.user_type == 'student':
+                return redirect('student_dashboard')
+            elif user.profile.user_type == 'faculty':
+                return redirect('faculty_dashboard')
+        else:
+            return render(request, 'login.html', {'error': 'Invalid credentials.'})
+    return render(request, 'students/login.html')
+
+@login_required
+def student_dashboard(request):
+    return render(request, 'student_dashboard.html', {'user': request.user})
+
+@login_required
+def faculty_dashboard(request):
+    return render(request, 'faculty_dashboard.html', {'user': request.user})
+
+def logout_user(request):
+    logout(request)
+    return redirect('login')

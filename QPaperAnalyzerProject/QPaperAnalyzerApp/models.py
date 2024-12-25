@@ -1,4 +1,8 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import User
+
+
 
 class Course(models.Model):
     coursecode = models.CharField(max_length=8, unique=True, primary_key=True)  # Unique course code
@@ -83,15 +87,37 @@ class College(models.Model):
 
     def __str__(self):
         return self.CollegeName
+
+class Profile(models.Model):
+    USER_TYPE_CHOICES = [
+        ('student', 'Student'),
+        ('faculty', 'Faculty'),
+    ]
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    phone_num = models.CharField(max_length=15, null=True, blank=True)
+    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES)
+    college = models.ForeignKey(College, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.user_type}"
     
 
 class Department(models.Model):
     Department_ID = models.AutoField(primary_key=True)  # Auto increment ID
     Department_Name = models.CharField(max_length=255)  # Adjust max_length as per requirement
-    College_ID = models.ForeignKey('College', on_delete=models.CASCADE)  # FK to College
+    Department_Code = models.CharField(max_length=255, default='')
 
     def __str__(self):
         return self.Department_Name
+
+class CollegeDepartmentMap(models.Model):
+    ColDepartID = models.AutoField(primary_key=True)  # Auto increment primary key
+    College_ID = models.ForeignKey('College', on_delete=models.CASCADE, related_name="departments")  # FK to College
+    Department_ID = models.ForeignKey('Department', on_delete=models.CASCADE, related_name="colleges")  # FK to Department
+
+    def __str__(self):
+        return f"{self.College_ID} - {self.Department_ID}"
     
 class Department_Course_Map(models.Model):
     Dep_Cour_ID = models.AutoField(primary_key=True)  # Auto increment ID
@@ -100,3 +126,4 @@ class Department_Course_Map(models.Model):
 
     def __str__(self):
         return f"{self.Department_ID} - {self.Course_ID}"
+    

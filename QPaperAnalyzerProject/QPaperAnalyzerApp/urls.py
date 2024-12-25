@@ -6,4 +6,14 @@ urlpatterns = [
     path('api/getTopicsSyllabus/<str:CourseCode>/<int:Module>/', views.API_get_topics_syllabus, name='API_get_topics_syllabus'),
     path('api/QuestionsToTopic/', views.API_question_to_topic, name='API_question_to_topic'),
     path('addCoursesThroughCSV/', views.dataEntryFunc, name='dataEntryFunc'),
+
+
+
+    path('register/', views.register, name='register'),
+    path('login/', views.login_user, name='login'),
+    path('logout/', views.logout_user, name='logout'),
+    path('student/dashboard/', views.student_dashboard, name='student_dashboard'),
+    path('faculty/dashboard/', views.faculty_dashboard, name='faculty_dashboard'),
+
+    
 ]
