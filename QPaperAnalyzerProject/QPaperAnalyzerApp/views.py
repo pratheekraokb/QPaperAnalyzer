@@ -192,6 +192,7 @@ from django.db import IntegrityError, DatabaseError
 
 def register(request):
     colleges = College.objects.all()
+    
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
@@ -199,14 +200,18 @@ def register(request):
         confirm_password = request.POST.get('confirm_password')
         phone_num = request.POST.get('phone_num')
         user_type = request.POST.get('user_type')
-        college_id = request.POST.get('college')
-
+        college_name = request.POST.get('college')
+        # print("College id is ", college_id)
         if password != confirm_password:
             return render(request, 'students/register.html', {'colleges': colleges, 'error': 'Passwords do not match.'})
 
         try:
             user = User.objects.create_user(username=username, email=email, password=password)
-            college = College.objects.get(pk=college_id) if college_id else None
+            # college = College.objects.get(pk=college_name) if college_name else None
+            college = College.objects.filter(CollegeName=college_name).first() if college_name else None
+
+            print("College Details")
+            print(college)
 
             # Check if the profile exists
             profile, created = Profile.objects.get_or_create(user=user, defaults={
