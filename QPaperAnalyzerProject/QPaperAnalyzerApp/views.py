@@ -176,7 +176,7 @@ def API_question_to_topic(request):
  
     
 def index(request):
-    return render(request, 'students/index.html')
+    return redirect('login')
 
 
 
@@ -230,11 +230,11 @@ def register(request):
             return redirect('login')
 
         except IntegrityError:
-            return render(request, 'students/register.html', {'colleges': colleges, 'error': 'User creation failed due to integrity error. Please try again.'})
+            return render(request, 'authentication/register.html', {'colleges': colleges, 'error': 'User creation failed due to integrity error. Please try again.'})
         except DatabaseError:
-            return render(request, 'students/register.html', {'colleges': colleges, 'error': 'A database error occurred. Please try again later.'})
+            return render(request, 'authentication/register.html', {'colleges': colleges, 'error': 'A database error occurred. Please try again later.'})
         except Exception as e:
-            return render(request, 'students/register.html', {'colleges': colleges, 'error': f'An unexpected error occurred: {e}'})
+            return render(request, 'authentication/register.html', {'colleges': colleges, 'error': f'An unexpected error occurred: {e}'})
 
     return render(request, 'students/register.html', {'colleges': colleges})
 
@@ -250,8 +250,8 @@ def login_user(request):
             elif user.profile.user_type == 'faculty':
                 return redirect('faculty_dashboard')
         else:
-            return render(request, 'login.html', {'error': 'Invalid credentials.'})
-    return render(request, 'students/login.html')
+            return render(request, 'authentication/login.html', {'error': 'Invalid credentials.'})
+    return render(request, 'authentication/login.html')
 
 @login_required
 def student_dashboard(request):
