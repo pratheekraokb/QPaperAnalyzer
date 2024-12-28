@@ -10,7 +10,10 @@ from .models import (
     Department,
     Department_Course_Map,
     CollegeDepartmentMap,
-    Profile
+    Profile,
+    Quiz,
+    QnA,
+    QuizScore
 )
 
 # Register each model to make it manageable through the admin interface
@@ -82,6 +85,27 @@ class CollegeDepartmentMapAdmin(admin.ModelAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone_num', 'user_type', 'college')  # Customize display in admin panel
+    list_display = ('user', 'name', 'phone_num', 'user_type', 'college')  # Customize display in admin panel
     list_filter = ('user_type', 'college')  # Allow filtering in admin panel
     search_fields = ('user__username', 'college__CollegeName')  # Enable searching in admin panel
+
+
+@admin.register(Quiz)
+class QuizAdmin(admin.ModelAdmin):
+    list_display = ('quiz_title', 'creation_timestamp', 'scheduled_date', 'max_score', 'created_by')
+    list_filter = ('scheduled_date', 'max_score', 'created_by')
+    search_fields = ('quiz_title', 'created_by__user__username')
+
+# Register QnA model
+@admin.register(QnA)
+class QnAAdmin(admin.ModelAdmin):
+    list_display = ('quiz', 'question_text', 'correct_option', 'mark')
+    list_filter = ('quiz', 'correct_option')
+    search_fields = ('question_text', 'quiz__quiz_title')
+
+# Register QuizScore model
+@admin.register(QuizScore)
+class QuizScoreAdmin(admin.ModelAdmin):
+    list_display = ('profile', 'quiz', 'score')
+    list_filter = ('quiz', 'profile')
+    search_fields = ('profile__user__username', 'quiz__quiz_title')

@@ -95,6 +95,7 @@ class Profile(models.Model):
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    name = models.CharField(max_length=100, default="", blank = True)
     phone_num = models.CharField(max_length=15, null=True, blank=True)
     user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES)
     college = models.ForeignKey(College, on_delete=models.SET_NULL, null=True, blank=True)
@@ -127,3 +128,36 @@ class Department_Course_Map(models.Model):
     def __str__(self):
         return f"{self.Department_ID} - {self.Course_ID}"
     
+
+class Quiz(models.Model):
+    quiz_title = models.CharField(max_length=200)
+    creation_timestamp = models.DateTimeField(auto_now_add=True)
+    scheduled_date = models.DateField()
+    max_score = models.IntegerField()
+    created_by = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='quizzes')
+    course_id = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='quizzes')
+    college_id = models.ForeignKey(College, on_delete=models.CASCADE, related_name='quizzes')
+    def __str__(self):
+        return self.quiz_title
+
+class QnA(models.Model):
+    quiz_qna_id = models.AutoField(primary_key=True)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='questions')
+    question_text = models.TextField()
+    option_1 = models.CharField(max_length=255)
+    option_2 = models.CharField(max_length=255)
+    option_3 = models.CharField(max_length=255)
+    option_4 = models.CharField(max_length=255)
+    correct_option = models.IntegerField()  # 1, 2, 3, or 4 to match the correct option
+    mark = models.IntegerField()
+
+    def __str__(self):
+        return f"Question for Quiz: {self.quiz.quiz_title}"
+
+class QuizScore(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='quiz_scores')
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='scores')
+    score = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.profile.user.username} - {self.quiz.quiz_title} - Score: {self.score}"
