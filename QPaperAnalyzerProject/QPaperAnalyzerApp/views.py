@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import User, Profile, College
+from .models import User, Profile, College, QPaper, QPaperQuestions
 
 from django.db import IntegrityError, DatabaseError
 
@@ -65,7 +65,7 @@ class QPaperModule:
         try:
             data = pd.read_csv(file_path)
             data = data.iloc[1:-1]
-            print("\nProcessing each row:")
+            # print("\nProcessing each row:")
             
             for index, row in data.iterrows():
                 course_code = str(row['Course_Code'])
@@ -109,76 +109,28 @@ class QPaperModule:
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
 
-    
-    # def ClassifyQuestion(question, topics):
-    #     """
-    #     Classifies a question into one of the given topics using TFBartForSequenceClassification.
-
-    #     Args:
-    #         question (str): The question to classify.
-    #         topics (list): A list of topics to classify the question into.
-
-    #     Returns:
-    #         str: The most likely topic for the question.
-    #     """
-    #     if not question or not topics:
-    #         raise ValueError("Both 'question' and 'topics' must be provided and non-empty.")
-
-    #     try:
-    #         # Load the pre-trained model and tokenizer
-    #         model = TFBartForSequenceClassification.from_pretrained("./bart-large-mnli")
-    #         tokenizer = BartTokenizer.from_pretrained("./bart-large-mnli")
-    #     except Exception as e:
-    #         print(f"Failed to load local model. Falling back to online model. Error: {e}")
-    #         model = TFBartForSequenceClassification.from_pretrained("facebook/bart-large-mnli")
-    #         tokenizer = BartTokenizer.from_pretrained("facebook/bart-large-mnli")
-
-    #     try:
-    #         # Prepare inputs for zero-shot classification
-    #         scores = []
-    #         for topic in topics:
-    #             inputs = tokenizer(
-    #                 f"This text is about {topic}: {question}",
-    #                 return_tensors="tf",
-    #                 padding=True,
-    #                 truncation=True,
-    #             )
-    #             logits = model(inputs["input_ids"]).logits
-    #             probabilities = tf.nn.softmax(logits, axis=-1).numpy()[0]
-    #             scores.append(probabilities[1])  # Probability for "entailment"
-
-    #         # Get the topic with the highest score
-    #         most_likely_topic = topics[scores.index(max(scores))]
-    #         return most_likely_topic
-    #     except Exception as e:
-    #         print(f"Classification failed: {e}")
-    #         raise RuntimeError("An error occurred during classification.") from e
-
-
-
     def QPaperExcelToJSON(file_path):
         # Load the Excel file
         df = pd.read_excel(file_path)
-        # print(df.iterrows())
         def retrieveMetaData():
             returnData = {}
             for index, row in df.iterrows():
                 first_col = row.iloc[0]
-                # print(first_col)
+       
                 if pd.isnull(first_col):
                     continue 
-                # print(row.iloc[1])
+             
                 if first_col == "Exam Name :":
                     examName = str(row.iloc[1])
                     examName = examName.strip("")
-                    # print(examName)
+                
                     try:
                         pattern = r'\b(January|February|March|April|May|June|July|August|September|October|November|December)\s\d{4}\b'
                         match = re.search(pattern, examName)
 
                         if match:
                             date_info = str(match.group(0))
-                            # print("date :- ", date_info)
+                        
                         else:
                             date_info = ""
                             print("Date not found.")
@@ -265,63 +217,92 @@ class QPaperModule:
         
         return returnData
 
+
+    # API QPaper Excel to Database
+
+    def handle_qpaper_creation(meta_data):
+        """Handles the creation or retrieval of a QPaper record."""
+        month_year = str(meta_data.get("Month_Year", ""))
+        course_code = str(meta_data.get("Course_Code", ""))
+        type_exam = QPaperModule.normalize_exam_type(str(meta_data.get("Type_Exam", "")))
+        max_marks = int(meta_data.get("Max_Marks", ""))
+        exam_name = str(meta_data.get("Exam_Name", ""))
+
+        qpaper, created = QPaper.objects.get_or_create(
+            CourseCode=course_code,
+            Exam_Type=type_exam,
+            Exam_Name=exam_name,
+            Month_Year=month_year,
+            defaults={"Max_Marks": max_marks},
+        )
+        return qpaper
     
-        """
-        Classifies a question into one of the given topics using TFBartForSequenceClassification.
+    def normalize_exam_type(type_exam):
+        """Normalizes the exam type."""
+        if "regular" in type_exam.lower():
+            return "Regular"
+        elif "supply" in type_exam.lower():
+            return "Supply"
+        else:
+            raise ValueError("Invalid exam type provided.")
+        
+    def process_questions(qpaper, part_a_questions_data, part_b_questions_data):
+        """Processes Part A and Part B questions."""
+        questions_list, module_list, marks_list = [], [], []
 
-        Args:
-            question (str): The question to classify.
-            topics (list): A list of topics to classify the question into.
+        for question_data in part_a_questions_data + part_b_questions_data:
+            question = question_data[1] if len(question_data) > 1 else ""
+            module = question_data[2] if len(question_data) > 2 else ""
+            mark = question_data[3] if len(question_data) > 3 else 0
 
-        Returns:
-            str: The most likely topic for the question.
-        """
-        if not question or not topics:
-            raise ValueError("Both 'question' and 'topics' must be provided and non-empty.")
+            question_obj, _ = QPaperQuestions.objects.get_or_create(
+                QPaper_ID=qpaper,
+                QuestionText=str(question),
+                defaults={
+                    "Mark": int(mark),
+                    "Module_Number": int(module),
+                },
+            )
+            questions_list.append(question)
+            module_list.append(module)
+            marks_list.append(mark)
 
-        # Generate hash key for caching
-        hash_key = QPaperModule.hash_question_topics(question, topics)
-
-        # Check if the result is already cached
-        if hash_key in QPaperModule.cache:
-            print(f"Cache hit for question: {question}")
-            return QPaperModule.cache[hash_key]
-
-        # Load model and tokenizer
+        return questions_list, module_list, marks_list
+    
+    def send_questions_to_topic_api(course_code, questions_list, module_list, marks_list):
+        """Sends questions data to an external API for topic analysis."""
+        url = "http://127.0.0.1:8000/api/QuestionsToTopic/"
+        payload = {
+            "course_code": course_code,
+            "questions": questions_list,
+            "module_info": module_list,
+            "marks_info": marks_list,
+        }
         try:
-            model = TFBartForSequenceClassification.from_pretrained("./bart-large-mnli")
-            tokenizer = BartTokenizer.from_pretrained("./bart-large-mnli")
-        except Exception as e:
-            print(f"Failed to load local model. Falling back to online model. Error: {e}")
-            model = TFBartForSequenceClassification.from_pretrained("facebook/bart-large-mnli")
-            tokenizer = BartTokenizer.from_pretrained("facebook/bart-large-mnli")
-
-        # Perform classification
+            response = requests.post(url, json=payload)
+            if response.status_code == 200:
+                print("Data sent successfully.")
+            else:
+                print(f"Failed to send data. Status code: {response.status_code}")
+                print("Error response:", response.text)
+        except requests.RequestException as e:
+            print(f"Error in sending questions to API: {e}")
+    def rename_file(file_path, base_url, course_code, type_exam):
+        """Renames the file to a standardized format."""
+        new_filename = f"{base_url}/{course_code}_{type_exam}.xlsx"
         try:
-            scores = []
-            for topic in topics:
-                inputs = tokenizer(
-                    f"This text is about {topic}: {question}",
-                    return_tensors="tf",
-                    padding=True,
-                    truncation=True,
-                )
-                logits = model(inputs["input_ids"]).logits
-                probabilities = tf.nn.softmax(logits, axis=-1).numpy()[0]
-                scores.append(probabilities[1])  # Probability for "entailment"
-
-            # Get the topic with the highest score
-            most_likely_topic = topics[scores.index(max(scores))]
-
-            # Cache the result
-            QPaperModule.cache[hash_key] = most_likely_topic
-            return most_likely_topic
+            os.rename(file_path, new_filename)
+        except FileNotFoundError:
+            print(f"File not found: {file_path}")
+        except FileExistsError:
+            print(f"File already exists: {new_filename}")
         except Exception as e:
-            print(f"Classification failed: {e}")
-            raise RuntimeError("An error occurred during classification.") from e
-
-
-
+            print(f"Unexpected error while renaming the file: {e}")
+    
+    def handle_exception(error_message, status_code):
+        """Handles exceptions by printing the error and returning a JSON response."""
+        print(error_message)
+        return JsonResponse({"status": "error", "message": error_message}, status=status_code)
     # Classifying the questions into corresponding topic from the module
 
     CACHE_FILE = "question_cache.json"  # File to store the cache
@@ -411,14 +392,14 @@ class QPaperModule:
                 )
                 logits = model(inputs["input_ids"]).logits
                 probabilities = tf.nn.softmax(logits, axis=-1).numpy()[0]
-                scores.append(probabilities[1])  # Probability for "entailment"
+                scores.append(probabilities[1])  
 
             # Get the topic with the highest score
             most_likely_topic = topics[scores.index(max(scores))]
 
             # Cache the result
             QPaperModule.cache[hash_key] = most_likely_topic
-            QPaperModule.save_cache()  # Save cache after updating
+            QPaperModule.save_cache()  
             return most_likely_topic
         except Exception as e:
             print(f"Classification failed: {e}")
@@ -488,7 +469,7 @@ def API_question_to_topic(request):
                 topics = data
                 resultTopic = QPaperModule.ClassifyQuestion(question, topics)
                 resultArray.append(resultTopic)
-            print(resultArray)
+            # print(resultArray)
             return JsonResponse({
                 'status': 'success',
                 'message': 'Data received successfully',
@@ -508,6 +489,7 @@ def API_question_to_topic(request):
 def index(request):
     return redirect('login')
 
+
 def API_QPaperExcelToDB(request):
     try:
         # File and path initialization
@@ -517,98 +499,193 @@ def API_QPaperExcelToDB(request):
 
         data = QPaperModule.QPaperExcelToJSON(file_path)
     
+        # Extract data
         meta_data = data.get("Meta_Data", {})
         part_a_questions_data = data.get("PartA_Questions", [])
         part_b_questions_data = data.get("PartB_Questions", [])
 
-        # print(meta_data)
-        month_year = meta_data.get("Month_Year", "")
-        course_code = meta_data.get("Course_Code", "")
-        type_exam = meta_data.get("Type_Exam", "")
+        # Handle QPaper creation
+        qpaper = QPaperModule.handle_qpaper_creation(meta_data)
 
-        # Initialize lists to hold question details
-        QuestionsList = []
-        ModuleList = []
-        MarksList = []
+        # Handle questions processing
+        questions_list, module_list, marks_list = QPaperModule.process_questions(qpaper, part_a_questions_data, part_b_questions_data)
 
-        # Process Part A questions
-        for questionData in part_a_questions_data:
-            question = questionData[1] if len(questionData) > 1 else ""
-            module = questionData[2] if len(questionData) > 2 else ""
-            mark = questionData[3] if len(questionData) > 3 else 0
-
-            QuestionsList.append(question)
-            ModuleList.append(module)
-            MarksList.append(mark)
-
-        # Process Part B questions
-        for questionData in part_b_questions_data:
-            question = questionData[1] if len(questionData) > 1 else ""
-            module = questionData[2] if len(questionData) > 2 else ""
-            mark = questionData[3] if len(questionData) > 3 else 0
-
-            QuestionsList.append(question)
-            ModuleList.append(module)
-            MarksList.append(mark)
-
-        # Prepare JSON to send
-            
-        
-            questions = data.get('', [])
-            module_info = data.get('module_info', [])
-            marks_info = data.get('marks_info', [])
-    
-        sendJSONFormat = {
-            "course_code": course_code,
-            "questions": QuestionsList,
-            "module_info": ModuleList,
-            "marks_info": MarksList
-        }
-        # SENDING POST REQUEST TO get the topic of each question
-        
-        url = "http://127.0.0.1:8000/api/QuestionsToTopic/"
-        try:
-            response = requests.post(url, json=sendJSONFormat)
-
-            # Check the response status
-            if response.status_code == 200:
-                print("Data sent successfully.")
-                print("Response:", response.json())
-            else:
-                print(f"Failed to send data. Status code: {response.status_code}")
-                print("Error response:", response.text)
-        except:
-            print("Error in retriveing the topic of each question")
-
-        # print(sendJSONFormat)
+        # Send data for further processing
+        QPaperModule.send_questions_to_topic_api(qpaper.CourseCode, questions_list, module_list, marks_list)
 
         # Rename the file
-        new_filename = f"{base_url}/{course_code}_{type_exam}.xlsx"
-        try:
-            os.rename(file_path, new_filename)
-        except FileNotFoundError:
-            print(f"File not found: {file_path}")
-        except FileExistsError:
-            print(f"File already exists: {new_filename}")
-        except Exception as e:
-            print(f"Unexpected error while renaming the file: {e}")
+        QPaperModule.rename_file(file_path, base_url, meta_data.get("Course_Code", ""), qpaper.Exam_Type)
 
-        return JsonResponse(data, safe=False)
+        return JsonResponse(data, safe=True)
 
     except KeyError as e:
-        error_message = f"KeyError: Missing key {e} in JSON data."
-        print(error_message)
-        return JsonResponse({"status": "error", "message": error_message}, status=400)
-
+        return QPaperModule.handle_exception(f"KeyError: Missing key {e} in JSON data.", 400)
     except FileNotFoundError as e:
-        error_message = f"FileNotFoundError: {e}"
-        print(error_message)
-        return JsonResponse({"status": "error", "message": error_message}, status=404)
-
+        return QPaperModule.handle_exception(f"FileNotFoundError: {e}", 404)
     except Exception as e:
-        error_message = f"An unexpected error occurred: {e}"
-        print(error_message)
-        return JsonResponse({"status": "error", "message": error_message}, status=500)
+        return QPaperModule.handle_exception(f"An unexpected error occurred: {e}", 500)
+
+# def API_QPaperExcelToDB(request):
+#     try:
+#         # File and path initialization
+#         filename = "CST204_Regular.xlsx"
+#         file_path = f"QPaperAnalyzerApp/media/Excel_Files/Temp_QPapers/{filename}"
+#         base_url = "QPaperAnalyzerApp/media/Excel_Files/Temp_QPapers/"
+
+#         data = QPaperModule.QPaperExcelToJSON(file_path)
+    
+#         meta_data = data.get("Meta_Data", {})
+#         part_a_questions_data = data.get("PartA_Questions", [])
+#         part_b_questions_data = data.get("PartB_Questions", [])
+
+#         # Extract values from meta_data
+#         month_year = str(meta_data.get("Month_Year", ""))
+#         course_code = str(meta_data.get("Course_Code", ""))
+#         type_exam = str(meta_data.get("Type_Exam", ""))
+#         max_marks = int(meta_data.get("Max_Marks", ""))
+#         exam_name = str(meta_data.get("Exam_Name", ""))
+
+#         # Normalize type_exam value
+#         if "regular" in type_exam.lower():
+#             type_exam = "Regular"
+#         elif "supply" in type_exam.lower():
+#             type_exam = "Supply"
+#         else:
+#             raise ValueError("Invalid exam type provided.")
+        
+
+#         # Add a new QPaper record only if it doesn't exist
+#         qpaper, created = QPaper.objects.get_or_create(
+#             CourseCode=course_code,
+#             Exam_Type=type_exam,
+#             Exam_Name=exam_name,
+#             Month_Year=month_year,
+#             defaults={
+#                 "Max_Marks": max_marks,
+#             }
+#         )
+
+#         # Provide feedback on the operation
+#         if created:
+#             print("A new QPaper record has been added.")
+#         else:
+#             print("The QPaper record already exists.")
+
+
+#         # Initialize lists to hold question details
+#         QuestionsList = []
+#         ModuleList = []
+#         MarksList = []
+
+#         try:
+#             qpaper = QPaper.objects.get(Exam_Name=exam_name, Month_Year=month_year)
+#             qpaper_id = qpaper.QPaper_ID
+#             print(f"QPaper_ID: {qpaper_id}")
+#         except QPaper.DoesNotExist:
+#             print("No QPaper record found for the given Exam_Name and Month_Year.")
+
+#         # Process Part A questions
+#         for questionData in part_a_questions_data:
+#             question = questionData[1] if len(questionData) > 1 else ""
+#             module = questionData[2] if len(questionData) > 2 else ""
+#             mark = questionData[3] if len(questionData) > 3 else 0
+
+#             # print(question, module, mark)
+#             question = str(question)
+#             module = int(module)
+#             mark = int(mark)
+
+#             question_obj, created = QPaperQuestions.objects.get_or_create(
+#                 QPaper_ID=qpaper,
+#                 QuestionText=question,
+#                 defaults={
+#                     "Mark": mark,
+#                     "Module_Number": module,
+#                 }
+#             )
+
+
+#             QuestionsList.append(question)
+#             ModuleList.append(module)
+#             MarksList.append(mark)
+
+
+
+
+#         # Process Part B questions
+#         for questionData in part_b_questions_data:
+#             question = questionData[1] if len(questionData) > 1 else ""
+#             module = questionData[2] if len(questionData) > 2 else ""
+#             mark = questionData[3] if len(questionData) > 3 else 0
+
+#             QuestionsList.append(question)
+#             ModuleList.append(module)
+#             MarksList.append(mark)
+
+#             question_obj, created = QPaperQuestions.objects.get_or_create(
+#                 QPaper_ID=qpaper,
+#                 QuestionText=question,
+#                 defaults={
+#                     "Mark": mark,
+#                     "Module_Number": module,
+#                 }
+#             )
+
+        
+#             questions = data.get('', [])
+#             module_info = data.get('module_info', [])
+#             marks_info = data.get('marks_info', [])
+    
+#         sendJSONFormat = {
+#             "course_code": course_code,
+#             "questions": QuestionsList,
+#             "module_info": ModuleList,
+#             "marks_info": MarksList
+#         }
+#         # SENDING POST REQUEST TO get the topic of each question
+        
+#         url = "http://127.0.0.1:8000/api/QuestionsToTopic/"
+#         try:
+#             response = requests.post(url, json=sendJSONFormat)
+
+#             # Check the response status
+#             if response.status_code == 200:
+#                 print("Data sent successfully.")
+#                 # print("Response:", response.json())
+#             else:
+#                 print(f"Failed to send data. Status code: {response.status_code}")
+#                 print("Error response:", response.text)
+#         except:
+#             print("Error in retriveing the topic of each question")
+
+        
+#         new_filename = f"{base_url}/{course_code}_{type_exam}.xlsx"
+#         try:
+#             os.rename(file_path, new_filename)
+#         except FileNotFoundError:
+#             print(f"File not found: {file_path}")
+#         except FileExistsError:
+#             print(f"File already exists: {new_filename}")
+#         except Exception as e:
+#             print(f"Unexpected error while renaming the file: {e}")
+
+#         return JsonResponse(data, safe=True)
+
+#     except KeyError as e:
+#         error_message = f"KeyError: Missing key {e} in JSON data."
+#         print(error_message)
+#         return JsonResponse({"status": "error", "message": error_message}, status=400)
+
+#     except FileNotFoundError as e:
+#         error_message = f"FileNotFoundError: {e}"
+#         print(error_message)
+#         return JsonResponse({"status": "error", "message": error_message}, status=404)
+
+#     except Exception as e:
+#         error_message = f"An unexpected error occurred: {e}"
+#         print(error_message)
+#         return JsonResponse({"status": "error", "message": error_message}, status=500)
+
 
 def register(request):
     colleges = College.objects.all()

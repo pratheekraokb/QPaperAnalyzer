@@ -32,6 +32,7 @@ class QPaper(models.Model):
     Max_Marks = models.IntegerField(default=100)
     Exam_Type = models.CharField(max_length=7, choices=EXAM_TYPE_CHOICES, default='Regular')
     Exam_Name = models.CharField(max_length=400)
+    Month_Year = models.CharField(max_length=200, default="")
 
     def __str__(self):
         return f"{self.CourseCode} - {self.Exam_Name}"
@@ -41,7 +42,7 @@ class QPaperQuestions(models.Model):
     QPaper_ID = models.ForeignKey(QPaper, on_delete=models.CASCADE, related_name="questions")
     QuestionText = models.TextField()
     Mark = models.IntegerField(default=1)
-    Topic = models.TextField()
+    # Topic = models.TextField()
     Module_Number = models.IntegerField(default=1)
 
     def __str__(self):
@@ -62,7 +63,7 @@ class PrivateQPaperQuestions(models.Model):
     QPaper_ID = models.ForeignKey(PrivateQPaper, on_delete=models.CASCADE, related_name="questions")
     QuestionText = models.TextField()
     Mark = models.IntegerField(default=1)
-    Topic = models.TextField()
+    # Topic = models.TextField()
     Module_Number = models.IntegerField(default=1)
 
     def __str__(self):

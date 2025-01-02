@@ -25,15 +25,15 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(QPaper)
 class QPaperAdmin(admin.ModelAdmin):
-    list_display = ('CourseCode', 'Exam_Name', 'Exam_Type', 'Max_Marks')
+    list_display = ('CourseCode', 'Exam_Name', 'Exam_Type', 'Max_Marks', 'Month_Year')
     search_fields = ('CourseCode', 'Exam_Name')
     list_filter = ('Exam_Type',)
 
 
 @admin.register(QPaperQuestions)
 class QPaperQuestionsAdmin(admin.ModelAdmin):
-    list_display = ('QPaper_ID', 'QuestionText', 'Mark', 'Module_Number', 'Topic')
-    search_fields = ('QuestionText', 'Topic')
+    list_display = ('QPaper_ID', 'QuestionText', 'Mark', 'Module_Number')
+    search_fields = ('QuestionText',)
     list_filter = ('Module_Number',)
 
 
@@ -45,8 +45,8 @@ class PrivateQPaperAdmin(admin.ModelAdmin):
 
 @admin.register(PrivateQPaperQuestions)
 class PrivateQPaperQuestionsAdmin(admin.ModelAdmin):
-    list_display = ('QPaper_ID', 'QuestionText', 'Mark', 'Module_Number', 'Topic')
-    search_fields = ('QuestionText', 'Topic')
+    list_display = ('QPaper_ID', 'QuestionText', 'Mark', 'Module_Number')
+    search_fields = ('QuestionText',)
     list_filter = ('Module_Number',)
 
 
