@@ -42,6 +42,7 @@ Retrieve the head and syllabus of a specific module for a given course.
 
 <!-- #### Example Request Body -->
 <!-- ```json -->
+```json
 {
     "CourseCode": "CS101",
     "Module": 1,
@@ -57,6 +58,7 @@ Retrieve the head and syllabus of a specific module for a given course.
         "Introduction to Micro services using Flask"
     ]
 }
+```
 
 ## 2. POST /api/QuestionsToTopic/ 
 
