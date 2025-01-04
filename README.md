@@ -64,12 +64,12 @@ Retrieve the head and syllabus of a specific module for a given course.
 
 
 
-## **Request Format**
+### **Request Format**
 
-### **Headers**
+#### **Headers**
 - `Content-Type: application/json`
 
-### **Body**
+#### **Body**
 The request body should contain the following fields:
 
 | Field         | Type   | Description                                            |
@@ -79,7 +79,7 @@ The request body should contain the following fields:
 | `module_info` | Array  | A list of module numbers corresponding to each question. |
 | `marks_info`  | Array  | A list of marks corresponding to each question.        |
 
-#### Example Request Body
+##### Example Request Body
 ```json
 {
   "course_code": "CST205",
@@ -103,7 +103,7 @@ The request body should contain the following fields:
 
 ---
 
-## CSV File Format
+### CSV File Format
 Save the csv file in "QPaperAnalyzerProject/dataEntry/Syllabus_Dataset.csv"
 The file should be a CSV with the following structure:
 
@@ -137,12 +137,12 @@ S6,1,CSL 362,Programming In Python,Programming Environment and Python Basics,"Ge
 ## 4. POST /api/QPaperExcelToDB/
 ### QPaper Excel to Database
 
-## **Description**
+### **Description**
 This API processes a provided Excel file containing question paper data, extracts information, and stores it in the database.
 
 ---
 
-## **Headers**
+### **Headers**
 
 | Header         | Value             |
 |-----------------|-------------------|
@@ -150,7 +150,7 @@ This API processes a provided Excel file containing question paper data, extract
 
 ---
 
-## Request Body
+### Request Body
 
 The request body should be in JSON format and contain the following field:
 
@@ -158,7 +158,7 @@ The request body should be in JSON format and contain the following field:
 |------------|--------|---------------------------------------------------------|
 | `filename` | String | The name of the Excel file to process, including the extension. |
 
-### Example Request Body
+#### Example Request Body
 ```json
 {
   "filename": "CST204_Regular_July_2021.xlsx"
