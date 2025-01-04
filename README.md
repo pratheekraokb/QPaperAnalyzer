@@ -88,5 +88,45 @@ The request body should contain the following fields:
   "module_info": [1, 1],
   "marks_info": [5, 10]
 }
+```
 
+## 3. Add Courses Through CSV
+- **URL:** `/addCoursesThroughCSV/`
+- **Method:** `GET`
+- **Description:** This endpoint processes a predefined CSV file containing course details and saves the courses into the database.
+- **Response:** 
+  - **Success:** Returns `Success` upon successful processing and saving.
+  - **Error:** Logs errors in the server console if any occur during processing.
 
+---
+
+## CSV File Format
+Save the csv file in "QPaperAnalyzerProject/dataEntry/Syllabus_Dataset.csv"
+The file should be a CSV with the following structure:
+
+| Column Name           | Description                                                        |
+|-----------------------|--------------------------------------------------------------------|
+| Semester              | The semester in which the course is offered (e.g., `S6`).         |
+| Sl No                 | Serial number of the course in the semester.                      |
+| Course_Code           | Unique code for the course (e.g., `CSL 362`).                     |
+| Subject Name          | The name of the course (e.g., `Programming In Python`).           |
+| Module1 Heading       | Title of the first module.                                        |
+| Module1 Syllabus      | Detailed syllabus of the first module.                           |
+| Module2 Heading       | Title of the second module.                                       |
+| Module2 Syllabus      | Detailed syllabus of the second module.                          |
+| Module3 Heading       | Title of the third module.                                        |
+| Module3 Syllabus      | Detailed syllabus of the third module.                           |
+| Module4 Heading       | Title of the fourth module.                                       |
+| Module4 Syllabus      | Detailed syllabus of the fourth module.                          |
+| Module5 Heading       | Title of the fifth module.                                        |
+| Module5 Syllabus      | Detailed syllabus of the fifth module.                           |
+| Module6 Heading       | Title of the sixth module (optional).                            |
+| Module6 Syllabus      | Detailed syllabus of the sixth module (optional).                |
+
+---
+
+## Example CSV File
+```csv
+Semester,Sl No,Course_Code,Subject Name,Module1 Heading,Module1 Syllabus,Module2 Heading,Module2 Syllabus,Module3 Heading,Module3 Syllabus,Module4 Heading,Module4 Syllabus,Module5 Heading,Module5 Syllabus,Module6 Heading,Module6 Syllabus
+S6,1,CSL 362,Programming In Python,Programming Environment and Python Basics,"Getting started with Python programming – Interactive shell, IDLE...",Building Python Programs,"Strings and text files – Accessing characters, substrings...",Graphics,"Graphics – Terminal-based programs, Simple Graphics...",Object Oriented Programming,"Design with classes - Objects and Classes...",Data Processing,"The os and sys modules, NumPy - Basics, Creating arrays...",,
+```

@@ -281,12 +281,28 @@ class QPaperModule:
         try:
             response = requests.post(url, json=payload)
             if response.status_code == 200:
+                data = response.json()
+                question_topic_list = data["result_topics"]
+
+                print(question_topic_list)
+                if len(questions_list) == len(question_topic_list):
+                    for question_text, topic in zip(questions_list, question_topic_list):
+                        # Check if the question already exists in the QPaperQuestions table
+                        question = QPaperQuestions.objects.filter(QuestionText=question_text).first()
+                        if question:
+                            question.Topic = str(topic)
+                            question.save()
+                        else:
+                            print("Question not present")
+
+                    
                 print("Data sent successfully.")
             else:
                 print(f"Failed to send data. Status code: {response.status_code}")
                 print("Error response:", response.text)
         except requests.RequestException as e:
             print(f"Error in sending questions to API: {e}")
+
     def rename_file(file_path, base_url, course_code, type_exam):
         """Renames the file to a standardized format."""
         new_filename = f"{base_url}/{course_code}_{type_exam}.xlsx"
@@ -504,16 +520,11 @@ def API_QPaperExcelToDB(request):
         part_a_questions_data = data.get("PartA_Questions", [])
         part_b_questions_data = data.get("PartB_Questions", [])
 
+
         # Handle QPaper creation
         qpaper = QPaperModule.handle_qpaper_creation(meta_data)
-
-        # Handle questions processing
         questions_list, module_list, marks_list = QPaperModule.process_questions(qpaper, part_a_questions_data, part_b_questions_data)
-
-        # Send data for further processing
         QPaperModule.send_questions_to_topic_api(qpaper.CourseCode, questions_list, module_list, marks_list)
-
-        # Rename the file
         QPaperModule.rename_file(file_path, base_url, meta_data.get("Course_Code", ""), qpaper.Exam_Type)
 
         return JsonResponse(data, safe=True)

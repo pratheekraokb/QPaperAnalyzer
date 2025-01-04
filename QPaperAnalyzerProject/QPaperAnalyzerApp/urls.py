@@ -8,7 +8,6 @@ urlpatterns = [
     path('api/QPaperExcelToDB/', views.API_QPaperExcelToDB, name='API_QPaperExcelToDB'),
     path('addCoursesThroughCSV/', views.dataEntryFunc, name='dataEntryFunc'),
 
-
     # Authentication
 
     path('register/', views.register, name='register'),
@@ -16,7 +15,5 @@ urlpatterns = [
     path('logout/', views.logout_user, name='logout'),
     
     path('student/dashboard/', views.student_dashboard, name='student_dashboard'),
-    path('faculty/dashboard/', views.faculty_dashboard, name='faculty_dashboard'),
-
-    
+    path('faculty/dashboard/', views.faculty_dashboard, name='faculty_dashboard'),   
 ]

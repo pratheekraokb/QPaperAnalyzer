@@ -42,7 +42,7 @@ class QPaperQuestions(models.Model):
     QPaper_ID = models.ForeignKey(QPaper, on_delete=models.CASCADE, related_name="questions")
     QuestionText = models.TextField()
     Mark = models.IntegerField(default=1)
-    # Topic = models.TextField()
+    Topic = models.TextField(default="")
     Module_Number = models.IntegerField(default=1)
 
     def __str__(self):
@@ -63,7 +63,7 @@ class PrivateQPaperQuestions(models.Model):
     QPaper_ID = models.ForeignKey(PrivateQPaper, on_delete=models.CASCADE, related_name="questions")
     QuestionText = models.TextField()
     Mark = models.IntegerField(default=1)
-    # Topic = models.TextField()
+    Topic = models.TextField(default="")
     Module_Number = models.IntegerField(default=1)
 
     def __str__(self):
