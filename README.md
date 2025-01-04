@@ -90,7 +90,8 @@ The request body should contain the following fields:
 }
 ```
 
-## 3. Add Courses Through CSV
+## 3. GET /addCoursesThroughCSV/
+### Add Courses Through CSV
 - **URL:** `/addCoursesThroughCSV/`
 - **Method:** `GET`
 - **Description:** This endpoint processes a predefined CSV file containing course details and saves the courses into the database.
