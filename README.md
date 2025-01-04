@@ -60,7 +60,7 @@ Retrieve the head and syllabus of a specific module for a given course.
 
 ## 2. POST /api/QuestionsToTopic/ 
 
----
+
 
 ## **Request Format**
 
@@ -130,4 +130,78 @@ The file should be a CSV with the following structure:
 ```csv
 Semester,Sl No,Course_Code,Subject Name,Module1 Heading,Module1 Syllabus,Module2 Heading,Module2 Syllabus,Module3 Heading,Module3 Syllabus,Module4 Heading,Module4 Syllabus,Module5 Heading,Module5 Syllabus,Module6 Heading,Module6 Syllabus
 S6,1,CSL 362,Programming In Python,Programming Environment and Python Basics,"Getting started with Python programming – Interactive shell, IDLE...",Building Python Programs,"Strings and text files – Accessing characters, substrings...",Graphics,"Graphics – Terminal-based programs, Simple Graphics...",Object Oriented Programming,"Design with classes - Objects and Classes...",Data Processing,"The os and sys modules, NumPy - Basics, Creating arrays...",,
+```
+
+## 4. POST /api/QPaperExcelToDB/
+### QPaper Excel to Database
+
+## **Description**
+This API processes a provided Excel file containing question paper data, extracts information, and stores it in the database.
+
+---
+
+## **Headers**
+
+| Header         | Value             |
+|-----------------|-------------------|
+| Content-Type    | `application/json` |
+
+---
+
+## Request Body
+
+The request body should be in JSON format and contain the following field:
+
+| Field      | Type   | Description                                             |
+|------------|--------|---------------------------------------------------------|
+| `filename` | String | The name of the Excel file to process, including the extension. |
+
+### Example Request Body
+```json
+{
+  "filename": "CST204_Regular_July_2021.xlsx"
+}
+```
+### Success Response
+
+```json
+{
+  "message": "File processed successfully and data stored in the database."
+}
+
+```
+### Error Responses
+1. 400 Bad Request: Missing or invalid input.
+```json
+{
+  "error": "Filename is required."
+}
+```
+2. 404 Not Found: File not found in the specified directory.
+```json
+{
+  "error": "FileNotFoundError: [file_path] not found."
+}
+```
+3. 400 Bad Request: Missing key in extracted JSON data.
+```json
+{
+  "error": "KeyError: Missing key [key_name] in JSON data."
+}
+
+```
+
+4. 500 Internal Server Error: Any other unexpected error during processing.
+```json
+{
+  "error": "An unexpected error occurred: [error details]."
+}
+
+```
+
+5. 405 Method Not Allowed: For HTTP methods other than POST.
+```json
+{
+  "error": "Only POST method is allowed."
+}
 ```
