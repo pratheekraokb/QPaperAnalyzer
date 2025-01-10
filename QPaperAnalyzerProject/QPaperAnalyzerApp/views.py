@@ -28,7 +28,7 @@ from functools import lru_cache
 from transformers import TFBartForSequenceClassification, BartTokenizer
 import tensorflow as tf
 
-
+import time
 
 import google.generativeai as genai
 
@@ -243,7 +243,7 @@ class QPaperModule:
                 existing_question = QPaperQuestions.objects.filter(QuestionText=question).first()
 
                 if existing_question and existing_question.AnswerText.strip():
-                    print("No Generation")
+                    # print("No Generation")
                     continue
                 
                 # Generate the content for the question
@@ -253,7 +253,7 @@ class QPaperModule:
                 """
                 response = model.generate_content(query_format)
                 response_text = str(response.text).strip()
-                print(response_text)  # For debugging purposes, print the generated response
+                # print(response_text)  # For debugging purposes, print the generated response
                 
                 if existing_question:
                     # Update the AnswerText field if the question exists
@@ -540,6 +540,8 @@ def API_question_to_topic(request):
                 topics = data
                 resultTopic = QPaperModule.ClassifyQuestion(question, topics)
                 resultArray.append(resultTopic)
+
+                
             # print(resultArray)
             return JsonResponse({
                 'status': 'success',
@@ -558,11 +560,6 @@ def API_question_to_topic(request):
  
     
 def index(request):
-    # QPaperModule.genAIQuestionToAnswer(api_key=api_key, )
-    # question = "What are the advantages of using UML? Sketch the UML class diagram for an entity 'book'."
-    # mark = 3
-    # response = QPaperModule.genAIQuestionToAnswer(api_key, question, mark)
-    # print(response)
     return redirect('login')
 
 
@@ -597,6 +594,8 @@ def API_QPaperExcelToDB(request):
                 qpaper.CourseCode, questions_list, module_list, marks_list
             )
             try:
+                QPaperModule.genAIQuestionsToAnswers(api_key=api_key, question_list=questions_list,mark_list=marks_list)
+                time.sleep(0.1)
                 QPaperModule.genAIQuestionsToAnswers(api_key=api_key, question_list=questions_list,mark_list=marks_list)
                 print("hai")
             except:
@@ -685,7 +684,7 @@ def login_user(request):
 
 @login_required
 def student_dashboard(request):
-    return render(request, 'student_dashboard.html', {'user': request.user})
+    return render(request, 'students/student_dashboard.html', {'user': request.user})
 
 @login_required
 def faculty_dashboard(request):
