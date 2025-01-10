@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import User, Profile, College, QPaper, QPaperQuestions, Course
+from django.core.exceptions import ObjectDoesNotExist
 
 from django.db import IntegrityError, DatabaseError
 
@@ -35,6 +36,7 @@ from dotenv import load_dotenv
 
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
+from django.db.models import Sum, Count
 
 
 
@@ -235,7 +237,7 @@ class QPaperModule:
             # Check if question_list and mark_list have the same length
             if len(question_list) != len(mark_list):
                 return "Error: The question list and mark list must have the same length."
-
+            # print(len(question_list))
             # Configure the API key
             genai.configure(api_key=api_key)
 
@@ -312,29 +314,53 @@ class QPaperModule:
     def process_questions(qpaper, part_a_questions_data, part_b_questions_data):
         """Processes Part A and Part B questions."""
         questions_list, module_list, marks_list = [], [], []
+        
+        try:
+            # Iterate over Part A and Part B question data
+            for question_data in part_a_questions_data + part_b_questions_data:
+                # Extract data, ensuring each element exists
+                question = question_data[1] if len(question_data) > 1 else ""
+                module = question_data[2] if len(question_data) > 2 else ""
+                mark = question_data[3] if len(question_data) > 3 else 0
 
-        for question_data in part_a_questions_data + part_b_questions_data:
-            question = question_data[1] if len(question_data) > 1 else ""
-            module = question_data[2] if len(question_data) > 2 else ""
-            mark = question_data[3] if len(question_data) > 3 else 0
+                # Get or create the question object
+                question_obj, created = QPaperQuestions.objects.get_or_create(
+                    QPaper_ID=qpaper,
+                    QuestionText=str(question),
+                    defaults={
+                        "Mark": int(mark),
+                        "Module_Number": int(module),
+                    },
+                )
+                
+                # Append relevant details to the lists
+                questions_list.append(question)
+                module_list.append(module)
+                marks_list.append(mark)
 
-            question_obj, _ = QPaperQuestions.objects.get_or_create(
-                QPaper_ID=qpaper,
-                QuestionText=str(question),
-                defaults={
-                    "Mark": int(mark),
-                    "Module_Number": int(module),
-                },
-            )
-            questions_list.append(question)
-            module_list.append(module)
-            marks_list.append(mark)
+        except IntegrityError as e:
+            # This handles issues like duplicate entries due to unique constraints
+            return {"error": f"Integrity error occurred: {str(e)}"}
+
+        except ObjectDoesNotExist as e:
+            # This handles cases where an object is not found when querying the database
+            return {"error": f"Object does not exist: {str(e)}"}
+
+        except ValueError as e:
+            # This handles any issues with type conversions (e.g., converting to int)
+            return {"error": f"Value error occurred: {str(e)}"}
+
+        except Exception as e:
+            # General exception handler for unexpected errors
+            return {"error": f"An unexpected error occurred: {str(e)}"}
 
         return questions_list, module_list, marks_list
     
     def send_questions_to_topic_api(course_code, questions_list, module_list, marks_list):
         """Sends questions data to an external API for topic analysis."""
         url = "http://127.0.0.1:8000/api/QuestionsToTopic/"
+        course_code = str(course_code)
+        print("hai")
         payload = {
             "course_code": course_code,
             "questions": questions_list,
@@ -343,6 +369,7 @@ class QPaperModule:
         }
         try:
             response = requests.post(url, json=payload)
+            # print("hai2")
             if response.status_code == 200:
                 data = response.json()
                 question_topic_list = data["result_topics"]
@@ -355,10 +382,11 @@ class QPaperModule:
                         if question:
                             question.Topic = str(topic)
                             question.save()
+                            # print(question_text)
                         else:
                             print("Question not present")
 
-                    
+                # print(len(questions_list))
                 print("Data sent successfully.")
             else:
                 print(f"Failed to send data. Status code: {response.status_code}")
@@ -577,6 +605,7 @@ def API_QPaperExcelToDB(request):
         try:
             # Parse the request body
             body = json.loads(request.body)
+            # print(type(body), body)
             filename = body.get("filename", "")
             if not filename:
                 return JsonResponse({"error": "Filename is required."}, status=400)
@@ -587,25 +616,30 @@ def API_QPaperExcelToDB(request):
 
             # Extract data from the Excel file
             data = QPaperModule.QPaperExcelToJSON(file_path)
-
+            # print(data)
             # Extract meta data and question data
             meta_data = data.get("Meta_Data", {})
             part_a_questions_data = data.get("PartA_Questions", [])
             part_b_questions_data = data.get("PartB_Questions", [])
 
+            # print(part_a_questions_data, part_b_questions_data)
+
             # Handle QPaper creation
             qpaper = QPaperModule.handle_qpaper_creation(meta_data)
+            # print("hai")
             questions_list, module_list, marks_list = QPaperModule.process_questions(
                 qpaper, part_a_questions_data, part_b_questions_data
             )
+            # print("hai 2")
             QPaperModule.send_questions_to_topic_api(
                 qpaper.CourseCode, questions_list, module_list, marks_list
             )
+            # print("hai")
             try:
                 QPaperModule.genAIQuestionsToAnswers(api_key=api_key, question_list=questions_list,mark_list=marks_list)
                 time.sleep(0.1)
                 QPaperModule.genAIQuestionsToAnswers(api_key=api_key, question_list=questions_list,mark_list=marks_list)
-                print("hai")
+                # print("hai")
             except:
                 print("Answer not updated")
             
@@ -626,6 +660,52 @@ def API_QPaperExcelToDB(request):
     else:
         return JsonResponse({"error": "Only POST method is allowed."}, status=405)
 
+def API_QPaperAnalysis(request, QPaper1ID):
+    try:
+        # Filter questions for the given QPaper_ID
+        questions = QPaperQuestions.objects.filter(QPaper_ID=QPaper1ID)
+
+        if not questions.exists():
+            return JsonResponse({"error": "No questions found for the provided QPaper ID."}, status=404)
+
+        # Group by Topic and calculate the sum of marks
+        topic_summary = questions.values('Topic').annotate(total_marks=Sum('Mark')).order_by('Topic')
+
+        # Mark-wise breakdown
+        mark_wise_split = questions.values('Mark').annotate(question_count=Count('ID'))
+
+        # Prepare the Mark-wise breakdown dictionary
+        mark_wise_split_down = {}
+        for item in mark_wise_split:
+            mark = int(item['Mark'])
+            count = item['question_count']
+            mark_wise_split_down[f"{mark}_Marks"] = count
+
+        # Module-wise breakdown
+        module_wise_split = questions.values('Module_Number').annotate(total_marks=Sum('Mark'))
+
+        # Prepare the Module-wise breakdown dictionary
+        module_wise_split_down = {}
+        for item in module_wise_split:
+            module = item['Module_Number']
+            total_marks = item['total_marks']
+            module_wise_split_down[f"Module{module}"] = total_marks
+
+        # Prepare the data for response
+        response_data = {
+            "QPaperID": QPaper1ID,
+            "TopicSummary": list(topic_summary),  # Convert QuerySet to list for JSON response
+            "MarkWiseSplitDown": mark_wise_split_down,
+            "ModuleWiseSplitDown": module_wise_split_down,
+        }
+
+        return JsonResponse(response_data)
+
+    except QPaperQuestions.DoesNotExist:
+        return JsonResponse({"error": "The provided QPaper ID does not exist."}, status=400)
+    
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
 @csrf_exempt
 def upload_file(request):
     try:

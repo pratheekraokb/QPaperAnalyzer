@@ -34,7 +34,7 @@ class QPaperAdmin(admin.ModelAdmin):
 class QPaperQuestionsAdmin(admin.ModelAdmin):
     list_display = ('QPaper_ID', 'QuestionText', 'Mark', 'Module_Number', 'Topic' ,'AnswerText')
     search_fields = ('QuestionText',)
-    list_filter = ('Module_Number',)
+    list_filter = ('QPaper_ID','Module_Number','Mark',)
 
 
 @admin.register(PrivateQPaper)
