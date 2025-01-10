@@ -6,7 +6,8 @@
 <style>
     .upload-container {
         width: 100%;
-        height: 40vh;  /* 40% of the viewport height */
+        height: 40vh;
+        /* 40% of the viewport height */
         display: flex;
         justify-content: center;
         align-items: center;
@@ -64,23 +65,32 @@
     }
 
     .processing {
-        display: none; /* Initially hidden */
+        display: none;
+        /* Initially hidden */
         text-align: center;
         margin-top: 20px;
     }
-    
+
     .loading-spinner {
-        border: 4px solid rgba(255, 255, 255, 0.3); /* Light gray border */
-        border-top: 4px solid #3498db; /* Blue color for the spinner */
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        /* Light gray border */
+        border-top: 4px solid #3498db;
+        /* Blue color for the spinner */
         border-radius: 50%;
         width: 50px;
         height: 50px;
-        animation: spin 1s linear infinite; /* Spin animation */
+        animation: spin 1s linear infinite;
+        /* Spin animation */
     }
-    
+
     @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
     }
 </style>
 {% endblock %}
@@ -106,14 +116,66 @@
     </div>
 </form>
 
+<h1>Select Question Paper to Perform Analysis</h1>
+<form>
+    
+    <div class="form-group">
+        <label for="qPaperSelect">Select Question Paper:</label>
+        <select class="form-control" id="qPaperSelect" name="selected_qpaper" onchange="updateInfoBox()">
+            {% for id, details in QPapers.items %}
+            <option value="{{ id }}" 
+                    data-questionpaper-name="{{ details.QuestionPaper_Name }}" 
+                    data-course-code="{{ details.Course_Code }}" 
+                    data-course-name="{{ details.Course_Name }}" 
+                    data-examination-month="{{ details.Examination_Month }}">
+                {{ details.text_to_display }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Rectangle box -->
+    <div id="infoBox"
+        style="width: 100%; height: auto; border: 2px dashed #ccc; margin: 20px 0; text-align: center; padding: 20px;">
+        <p style="color: #666;">Select a question paper to see details here.</p>
+    </div>
+
+    <div class="button" style="display: flex;justify-content: center;">
+        <button type="submit" class="btn btn-primary">Analyze</button>
+    </div>
+</form>
+
+<script>
+    function updateInfoBox() {
+        const dropdown = document.getElementById("qPaperSelect");
+        const selectedOption = dropdown.options[dropdown.selectedIndex];
+
+        // Get data attributes from the selected option
+        const questionPaperName = selectedOption.getAttribute("data-questionpaper-name");
+        const courseCode = selectedOption.getAttribute("data-course-code");
+        const courseName = selectedOption.getAttribute("data-course-name");
+        const examinationMonth = selectedOption.getAttribute("data-examination-month");
+
+        // Update the infoBox content
+        const infoBox = document.getElementById("infoBox");
+        infoBox.innerHTML = `
+            <p><strong>Question Paper Name:</strong> ${questionPaperName}</p>
+            <p><strong>Course Code:</strong> ${courseCode}</p>
+            <p><strong>Course Name:</strong> ${courseName}</p>
+            <p><strong>Examination Month:</strong> ${examinationMonth}</p>
+        `;
+    }
+</script>
+
+
 
 
 <script>
     // Enable the submit button and display the filename when a file is chosen
-    document.getElementById('excelFile').addEventListener('change', function() {
+    document.getElementById('excelFile').addEventListener('change', function () {
         const filenameDisplay = document.getElementById('filename');
         const submitBtn = document.getElementById('submitBtn');
-        
+
         if (this.files.length > 0) {
             filenameDisplay.textContent = 'Selected file: ' + this.files[0].name;
             submitBtn.disabled = false; // Enable the submit button
@@ -123,46 +185,46 @@
         }
     });
 
-    document.getElementById('submitBtn').addEventListener('click', function() {
+    document.getElementById('submitBtn').addEventListener('click', function () {
         const form = document.getElementById('uploadForm');
         const formData = new FormData(form); // Create FormData from the form
-    
+
         // Show the processing section with the spinner
         const processingDiv = document.querySelector('.processing');
         processingDiv.style.display = 'block'; // Show the processing div
-    
+
         let timeoutReached = false; // Flag to check if minimum 3 seconds have passed
-    
+
         // Set a timeout for at least 3 seconds
         setTimeout(() => {
             timeoutReached = true;
         }, 3000);
-    
+
         // Make the AJAX request to upload the file
         const xhr = new XMLHttpRequest();
         xhr.open('POST', '{% url "upload_file" %}', true); // Ensure the URL is correct
-    
+
         // Set up the callback function to handle the response
-        xhr.onload = function() {
+        xhr.onload = function () {
             if (xhr.status === 200) {
                 // Parse the JSON response
                 const response = JSON.parse(xhr.responseText);
-    
+
                 // Handle the response
                 if (response.status === 600) {
                     const filename = response.file_name; // Extract the filename
-    
+
                     // Send the second POST request to /api/QPaperExcelToDB/ with the filename
                     const secondRequest = new XMLHttpRequest();
                     secondRequest.open('POST', '/api/QPaperExcelToDB/', true);
                     secondRequest.setRequestHeader('Content-Type', 'application/json');
-    
+
                     const requestBody = JSON.stringify({
                         filename: filename // Send the filename as part of the request
                     });
-    
+
                     // Handle the second request response
-                    secondRequest.onload = function() {
+                    secondRequest.onload = function () {
                         if (secondRequest.status === 200) {
                             // Check if minimum 3 seconds have passed
                             const interval = setInterval(() => {
@@ -180,7 +242,7 @@
                             location.href = "#error";
                         }
                     };
-    
+
                     secondRequest.send(requestBody); // Send the second request with the filename
                 } else {
                     alert(response.status_msg || 'File upload failed!');
@@ -191,11 +253,11 @@
                 processingDiv.style.display = 'none'; // Hide on server error
             }
         };
-    
+
         // Send the FormData (file)
         xhr.send(formData);
     });
-    
+
 </script>
 
 {% endblock %}

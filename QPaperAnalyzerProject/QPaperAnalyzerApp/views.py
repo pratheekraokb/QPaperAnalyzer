@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import User, Profile, College, QPaper, QPaperQuestions
+from .models import User, Profile, College, QPaper, QPaperQuestions, Course
 
 from django.db import IntegrityError, DatabaseError
 
@@ -754,12 +754,28 @@ def logout_user(request):
     return redirect('login')
 
 @login_required
-def qPaperAnalysis(request):
-    return HttpResponse("hai")
-    # return render(request, 'students/question_paper_analysis.html', {'user': request.user})
-
 def qPaperUpload(request):
-    return render(request, 'students/question_paper_upload.html', {'user': request.user})
+    result = QPaper.objects.select_related('CourseCode').values(
+        'QPaper_ID',
+        'Exam_Type',
+        'CourseCode__coursecode',  # Course Code
+        'CourseCode__subjectname',  # Course Name
+        'Exam_Name',
+        'Month_Year',
+    )
+    qPaperJSON = {
 
-def qPaperAnalysisResult(request):
-    return HttpResponse("Hai")
+    } 
+    for entry in result:
+        examNameUpdated = f"{entry['CourseCode__coursecode']}_{entry['CourseCode__subjectname']}_{entry['Month_Year']}_{entry['Exam_Name']}"
+        qPaperJSON[f"{entry['QPaper_ID']}"] = {
+            "text_to_display": str(examNameUpdated),
+            "QuestionPaper_Name" : entry['Exam_Name'],
+            "Course_Code" : entry['CourseCode__coursecode'],
+            "Course_Name": entry['CourseCode__subjectname'],
+            "Examination_Month": entry['Month_Year'],
+        } 
+
+    print(qPaperJSON)
+    return render(request, 'students/question_paper_upload.html', {'user': request.user, 'QPapers': qPaperJSON})
+

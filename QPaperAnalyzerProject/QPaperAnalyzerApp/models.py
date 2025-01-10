@@ -28,7 +28,8 @@ class QPaper(models.Model):
     ]
 
     QPaper_ID = models.AutoField(primary_key=True)
-    CourseCode = models.CharField(max_length=8)
+    CourseCode = models.ForeignKey('Course', on_delete=models.CASCADE)  # Establish a foreign key relationship
+    # CourseCode = models.CharField(max_length=8)
     Max_Marks = models.IntegerField(default=100)
     Exam_Type = models.CharField(max_length=7, choices=EXAM_TYPE_CHOICES, default='Regular')
     Exam_Name = models.CharField(max_length=400)
