@@ -31,9 +31,12 @@ import tensorflow as tf
 import time
 
 import google.generativeai as genai
+from dotenv import load_dotenv
 
+load_dotenv()
 api_endpoint = "https://api.gemini.com/v1/question"
-api_key = "AIzaSyDHkEll5nUugpWUbskf9cCMbLy3Na4jfMI"
+# api_key = "AIzaSyDHkEll5nUugpWUbskf9cCMbLy3Na4jfMI"
+api_key = os.getenv('api_key')
 
 class QPaperModule:
     def topicsFromSyllabus(syllabus):

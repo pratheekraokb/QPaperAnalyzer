@@ -12,7 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
+
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -79,8 +82,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'QPaperAnalyzer',
-        'USER': 'root',
-        'PASSWORD': 'Pratheek@2003',
+        'USER': os.getenv('database_user'),
+        'PASSWORD': os.getenv('database_password'),
         'HOST': 'localhost',
         'PORT': '3306',
     }
