@@ -7,6 +7,7 @@ urlpatterns = [
     path('api/QuestionsToTopic/', views.API_question_to_topic, name='API_question_to_topic'),
     path('api/QPaperExcelToDB/', views.API_QPaperExcelToDB, name='API_QPaperExcelToDB'),
     path('addCoursesThroughCSV/', views.dataEntryFunc, name='dataEntryFunc'),
+    path('upload/', views.upload_file, name='upload_file'),
 
     # Authentication
 
@@ -14,7 +15,12 @@ urlpatterns = [
     path('login/', views.login_user, name='login'),
     path('logout/', views.logout_user, name='logout'),
     
+
+    # Frontend Designs
+    path('student/qPaperAnalysis/', views.qPaperAnalysis, name='qPaperAnalysis'),
     path('student/dashboard/', views.student_dashboard, name='student_dashboard'),
+    
+
     path('faculty/dashboard/', views.faculty_dashboard, name='faculty_dashboard'),
 
     

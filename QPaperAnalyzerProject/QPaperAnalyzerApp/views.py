@@ -33,6 +33,11 @@ import time
 import google.generativeai as genai
 from dotenv import load_dotenv
 
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
+
+
+
 load_dotenv()
 api_endpoint = "https://api.gemini.com/v1/question"
 # api_key = "AIzaSyDHkEll5nUugpWUbskf9cCMbLy3Na4jfMI"
@@ -620,6 +625,55 @@ def API_QPaperExcelToDB(request):
             return QPaperModule.handle_exception(f"An unexpected error occurred: {e}", 500)
     else:
         return JsonResponse({"error": "Only POST method is allowed."}, status=405)
+
+def upload_file(request):
+    try:
+        if request.method == 'POST' and request.FILES.get('excel_file'):
+            excel_file = request.FILES['excel_file']
+            
+            # Define the path to save the file
+            upload_path = os.path.join(settings.MEDIA_ROOT, 'Excel_Files', 'Temp_QPapers')
+            
+            # Create the directory if it doesn't exist
+            os.makedirs(upload_path, exist_ok=True)
+            
+            # Check if the file already exists
+            file_path = os.path.join(upload_path, excel_file.name)
+            if os.path.exists(file_path):
+                return JsonResponse({
+                    'status': 300,
+                    'status_msg': 'File upload failed. A file with the same name already exists.'
+                })
+            
+            # Save the file
+            fs = FileSystemStorage(location=upload_path)
+            filename = fs.save(excel_file.name, excel_file)
+            
+            # Get the file URL (optional)
+            file_url = fs.url(filename)
+            
+            
+
+
+            return JsonResponse({
+                'status': 600,
+                'status_msg': 'Successfully uploaded the file.',
+                'file_url': file_url,
+                'file_name': filename
+            })
+        
+        else:
+            return JsonResponse({
+                'status': 300,
+                'status_msg': 'No file selected or invalid request.'
+            })
+    
+    except Exception as e:
+        # Handle any unexpected exceptions
+        return JsonResponse({
+            'status': 500,
+            'status_msg': f'An error occurred during file upload: {str(e)}'
+        })
     
 def register(request):
     colleges = College.objects.all()
@@ -685,6 +739,7 @@ def login_user(request):
             return render(request, 'authentication/login.html', {'error': 'Invalid credentials.'})
     return render(request, 'authentication/login.html')
 
+
 @login_required
 def student_dashboard(request):
     return render(request, 'students/student_dashboard.html', {'user': request.user})
@@ -696,3 +751,11 @@ def faculty_dashboard(request):
 def logout_user(request):
     logout(request)
     return redirect('login')
+
+@login_required
+def qPaperAnalysis(request):
+    return render(request, 'students/question_paper_analysis.html', {'user': request.user})
+
+
+def qPaperAnalysisResult(request):
+    return HttpResponse("Hai")

@@ -97,6 +97,8 @@
             transform: scale(1.1);
         }
     </style>
+
+    {% block style %} {% endblock %}
 </head>
 
 <body>
@@ -105,6 +107,7 @@
             <div class="sidebar-content">
                 <h2>QPaperAnalyzer Menu</h2>
                 <button class="sidebar-button" onclick="gotoLink('student/dashboard')">Dashboard</button>
+                <button class="sidebar-button" onclick="gotoLink('student/qPaperAnalysis')">Analyze Question Papers</button>
                 <button class="sidebar-button">Profile</button>
                 <button class="sidebar-button">Settings</button>
                 <button class="sidebar-button" onclick="gotoLink('logout')">Logout</button>
