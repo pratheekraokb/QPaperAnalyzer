@@ -32,7 +32,7 @@ class QPaperAdmin(admin.ModelAdmin):
 
 @admin.register(QPaperQuestions)
 class QPaperQuestionsAdmin(admin.ModelAdmin):
-    list_display = ('QPaper_ID', 'QuestionText', 'Mark', 'Module_Number')
+    list_display = ('QPaper_ID', 'QuestionText', 'Mark', 'Module_Number', 'Topic' ,'AnswerText')
     search_fields = ('QuestionText',)
     list_filter = ('Module_Number',)
 

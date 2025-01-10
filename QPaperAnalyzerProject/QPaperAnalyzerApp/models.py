@@ -44,6 +44,8 @@ class QPaperQuestions(models.Model):
     Mark = models.IntegerField(default=1)
     Topic = models.TextField(default="")
     Module_Number = models.IntegerField(default=1)
+    AnswerText = models.TextField(default="")
+
 
     def __str__(self):
         return f"Question {self.ID} for QPaper {self.QPaper_ID}"

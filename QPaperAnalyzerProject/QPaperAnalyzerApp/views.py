@@ -18,7 +18,7 @@ import pandas as pd
 from transformers import pipeline
 import os
 
-import requests
+import requests, json
 
 
 
@@ -30,8 +30,10 @@ import tensorflow as tf
 
 
 
+import google.generativeai as genai
 
-
+api_endpoint = "https://api.gemini.com/v1/question"
+api_key = "AIzaSyDHkEll5nUugpWUbskf9cCMbLy3Na4jfMI"
 
 class QPaperModule:
     def topicsFromSyllabus(syllabus):
@@ -218,7 +220,60 @@ class QPaperModule:
         return returnData
 
 
+    
+
+    def genAIQuestionsToAnswers(api_key, question_list, mark_list):
+        try:
+            # Check if question_list and mark_list have the same length
+            if len(question_list) != len(mark_list):
+                return "Error: The question list and mark list must have the same length."
+
+            # Configure the API key
+            genai.configure(api_key=api_key)
+
+            # Initialize the model
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            guidelines = "Write 1/2 page for 3 marks, 1 page for 8 marks, and adjust length for other marks. Use text only, no points or graphics, with simple examples."
+
+            # Prepare the results dictionary
+            results = {}
+
+            for question, marks in zip(question_list, mark_list):
+                # Check if the question exists and if AnswerText is empty
+                existing_question = QPaperQuestions.objects.filter(QuestionText=question).first()
+
+                if existing_question and existing_question.AnswerText.strip():
+                    print("No Generation")
+                    continue
+                
+                # Generate the content for the question
+                query_format = f"""
+                    {guidelines}
+                    {question} - 3 Marks
+                """
+                response = model.generate_content(query_format)
+                response_text = str(response.text).strip()
+                print(response_text)  # For debugging purposes, print the generated response
+                
+                if existing_question:
+                    # Update the AnswerText field if the question exists
+                    existing_question.AnswerText = response_text
+                    existing_question.save()
+                else:
+                    # If the question does not exist, store the generated response
+                    results[question] = response_text
+
+            return results if results else "All questions were already answered or updated."
+        except Exception as e:
+            print(e)
+            return f"An unexpected error occurred: {e}"
+
+
+
+
     # API QPaper Excel to Database
+
+
 
     def handle_qpaper_creation(meta_data):
         """Handles the creation or retrieval of a QPaper record."""
@@ -503,6 +558,11 @@ def API_question_to_topic(request):
  
     
 def index(request):
+    # QPaperModule.genAIQuestionToAnswer(api_key=api_key, )
+    # question = "What are the advantages of using UML? Sketch the UML class diagram for an entity 'book'."
+    # mark = 3
+    # response = QPaperModule.genAIQuestionToAnswer(api_key, question, mark)
+    # print(response)
     return redirect('login')
 
 
@@ -536,6 +596,11 @@ def API_QPaperExcelToDB(request):
             QPaperModule.send_questions_to_topic_api(
                 qpaper.CourseCode, questions_list, module_list, marks_list
             )
+            try:
+                QPaperModule.genAIQuestionsToAnswers(api_key=api_key, question_list=questions_list,mark_list=marks_list)
+                print("hai")
+            except:
+                print("Anwer not updated")
             
             # Rename the file for proper storage
             month_year = str(meta_data.get("Month_Year", "")).replace(" ", "_")
