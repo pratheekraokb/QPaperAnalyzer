@@ -18,6 +18,7 @@ urlpatterns = [
 
     # Frontend Designs
     path('student/qPaperAnalysis/', views.qPaperAnalysis, name='qPaperAnalysis'),
+    path('student/qPaperUpload/', views.qPaperUpload, name='qPaperUpload'),
     path('student/dashboard/', views.student_dashboard, name='student_dashboard'),
     
 

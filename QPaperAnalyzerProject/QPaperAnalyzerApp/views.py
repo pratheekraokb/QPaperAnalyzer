@@ -607,7 +607,7 @@ def API_QPaperExcelToDB(request):
                 QPaperModule.genAIQuestionsToAnswers(api_key=api_key, question_list=questions_list,mark_list=marks_list)
                 print("hai")
             except:
-                print("Anwer not updated")
+                print("Answer not updated")
             
             # Rename the file for proper storage
             month_year = str(meta_data.get("Month_Year", "")).replace(" ", "_")
@@ -626,6 +626,7 @@ def API_QPaperExcelToDB(request):
     else:
         return JsonResponse({"error": "Only POST method is allowed."}, status=405)
 
+@csrf_exempt
 def upload_file(request):
     try:
         if request.method == 'POST' and request.FILES.get('excel_file'):
@@ -754,8 +755,11 @@ def logout_user(request):
 
 @login_required
 def qPaperAnalysis(request):
-    return render(request, 'students/question_paper_analysis.html', {'user': request.user})
+    return HttpResponse("hai")
+    # return render(request, 'students/question_paper_analysis.html', {'user': request.user})
 
+def qPaperUpload(request):
+    return render(request, 'students/question_paper_upload.html', {'user': request.user})
 
 def qPaperAnalysisResult(request):
     return HttpResponse("Hai")

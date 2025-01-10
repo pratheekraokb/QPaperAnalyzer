@@ -86,7 +86,7 @@
 {% endblock %}
 
 {% block content %}
-<h1>Analyse</h1>
+<h1>Upload Question Paper (If Not Present)</h1>
 
 <form id="uploadForm" enctype="multipart/form-data">
     {% csrf_token %}
@@ -106,6 +106,8 @@
     </div>
 </form>
 
+
+
 <script>
     // Enable the submit button and display the filename when a file is chosen
     document.getElementById('excelFile').addEventListener('change', function() {
@@ -122,7 +124,6 @@
     });
 
     document.getElementById('submitBtn').addEventListener('click', function() {
-        let spin_flag = 0;
         const form = document.getElementById('uploadForm');
         const formData = new FormData(form); // Create FormData from the form
     
@@ -130,23 +131,26 @@
         const processingDiv = document.querySelector('.processing');
         processingDiv.style.display = 'block'; // Show the processing div
     
+        let timeoutReached = false; // Flag to check if minimum 3 seconds have passed
+    
+        // Set a timeout for at least 3 seconds
+        setTimeout(() => {
+            timeoutReached = true;
+        }, 3000);
+    
         // Make the AJAX request to upload the file
         const xhr = new XMLHttpRequest();
         xhr.open('POST', '{% url "upload_file" %}', true); // Ensure the URL is correct
     
         // Set up the callback function to handle the response
         xhr.onload = function() {
-            // Hide the processing div once the request is complete
-            processingDiv.style.display = 'none'; // Hide the spinner and processing message
-    
             if (xhr.status === 200) {
                 // Parse the JSON response
                 const response = JSON.parse(xhr.responseText);
     
                 // Handle the response
                 if (response.status === 600) {
-                    
-                    const filename = response.file_name;  // Extract the filename
+                    const filename = response.file_name; // Extract the filename
     
                     // Send the second POST request to /api/QPaperExcelToDB/ with the filename
                     const secondRequest = new XMLHttpRequest();
@@ -160,31 +164,38 @@
                     // Handle the second request response
                     secondRequest.onload = function() {
                         if (secondRequest.status === 200) {
-                            const secondResponse = JSON.parse(secondRequest.responseText);
-                            spin_flag = 1;
-                        
-                            // Stop the loading spinner when spin_flag becomes 1
-                            if (spin_flag === 1) {
-                                processingDiv.style.display = 'none'; // Hide the processing div
-                            }
+                            // Check if minimum 3 seconds have passed
+                            const interval = setInterval(() => {
+                                if (timeoutReached) {
+                                    processingDiv.style.display = 'none'; // Hide the processing div
+                                    clearInterval(interval); // Clear the interval once completed
+                                }
+
+                            }, 100); // Check every 100ms
+                            alert("Question Paper Uploaded !")
+                            location.href = "#sucess";
                         } else {
-                            spin_flag = 1;
                             alert('Error in processing the question paper data.');
+                            alert("Something went wrong! Please try again later.")
+                            location.href = "#error";
                         }
                     };
     
                     secondRequest.send(requestBody); // Send the second request with the filename
                 } else {
                     alert(response.status_msg || 'File upload failed!');
+                    processingDiv.style.display = 'none'; // Hide if file upload fails
                 }
             } else {
                 alert('An error occurred during file upload.');
+                processingDiv.style.display = 'none'; // Hide on server error
             }
         };
     
         // Send the FormData (file)
         xhr.send(formData);
     });
+    
 </script>
 
 {% endblock %}
