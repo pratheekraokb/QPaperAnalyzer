@@ -6,6 +6,7 @@ urlpatterns = [
     path('api/getTopicsSyllabus/<str:CourseCode>/<int:Module>/', views.API_get_topics_syllabus, name='API_get_topics_syllabus'),
     path('api/QuestionsToTopic/', views.API_question_to_topic, name='API_question_to_topic'),
     path('api/QPaperExcelToDB/', views.API_QPaperExcelToDB, name='API_QPaperExcelToDB'),
+    path('api/getQuestionsTopicsAnswer/<int:QPaperID>/', views.API_QuestTopicAns, name='API_QuestTopicAns'),
     
     path('addCoursesThroughCSV/', views.dataEntryFunc, name='dataEntryFunc'),
     path('upload/', views.upload_file, name='upload_file'),

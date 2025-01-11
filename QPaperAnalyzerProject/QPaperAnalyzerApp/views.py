@@ -648,6 +648,43 @@ def API_QPaperExcelToDB(request):
     else:
         return JsonResponse({"error": "Only POST method is allowed."}, status=405)
 
+
+def API_QuestTopicAns(request, QPaperID):
+    try:
+        # Fetch questions for the given QPaperID
+        QPaperID = int(QPaperID)
+        questions = QPaperQuestions.objects.filter(QPaper_ID=QPaperID)
+
+        # If no questions are found, raise an exception
+        if not questions.exists():
+            raise ObjectDoesNotExist("No questions found for the given QPaperID.")
+
+        # Create a list to store the question data
+        question_data = []
+        
+        for question in questions:
+            # Prepare the data for each question
+            data = {
+                'QuestionText': question.QuestionText,
+                'Mark': question.Mark,
+                'Topic': question.Topic,
+                'ID': question.ID,
+                'ModuleNumber': question.Module_Number,
+                'AnswerText': question.AnswerText if question.AnswerText else "",
+            }
+            question_data.append(data)
+
+        # Return the data as a JSON response
+        return JsonResponse({'questions': question_data})
+
+    except ObjectDoesNotExist as e:
+        # Handle case where no questions are found
+        return JsonResponse({'error': str(e)}, status=404)
+
+    except Exception as e:
+        # Handle any other unexpected exceptions
+        return JsonResponse({'error': 'An error occurred: ' + str(e)}, status=500)
+
 def WEB_QPaperAnalysis(request, QPaper1ID):
     try:
         # Fetch the QPaper object using the provided QPaper1ID
@@ -687,6 +724,7 @@ def WEB_QPaperAnalysis(request, QPaper1ID):
 
         # Prepare the metadata for response (Course details and QPaper details)
         metadata = {
+            "QPaperID": QPaper1ID,
             "CourseCode": course.coursecode,
             "ExamName": qpaper.Exam_Name,
             "MonthYear": qpaper.Month_Year,

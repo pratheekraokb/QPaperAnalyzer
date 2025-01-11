@@ -111,17 +111,69 @@
         .collapsible-button:hover {
             background-color: #0056b3;
         }
-        button{
+
+        button {
             background-color: black;
             color: gold;
             padding: 8px;
             border-radius: 10px;
-            
+
         }
-        button:hover{
+
+        button:hover {
             color: white;
             text-decoration: underline;
         }
+    </style>
+    <style>
+       .question-card {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    cursor: pointer; /* Add pointer cursor to show it's clickable */
+}
+
+.question-card:hover {
+    transform: translateY(-5px);
+}
+
+.question-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.question-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.answer-text {
+    background-color: #eaeaea;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 10px;
+    max-height: 0; /* Initially hide the answer */
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+}
+
+/* Expanded state */
+.question-card.active .answer-text {
+    max-height: 500px; /* Ensure enough space for content */
+    padding: 15px; /* Retain padding on expand */
+}
+
+.text {
+    font-size: 1em;
+    color: #333;
+    line-height: 1.5;
+}
+
     </style>
 </head>
 
@@ -132,11 +184,16 @@
         <!-- Question Paper ID -->
         <div class="alert alert-primary" style="padding: 15px;">
             <div style="margin: 10px;margin-left: 25%;">
-                <strong>Course Code:</strong> <span style="display: inline-block; width: 800px;">{{Metadata.CourseCode}}</span><br>
-                <strong>Subject Name:</strong> <span style="display: inline-block; width: 800px;">{{Metadata.SubjectName }}</span><br>
-                <strong>Exam Name:</strong> <span style="display: inline-block; width: 800px;">{{ Metadata.ExamName}}</span><br>
-                <strong>Month/Year:</strong> <span style="display: inline-block; width: 800px;">{{ Metadata.MonthYear}}</span><br>
-                <strong>Exam Type:</strong> <span style="display: inline-block; width: 800px;">{{ Metadata.ExamType}}</span><br>
+                <strong>Course Code:</strong> <span
+                    style="display: inline-block; width: 800px;">{{Metadata.CourseCode}}</span><br>
+                <strong>Subject Name:</strong> <span style="display: inline-block; width: 800px;">{{Metadata.SubjectName
+                    }}</span><br>
+                <strong>Exam Name:</strong> <span style="display: inline-block; width: 800px;">{{
+                    Metadata.ExamName}}</span><br>
+                <strong>Month/Year:</strong> <span style="display: inline-block; width: 800px;">{{
+                    Metadata.MonthYear}}</span><br>
+                <strong>Exam Type:</strong> <span style="display: inline-block; width: 800px;">{{
+                    Metadata.ExamType}}</span><br>
             </div>
         </div>
 
@@ -151,6 +208,11 @@
 
             <!-- Placeholder for the modules -->
             <div id="modules-container" class="container-fluid" style="display: flex; flex-direction: column;"></div>
+        </div>
+
+        <h1>Question Paper Brakedown</h1>
+        <div id="questions-container">
+            <!-- Questions will be dynamically populated here -->
         </div>
 
 
@@ -221,6 +283,60 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Function to fetch the data from the API
+function fetchQuestions(QPaperID) {
+    fetch(`/api/getQuestionsTopicsAnswer/${QPaperID}/`)
+        .then(response => response.json())
+        .then(data => {
+            // Clear the container before adding new data
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+            var qNumber = 1;
+            if (data.questions && data.questions.length > 0) {
+                // Loop through the questions and display them
+                data.questions.forEach(question => {
+                    const questionCard = document.createElement('div');
+                    questionCard.classList.add('question-card');
+                    questionCard.classList.add('collapsible'); // Adding collapsible class for styling and functionality
+
+                    questionCard.innerHTML = `
+                        <h4 class="question-title">Q${qNumber}: ${question.QuestionText} (${question.Mark} Marks)</h4>
+                        <div class="question-details" style="padding:10px;">
+                            <span><strong>Topic:</strong> ${question.Topic || 'N/A'}</span><br>
+                            <span><strong>Module:</strong> Module ${question.ModuleNumber} </span>
+                        </div>
+                        <div class="answer-text" style="padding:0;">
+                            <strong>Answer:</strong>
+                            <p>${question.AnswerText || 'No answer provided.'}</p>
+                        </div>
+                    `;
+                    qNumber += 1;
+
+                    // Add event listener to make the answer section collapsible
+                    questionCard.addEventListener('click', function () {
+                        // Toggle the 'active' class to show/hide the answer text
+                        questionCard.classList.toggle('active');
+                    });
+
+                    container.appendChild(questionCard);
+                });
+            } else {
+                container.innerHTML = '<p>No questions found.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching questions:', error);
+            document.getElementById('questions-container').innerHTML = '<p>Error loading data.</p>';
+        });
+}
+
+// Fetch questions for a specific QPaperID (example QPaperID = 1)
+var QPaperID = "{{ Metadata.QPaperID }}";
+fetchQuestions(QPaperID);
+
+    </script>
+
     <script>
         // Course code can be dynamically set depending on the course
 
