@@ -20,7 +20,8 @@
             overflow: hidden;
         }
 
-        .table th, .table td {
+        .table th,
+        .table td {
             text-align: center;
             padding: 12px;
             border: 1px solid #ddd;
@@ -28,8 +29,10 @@
 
         /* Scrollable table body */
         .table-responsive {
-            max-height: 50vh;  /* 50% of viewport height */
-            overflow-y: auto;  /* Vertical scroll */
+            max-height: 50vh;
+            /* 50% of viewport height */
+            overflow-y: auto;
+            /* Vertical scroll */
             display: block;
         }
 
@@ -60,10 +63,10 @@
         .canvas-container {
             margin-top: 30px;
         }
-        .alert strong{
+
+        .alert strong {
             padding: 10px;
         }
-
     </style>
     <style>
         .module-heading {
@@ -71,16 +74,53 @@
             font-weight: bold;
             color: #007bff;
             width: 100%;
-            text-align: left; 
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: left;
+            cursor: pointer;
         }
-        
+
         .topic-list {
             font-size: 1.1rem;
             list-style-type: decimal;
+            padding-left: 0;
+            margin: 0;
+            background-color: #f9f9f9;
+            padding: 10px;
         }
-        .collapsible {
+
+        .collapsible-row {
             margin-bottom: 10px;
-            /* width: 100vw; */
+            width: 100%;
+        }
+
+        .collapsible-button {
+            width: 100%;
+            text-align: left;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .collapsible-button:hover {
+            background-color: #0056b3;
+        }
+        button{
+            background-color: black;
+            color: gold;
+            padding: 8px;
+            border-radius: 10px;
+            
+        }
+        button:hover{
+            color: white;
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -92,22 +132,28 @@
         <!-- Question Paper ID -->
         <div class="alert alert-primary" style="padding: 15px;">
             <div style="margin: 10px;margin-left: 25%;">
-            <strong>Course Code:</strong> <span style="display: inline-block; width: 800px;">{{ Metadata.CourseCode }}</span><br>
-            <strong>Subject Name:</strong> <span style="display: inline-block; width: 800px;">{{ Metadata.SubjectName }}</span><br>
-            <strong>Exam Name:</strong> <span style="display: inline-block; width: 800px;">{{ Metadata.ExamName }}</span><br>
-            <strong>Month/Year:</strong> <span style="display: inline-block; width: 800px;">{{ Metadata.MonthYear }}</span><br>
-            
-            <strong>Exam Type:</strong> <span style="display: inline-block; width: 800px;">{{ Metadata.ExamType }}</span><br>
+                <strong>Course Code:</strong> <span style="display: inline-block; width: 800px;">{{Metadata.CourseCode}}</span><br>
+                <strong>Subject Name:</strong> <span style="display: inline-block; width: 800px;">{{Metadata.SubjectName }}</span><br>
+                <strong>Exam Name:</strong> <span style="display: inline-block; width: 800px;">{{ Metadata.ExamName}}</span><br>
+                <strong>Month/Year:</strong> <span style="display: inline-block; width: 800px;">{{ Metadata.MonthYear}}</span><br>
+                <strong>Exam Type:</strong> <span style="display: inline-block; width: 800px;">{{ Metadata.ExamType}}</span><br>
             </div>
         </div>
-        
+
         <div class="syllabus-container" style="width: 100%;">
-            <h1 class="text-center my-4">Syllabus - Topics</h1>
-    
+            <div style="display: flex;">
+                <h1 class=" my-4">Syllabus - Topics</h1>
+                <p>
+                    <button id="column-view-btn">Column View</button>
+                    <button id="row-view-btn">Row View</button>
+                </p>
+            </div>
+
             <!-- Placeholder for the modules -->
-            <div id="modules-container"></div>
+            <div id="modules-container" class="container-fluid" style="display: flex; flex-direction: column;"></div>
         </div>
-       
+
+
 
         <!-- Topic-Wise Marks Distribution (Row 1) -->
 
@@ -177,6 +223,18 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         // Course code can be dynamically set depending on the course
+
+        document.getElementById('column-view-btn').addEventListener('click', function () {
+            const modulesContainer = document.getElementById('modules-container');
+            modulesContainer.style.display = 'flex';
+            modulesContainer.style.flexDirection = 'column';  // Switch to column view
+        });
+
+        document.getElementById('row-view-btn').addEventListener('click', function () {
+            const modulesContainer = document.getElementById('modules-container');
+            modulesContainer.style.display = 'flex';
+            modulesContainer.style.flexDirection = 'row';  // Switch to row view
+        });
         const courseCode = "{{ Metadata.CourseCode }}";
         const modules = [1, 2, 3, 4, 5]; // Module numbers (1-5)
 
@@ -189,17 +247,26 @@
 
                 // Create HTML for the module
                 const moduleHtml = `
-                    <div class="collapsible">
-                        <button class="btn btn-info" data-toggle="collapse" data-target="#module${module}">
-                            Module ${module} - ${moduleData.Heading}
-                        </button>
-                        <div id="module${module}" class="collapse">
+            <div class="collapsible-row">
+                <!-- Module Heading -->
+                <div class="module-heading">
+                    <button class="collapsible-button" data-toggle="collapse" data-target="#module${module}">
+                        Module ${module} - ${moduleData.Heading}
+                    </button>
+                </div>
+
+                <!-- Topics (Collapsible Section) -->
+                <div id="module${module}" class="collapse">
+                    <div class="row">
+                        <div class="col-12">
                             <ul class="topic-list mt-3">
                                 ${moduleData.Topics.map(topic => `<li>${topic}</li>`).join('')}
                             </ul>
                         </div>
                     </div>
-                `;
+                </div>
+            </div>
+        `;
 
                 // Append the module HTML to the modules container
                 document.getElementById("modules-container").innerHTML += moduleHtml;
@@ -207,7 +274,8 @@
                 console.error(`Error fetching data for Module ${module}`);
             }
         }
-      
+
+        // Function to load all modules
         async function loadModules() {
             for (const module of modules) {
                 await fetchSyllabus(courseCode, module);  // Wait for each module to be loaded before moving to the next
@@ -217,11 +285,7 @@
         // Call the loadModules function to start fetching and displaying the syllabus
         loadModules();
 
-        // Loop through the module numbers and fetch the syllabus for each
-        // modules.forEach(module => {
-            // fetchSyllabus(courseCode, module);
-        // });
-    </script> 
+    </script>
 
     <script>
         // Data passed from the Django view
