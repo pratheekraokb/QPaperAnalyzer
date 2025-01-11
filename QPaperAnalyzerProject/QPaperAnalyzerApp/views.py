@@ -700,7 +700,43 @@ def WEB_QPaperAnalysis(request, QPaper1ID):
             return JsonResponse({"error": "No questions found for the provided QPaper ID."}, status=404)
 
         # Group by Topic and calculate the sum of marks
-        topic_summary = questions.values('Topic').annotate(total_marks=Sum('Mark')).order_by('Topic')
+        topic_summary = (
+            questions.values('Topic')
+            .annotate(total_marks=Sum('Mark'))
+            .order_by('Topic')  # Sort by Topic
+        )
+
+        # Add the module name (module head) based on the topic and syllabus
+        topic_summary_with_modules = []
+        for item in topic_summary:
+            topic = item['Topic']
+            
+            def clean_string(s):
+                return re.sub(r'[^A-Za-z0-9]', '', s)
+
+            # Check if the topic is present in any module's syllabus
+            cleaned_topic = clean_string(topic)  # Clean the topic string
+
+            module_name = "Unknown"  # Default value if topic is not found in any syllabus
+
+            # Clean each module syllabus and compare with cleaned topic
+            if cleaned_topic in clean_string(course.module1Syllabus):
+                module_name = f"Module 1 - {course.module1Head}"
+            elif cleaned_topic in clean_string(course.module2Syllabus):
+                module_name = f"Module 2 - {course.module2Head}"
+            elif cleaned_topic in clean_string(course.module3Syllabus):
+                module_name = f"Module 3 - {course.module3Head}"
+            elif cleaned_topic in clean_string(course.module4Syllabus):
+                module_name = f"Module 4 - {course.module4Head}"
+            elif cleaned_topic in clean_string(course.module5Syllabus):
+                module_name = f"Module 5 - {course.module5Head}"
+
+            # Add the module name to the topic summary
+            topic_summary_with_modules.append({
+                "Topic": topic,
+                "TotalMarks": item['total_marks'],
+                "ModuleName": module_name
+            })
 
         # Mark-wise breakdown
         mark_wise_split = questions.values('Mark').annotate(question_count=Count('ID'))
@@ -736,7 +772,7 @@ def WEB_QPaperAnalysis(request, QPaper1ID):
         # Prepare the data for response
         response_data = {
             "QPaperID": QPaper1ID,
-            "TopicSummary": list(topic_summary),  # Convert QuerySet to list for JSON response
+            "TopicSummary": topic_summary_with_modules,  # Add the module name to TopicSummary
             "MarkWiseSplitDown": mark_wise_split_down,
             "ModuleWiseSplitDown": module_wise_split_down,
             "Metadata": metadata  # Add metadata to the response

@@ -269,6 +269,7 @@
                         <tr>
                             <th>Topic</th>
                             <th>Total Marks</th>
+                            <th>Module Name</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -425,13 +426,15 @@ fetchQuestions(QPaperID);
                 const row = tableBody.insertRow();
                 const cell1 = row.insertCell(0);
                 const cell2 = row.insertCell(1);
+                const cell3 = row.insertCell(2);
 
                 cell1.textContent = item.Topic;
-                cell2.textContent = item.total_marks;
+                cell2.textContent = item.TotalMarks;
+                cell3.textContent = item.ModuleName;  // Corrected here
             });
         }
-        updateTable();
 
+        updateTable();
 
         // Modular Chart Function to reduce code repetition
         function createChart(chartId, chartType, chartData, chartOptions) {
@@ -442,10 +445,11 @@ fetchQuestions(QPaperID);
             });
         }
 
-        // Topic-Wise Radar Chart Data and Configuration
-        const topicLabels = topicSummary.map(item => item.Topic);
-        const topicData = topicSummary.map(item => item.total_marks);
+        // Extract Topic labels and Total Marks data
+        const topicLabels = topicSummary.map(item => item.Topic);  // Labels will be the Topic names
+        const topicData = topicSummary.map(item => item.TotalMarks);  // Data will be the total marks for each topic
 
+        // Radar chart configuration
         const topicSummaryConfig = {
             labels: topicLabels,
             datasets: [{
@@ -465,16 +469,18 @@ fetchQuestions(QPaperID);
             responsive: true,
             plugins: {
                 legend: { display: true },
-                title: { display: true, text: 'Topic-Wise Marks Distribution' },
+                title: { 
+                    display: true, 
+                    text: 'Topic-Wise Marks Distribution' 
+                },
                 tooltip: {
                     callbacks: {
                         label: function (tooltipItem) {
-                            return tooltipItem.raw + ' Marks';
+                            return tooltipItem.raw + ' Marks';  // Only show the total marks for each topic
                         }
                     }
                 }
             },
-
         };
 
         // Mark-Wise Line Chart Data and Configuration
