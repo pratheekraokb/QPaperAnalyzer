@@ -41,8 +41,8 @@ from django.db.models import Sum, Count
 
 
 load_dotenv()
-api_endpoint = "https://api.gemini.com/v1/question"
-# api_key = "AIzaSyDHkEll5nUugpWUbskf9cCMbLy3Na4jfMI"
+# api_endpoint = "https://api.gemini.com/v1/question"
+api_endpoint = os.getenv('api_endpoint')
 api_key = os.getenv('api_key')
 
 class QPaperModule:
@@ -110,7 +110,7 @@ class QPaperModule:
                         module5Syllabus=module5_syllabus,
                     )
                     course.save()
-                    print(f"Saved course: {course_code}")
+                    # print(f"Saved course: {course_code}")
                 except Exception as e:
                     print(f"Failed to save course {course_code}: {e}")
 
@@ -360,7 +360,7 @@ class QPaperModule:
         """Sends questions data to an external API for topic analysis."""
         url = "http://127.0.0.1:8000/api/QuestionsToTopic/"
         course_code = str(course_code)
-        print("hai")
+        # print("hai")
         payload = {
             "course_code": course_code,
             "questions": questions_list,
@@ -374,7 +374,7 @@ class QPaperModule:
                 data = response.json()
                 question_topic_list = data["result_topics"]
 
-                print(question_topic_list)
+                # print(question_topic_list)
                 if len(questions_list) == len(question_topic_list):
                     for question_text, topic in zip(questions_list, question_topic_list):
                         # Check if the question already exists in the QPaperQuestions table
@@ -603,43 +603,31 @@ def index(request):
 def API_QPaperExcelToDB(request):
     if request.method == "POST":
         try:
-            # Parse the request body
             body = json.loads(request.body)
-            # print(type(body), body)
             filename = body.get("filename", "")
             if not filename:
                 return JsonResponse({"error": "Filename is required."}, status=400)
             
-            # File and path initialization
             file_path = f"QPaperAnalyzerApp/media/Excel_Files/Temp_QPapers/{filename}"
             base_url = "QPaperAnalyzerApp/media/Excel_Files/Temp_QPapers/"
 
-            # Extract data from the Excel file
             data = QPaperModule.QPaperExcelToJSON(file_path)
-            # print(data)
-            # Extract meta data and question data
             meta_data = data.get("Meta_Data", {})
             part_a_questions_data = data.get("PartA_Questions", [])
             part_b_questions_data = data.get("PartB_Questions", [])
 
-            # print(part_a_questions_data, part_b_questions_data)
-
             # Handle QPaper creation
             qpaper = QPaperModule.handle_qpaper_creation(meta_data)
-            # print("hai")
             questions_list, module_list, marks_list = QPaperModule.process_questions(
                 qpaper, part_a_questions_data, part_b_questions_data
             )
-            # print("hai 2")
             QPaperModule.send_questions_to_topic_api(
                 qpaper.CourseCode, questions_list, module_list, marks_list
             )
-            # print("hai")
             try:
                 QPaperModule.genAIQuestionsToAnswers(api_key=api_key, question_list=questions_list,mark_list=marks_list)
                 time.sleep(0.1)
                 QPaperModule.genAIQuestionsToAnswers(api_key=api_key, question_list=questions_list,mark_list=marks_list)
-                # print("hai")
             except:
                 print("Answer not updated")
             
@@ -660,7 +648,7 @@ def API_QPaperExcelToDB(request):
     else:
         return JsonResponse({"error": "Only POST method is allowed."}, status=405)
 
-def API_QPaperAnalysis(request, QPaper1ID):
+def WEB_QPaperAnalysis(request, QPaper1ID):
     try:
         # Filter questions for the given QPaper_ID
         questions = QPaperQuestions.objects.filter(QPaper_ID=QPaper1ID)
@@ -698,8 +686,8 @@ def API_QPaperAnalysis(request, QPaper1ID):
             "MarkWiseSplitDown": mark_wise_split_down,
             "ModuleWiseSplitDown": module_wise_split_down,
         }
-
-        return JsonResponse(response_data)
+        return render(request,"results/qPaperAnalysis.html", response_data)
+        # return JsonResponse(response_data)
 
     except QPaperQuestions.DoesNotExist:
         return JsonResponse({"error": "The provided QPaper ID does not exist."}, status=400)
@@ -856,6 +844,6 @@ def qPaperUpload(request):
             "Examination_Month": entry['Month_Year'],
         } 
 
-    print(qPaperJSON)
+    # print(qPaperJSON)
     return render(request, 'students/question_paper_upload.html', {'user': request.user, 'QPapers': qPaperJSON})
 
