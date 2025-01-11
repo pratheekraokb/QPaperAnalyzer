@@ -65,6 +65,24 @@
         }
 
     </style>
+    <style>
+        .module-heading {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #007bff;
+            width: 100%;
+            text-align: left; 
+        }
+        
+        .topic-list {
+            font-size: 1.1rem;
+            list-style-type: decimal;
+        }
+        .collapsible {
+            margin-bottom: 10px;
+            /* width: 100vw; */
+        }
+    </style>
 </head>
 
 <body class="bg-light">
@@ -83,6 +101,13 @@
             </div>
         </div>
         
+        <div class="syllabus-container" style="width: 100%;">
+            <h1 class="text-center my-4">Syllabus - Topics</h1>
+    
+            <!-- Placeholder for the modules -->
+            <div id="modules-container"></div>
+        </div>
+       
 
         <!-- Topic-Wise Marks Distribution (Row 1) -->
 
@@ -147,6 +172,56 @@
         </div>
 
     </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Course code can be dynamically set depending on the course
+        const courseCode = "{{ Metadata.CourseCode }}";
+        const modules = [1, 2, 3, 4, 5]; // Module numbers (1-5)
+
+        // Function to fetch and display syllabus
+        async function fetchSyllabus(courseCode, module) {
+            const response = await fetch(`/api/getTopicsSyllabus/${courseCode}/${module}/`);
+            if (response.ok) {
+                const data = await response.json();
+                const moduleData = data;
+
+                // Create HTML for the module
+                const moduleHtml = `
+                    <div class="collapsible">
+                        <button class="btn btn-info" data-toggle="collapse" data-target="#module${module}">
+                            Module ${module} - ${moduleData.Heading}
+                        </button>
+                        <div id="module${module}" class="collapse">
+                            <ul class="topic-list mt-3">
+                                ${moduleData.Topics.map(topic => `<li>${topic}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+
+                // Append the module HTML to the modules container
+                document.getElementById("modules-container").innerHTML += moduleHtml;
+            } else {
+                console.error(`Error fetching data for Module ${module}`);
+            }
+        }
+      
+        async function loadModules() {
+            for (const module of modules) {
+                await fetchSyllabus(courseCode, module);  // Wait for each module to be loaded before moving to the next
+            }
+        }
+
+        // Call the loadModules function to start fetching and displaying the syllabus
+        loadModules();
+
+        // Loop through the module numbers and fetch the syllabus for each
+        // modules.forEach(module => {
+            // fetchSyllabus(courseCode, module);
+        // });
+    </script> 
 
     <script>
         // Data passed from the Django view
