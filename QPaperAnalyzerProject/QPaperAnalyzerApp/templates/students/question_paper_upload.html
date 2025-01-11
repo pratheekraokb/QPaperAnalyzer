@@ -141,9 +141,21 @@
     </div>
 
     <div class="button" style="display: flex;justify-content: center;">
-        <button type="submit" class="btn btn-primary">Analyze</button>
+        <button type="submit" class="btn btn-primary" onclick="redirectToAnalysisPage(event)">Analyze</button>
     </div>
 </form>
+
+<script>
+    function redirectToAnalysisPage(event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+        
+        // Get the selected question paper id
+        const selectedOption = parseInt(document.getElementById('qPaperSelect').value);
+        
+        // Redirect to the new URL with the selected id
+        window.location.href = `/qPaperAnalyze/${selectedOption}`;
+    }
+</script>
 
 <script>
     function updateInfoBox() {

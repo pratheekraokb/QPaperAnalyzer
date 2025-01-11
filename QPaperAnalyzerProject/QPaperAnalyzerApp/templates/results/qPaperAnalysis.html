@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        
         h1 {
             padding: 10px;
             margin-top: 10px;
@@ -173,6 +174,14 @@
     color: #333;
     line-height: 1.5;
 }
+#questions-container {
+    max-height: 90vh;  /* Set the height to 90% of the viewport height */
+    overflow-y: auto;  /* Enable vertical scrolling if content overflows */
+    padding: 10px;  /* Optional: Add some padding inside the container */
+    border: 1px solid #ddd;  /* Optional: Border for visual clarity */
+    background-color: #f9f9f9;  /* Optional: Light background color */
+}
+
 
     </style>
 </head>
@@ -186,14 +195,10 @@
             <div style="margin: 10px;margin-left: 25%;">
                 <strong>Course Code:</strong> <span
                     style="display: inline-block; width: 800px;">{{Metadata.CourseCode}}</span><br>
-                <strong>Subject Name:</strong> <span style="display: inline-block; width: 800px;">{{Metadata.SubjectName
-                    }}</span><br>
-                <strong>Exam Name:</strong> <span style="display: inline-block; width: 800px;">{{
-                    Metadata.ExamName}}</span><br>
-                <strong>Month/Year:</strong> <span style="display: inline-block; width: 800px;">{{
-                    Metadata.MonthYear}}</span><br>
-                <strong>Exam Type:</strong> <span style="display: inline-block; width: 800px;">{{
-                    Metadata.ExamType}}</span><br>
+                <strong>Subject Name:</strong> <span style="display: inline-block; width: 800px;">{{Metadata.SubjectName}}</span><br>
+                <strong>Exam Name:</strong> <span style="display: inline-block; width: 800px;">{{Metadata.ExamName}}</span><br>
+                <strong>Month/Year:</strong> <span style="display: inline-block; width: 800px;">{{Metadata.MonthYear}}</span><br>
+                <strong>Exam Type:</strong> <span style="display: inline-block; width: 800px;">{{Metadata.ExamType}}</span><br>
             </div>
         </div>
 
@@ -304,11 +309,13 @@ function fetchQuestions(QPaperID) {
                         <h4 class="question-title">Q${qNumber}: ${question.QuestionText} (${question.Mark} Marks)</h4>
                         <div class="question-details" style="padding:10px;">
                             <span><strong>Topic:</strong> ${question.Topic || 'N/A'}</span><br>
-                            <span><strong>Module:</strong> Module ${question.ModuleNumber} </span>
+                            <span><strong>Module:</strong> Module ${question.ModuleNumber}</span><br>
+                            <br>
+                            <span><strong>Marks:</strong> ${question.Mark}</span><br>
                         </div>
                         <div class="answer-text" style="padding:0;">
-                            <strong>Answer:</strong>
-                            <p>${question.AnswerText || 'No answer provided.'}</p>
+                            <strong>Answer: (Just for Reference)</strong>
+                            <p style="padding:8px;">${question.AnswerText || 'No answer provided.'}</p>
                         </div>
                     `;
                     qNumber += 1;
