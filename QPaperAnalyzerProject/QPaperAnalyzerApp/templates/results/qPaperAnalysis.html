@@ -60,6 +60,9 @@
         .canvas-container {
             margin-top: 30px;
         }
+        .alert strong{
+            padding: 10px;
+        }
 
     </style>
 </head>
@@ -69,9 +72,17 @@
         <h1 class="text-center mb-4">Question Paper Analysis</h1>
 
         <!-- Question Paper ID -->
-        <div class="alert alert-primary text-center">
-            <strong>Question Paper ID:</strong> {{ QPaperID }}
+        <div class="alert alert-primary" style="padding: 15px;">
+            <div style="margin: 10px;margin-left: 25%;">
+            <strong>Course Code:</strong> <span style="display: inline-block; width: 800px;">{{ Metadata.CourseCode }}</span><br>
+            <strong>Subject Name:</strong> <span style="display: inline-block; width: 800px;">{{ Metadata.SubjectName }}</span><br>
+            <strong>Exam Name:</strong> <span style="display: inline-block; width: 800px;">{{ Metadata.ExamName }}</span><br>
+            <strong>Month/Year:</strong> <span style="display: inline-block; width: 800px;">{{ Metadata.MonthYear }}</span><br>
+            
+            <strong>Exam Type:</strong> <span style="display: inline-block; width: 800px;">{{ Metadata.ExamType }}</span><br>
+            </div>
         </div>
+        
 
         <!-- Topic-Wise Marks Distribution (Row 1) -->
 

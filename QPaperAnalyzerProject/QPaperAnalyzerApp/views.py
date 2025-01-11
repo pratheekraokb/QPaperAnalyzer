@@ -650,8 +650,14 @@ def API_QPaperExcelToDB(request):
 
 def WEB_QPaperAnalysis(request, QPaper1ID):
     try:
-        # Filter questions for the given QPaper_ID
-        questions = QPaperQuestions.objects.filter(QPaper_ID=QPaper1ID)
+        # Fetch the QPaper object using the provided QPaper1ID
+        qpaper = QPaper.objects.get(QPaper_ID=QPaper1ID)
+
+        # Fetch associated Course details
+        course = qpaper.CourseCode
+
+        # Fetch the questions related to the QPaper
+        questions = QPaperQuestions.objects.filter(QPaper_ID=qpaper)
 
         if not questions.exists():
             return JsonResponse({"error": "No questions found for the provided QPaper ID."}, status=404)
@@ -679,21 +685,34 @@ def WEB_QPaperAnalysis(request, QPaper1ID):
             total_marks = item['total_marks']
             module_wise_split_down[f"Module{module}"] = total_marks
 
+        # Prepare the metadata for response (Course details and QPaper details)
+        metadata = {
+            "CourseCode": course.coursecode,
+            "ExamName": qpaper.Exam_Name,
+            "MonthYear": qpaper.Month_Year,
+            "SubjectName": course.subjectname,
+            "MaxMarks": qpaper.Max_Marks,
+            "ExamType": qpaper.Exam_Type
+        }
+
         # Prepare the data for response
         response_data = {
             "QPaperID": QPaper1ID,
             "TopicSummary": list(topic_summary),  # Convert QuerySet to list for JSON response
             "MarkWiseSplitDown": mark_wise_split_down,
             "ModuleWiseSplitDown": module_wise_split_down,
+            "Metadata": metadata  # Add metadata to the response
         }
-        return render(request,"results/qPaperAnalysis.html", response_data)
-        # return JsonResponse(response_data)
 
-    except QPaperQuestions.DoesNotExist:
+        # Render the result page with the response data
+        return render(request, "results/qPaperAnalysis.html", response_data)
+
+    except QPaper.DoesNotExist:
         return JsonResponse({"error": "The provided QPaper ID does not exist."}, status=400)
     
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+    
 @csrf_exempt
 def upload_file(request):
     try:
