@@ -207,3 +207,89 @@ The request body should be in JSON format and contain the following field:
   "error": "Only POST method is allowed."
 }
 ```
+
+## 5. GET /api/getQuestionsTopicsAnswer/<int:QPaperID>/
+
+### Overview
+The API_QuestTopicAns endpoint retrieves detailed information about questions associated with a specific question paper (QPaperID). The data includes question text, marks, topic, module number, and an optional answer text.
+
+
+### Description
+Fetches a list of questions and their associated data for a given QPaperID.
+
+
+### Request
+
+QPaperID (integer): The unique identifier for the question paper.
+
+### Request
+
+#### Path Parameters
+- **`QPaperID`** *(integer)*: The unique identifier for the question paper.
+
+#### Example Request URL
+```plaintext
+GET /api/getQuestionsTopicsAnswer/42/
+```
+
+### Response
+
+#### Success Response
+On success, the endpoint returns a JSON object containing a list of questions. Each question includes details such as question text, marks, topic, module number, and answer text.
+
+#### HTTP Status Code
+200 OK
+
+#### Response Body Example
+
+```json
+{
+  "questions": [
+    {
+      "QuestionText": "List any three categories of database users, highlighting any one important characteristic of each category.",
+      "Mark": 3,
+      "Topic": "ER model - Basic concepts, entity set & attributes, notations, Relationships and constraints, cardinality, participation, notations, weak entities, relationships of degree 3",
+      "ID": 31,
+      "ModuleNumber": 1,
+      "AnswerText": "Three categories of database users are:\n\n1. **Database Administrators (DBAs):** A key characteristic of DBAs is their responsibility for the overall performance and security of the database system. ..."
+    },
+    {
+      "QuestionText": "What are the major differences between structured, unstructured and semi-structured data.",
+      "Mark": 3,
+      "Topic": "Concept & Overview of Database Management Systems (DBMS) - Characteristics of Database system, Database Users, structured, semi-structured and unstructured data",
+      "ID": 32,
+      "ModuleNumber": 1,
+      "AnswerText": "Structured data is highly organized and easily searchable by traditional database applications ..."
+    }
+  ]
+}
+```
+
+### Error Responses
+#### Case 1: No Questions Found
+If no questions are associated with the provided QPaperID, the API returns an error message.
+
+
+##### HTTP Status Code
+404 Not Found
+
+##### Response Body Example
+```json
+{
+  "error": "No questions found for the given QPaperID."
+}
+```
+
+#### Case 2: Unexpected Errors
+For any other unexpected errors, the API returns a generic error message.
+
+##### HTTP Status Code
+500 Internal Server Error
+
+##### Response Body Example
+```json
+Copy code
+{
+  "error": "An error occurred: <error_message>"
+}
+```
