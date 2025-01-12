@@ -318,20 +318,20 @@ This document provides detailed information about the database models used in th
 ---
 
 ## Table of Contents
-- [Course](#1course)
-- [QPaper](#2qpaper)
-- [QPaperQuestions](#3qpaperquestions)
-- [PrivateQPaper](#4privateqpaper)
-- [PrivateQPaperQuestions](#5privateqpaperquestions)
-- [University](#6university)
-- [College](#7college)
-- [Profile](#8profile)
-- [Department](#9department)
-- [CollegeDepartmentMap](#10collegedepartmentmap)
-- [Department_Course_Map](#11department_course_map)
-- [Quiz](#12quiz)
-- [QnA](#13qna)
-- [QuizScore](#14quizscore)
+- [Course](#1-course)
+- [QPaper](#2-qpaper)
+- [QPaperQuestions](#3-qpaperquestions)
+- [PrivateQPaper](#4-privateqpaper)
+- [PrivateQPaperQuestions](#5-privateqpaperquestions)
+- [University](#6-university)
+- [College](#7-college)
+- [Profile](#8-profile)
+- [Department](#9-department)
+- [CollegeDepartmentMap](#10-collegedepartmentmap)
+- [Department_Course_Map](#11-department_course_map)
+- [Quiz](#12-quiz)
+- [QnA](#13-qna)
+- [QuizScore](#14-quizscore)
 
 ---
 
