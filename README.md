@@ -292,3 +292,226 @@ For any other unexpected errors, the API returns a generic error message.
   "error": "An error occurred: <error_message>"
 }
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Database -->
+
+# Database - Models
+
+This document provides detailed information about the database models used in the EduSphere platform, an advanced educational management and analysis system. The models are designed to manage courses, quizzes, question papers, and profiles of users, among other entities.
+
+---
+
+## Table of Contents
+- [Course](#course)
+- [QPaper](#qpaper)
+- [QPaperQuestions](#qpaperquestions)
+- [PrivateQPaper](#privateqpaper)
+- [PrivateQPaperQuestions](#privateqpaperquestions)
+- [University](#university)
+- [College](#college)
+- [Profile](#profile)
+- [Department](#department)
+- [CollegeDepartmentMap](#collegedepartmentmap)
+- [Department_Course_Map](#department_course_map)
+- [Quiz](#quiz)
+- [QnA](#qna)
+- [QuizScore](#quizscore)
+
+---
+
+## Models
+
+### 1. **Course**
+Manages information about the courses offered.
+
+- **Fields**:
+  - `coursecode` (Primary Key): Unique course code (max length 8).
+  - `subjectname`: Name of the subject.
+  - `module1Head`, `module1Syllabus`: Module 1 details.
+  - `module2Head`, `module2Syllabus`: Module 2 details.
+  - `module3Head`, `module3Syllabus`: Module 3 details.
+  - `module4Head`, `module4Syllabus`: Module 4 details.
+  - `module5Head`, `module5Syllabus`: Module 5 details.
+- **String Representation**: Course code.
+
+---
+
+### 2. **QPaper**
+Stores information about question papers.
+
+- **Fields**:
+  - `QPaper_ID` (Primary Key): Auto-generated ID.
+  - `CourseCode`: Foreign key linking to `Course`.
+  - `Max_Marks`: Maximum marks for the question paper.
+  - `Exam_Type`: Exam type (Supply or Regular).
+  - `Exam_Name`: Name of the exam.
+  - `Month_Year`: Exam month and year.
+- **String Representation**: Course code and exam name.
+
+---
+
+### 3. **QPaperQuestions**
+Stores questions in a question paper.
+
+- **Fields**:
+  - `ID` (Primary Key): Auto-generated ID.
+  - `QPaper_ID`: Foreign key linking to `QPaper`.
+  - `QuestionText`: Text of the question.
+  - `Mark`: Marks for the question.
+  - `Topic`: Topic of the question.
+  - `Module_Number`: Associated module number.
+  - `AnswerText`: Text for the answer.
+- **String Representation**: Question and associated question paper.
+
+---
+
+### 4. **PrivateQPaper**
+Handles privately created question papers.
+
+- **Fields**:
+  - `PrivateQPaper_ID` (Primary Key): Auto-generated ID.
+  - `CourseCode`: Course code of the question paper.
+  - `Max_Marks`: Maximum marks.
+  - `Exam_Name`: Name of the private exam.
+- **String Representation**: Course code and exam name.
+
+---
+
+### 5. **PrivateQPaperQuestions**
+Stores questions for privately created question papers.
+
+- **Fields**:
+  - `ID` (Primary Key): Auto-generated ID.
+  - `QPaper_ID`: Foreign key linking to `PrivateQPaper`.
+  - `QuestionText`: Text of the question.
+  - `Mark`: Marks for the question.
+  - `Topic`: Topic of the question.
+  - `Module_Number`: Associated module number.
+- **String Representation**: Question and associated private question paper.
+
+---
+
+### 6. **University**
+Manages information about universities.
+
+- **Fields**:
+  - `University_ID` (Primary Key): Auto-generated ID.
+  - `University_Name`: Name of the university.
+  - `Location`: Location of the university.
+- **String Representation**: University name.
+
+---
+
+### 7. **College**
+Manages information about colleges.
+
+- **Fields**:
+  - `CollegeID` (Primary Key): Auto-generated ID.
+  - `CollegeName`: Name of the college.
+  - `University_ID`: Foreign key linking to `University`.
+  - `Address`: Address of the college.
+- **String Representation**: College name.
+
+---
+
+### 8. **Profile**
+Stores user profiles.
+
+- **Fields**:
+  - `user`: One-to-one relationship with Django's `User` model.
+  - `name`: Name of the user.
+  - `phone_num`: Phone number of the user.
+  - `user_type`: User type (Student or Faculty).
+  - `college`: Foreign key linking to `College`.
+- **String Representation**: Username and user type.
+
+---
+
+### 9. **Department**
+Stores department details.
+
+- **Fields**:
+  - `Department_ID` (Primary Key): Auto-generated ID.
+  - `Department_Name`: Name of the department.
+  - `Department_Code`: Code of the department.
+- **String Representation**: Department name.
+
+---
+
+### 10. **CollegeDepartmentMap**
+Maps colleges to their departments.
+
+- **Fields**:
+  - `ColDepartID` (Primary Key): Auto-generated ID.
+  - `College_ID`: Foreign key linking to `College`.
+  - `Department_ID`: Foreign key linking to `Department`.
+- **String Representation**: College and department mapping.
+
+---
+
+### 11. **Department_Course_Map**
+Maps departments to courses.
+
+- **Fields**:
+  - `Dep_Cour_ID` (Primary Key): Auto-generated ID.
+  - `Department_ID`: Foreign key linking to `Department`.
+  - `Course_ID`: Foreign key linking to `Course`.
+- **String Representation**: Department and course mapping.
+
+---
+
+### 12. **Quiz**
+Stores quizzes created by users.
+
+- **Fields**:
+  - `quiz_title`: Title of the quiz.
+  - `creation_timestamp`: Auto-generated timestamp when created.
+  - `scheduled_date`: Scheduled date for the quiz.
+  - `max_score`: Maximum score for the quiz.
+  - `created_by`: Foreign key linking to `Profile`.
+  - `course_id`: Foreign key linking to `Course`.
+  - `college_id`: Foreign key linking to `College`.
+- **String Representation**: Quiz title.
+
+---
+
+### 13. **QnA**
+Stores questions and answers for quizzes.
+
+- **Fields**:
+  - `quiz_qna_id` (Primary Key): Auto-generated ID.
+  - `quiz`: Foreign key linking to `Quiz`.
+  - `question_text`: Text of the question.
+  - `option_1`, `option_2`, `option_3`, `option_4`: Options for the question.
+  - `correct_option`: Correct option (1, 2, 3, or 4).
+  - `mark`: Marks for the question.
+- **String Representation**: Question and associated quiz.
+
+---
+
+### 14. **QuizScore**
+Tracks scores for quizzes.
+
+- **Fields**:
+  - `profile`: Foreign key linking to `Profile`.
+  - `quiz`: Foreign key linking to `Quiz`.
+  - `score`: Score achieved by the user.
+- **String Representation**: Username, quiz title, and score.
+
+---
