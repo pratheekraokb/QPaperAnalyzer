@@ -316,6 +316,9 @@ For any other unexpected errors, the API returns a generic error message.
 This document provides detailed information about the database models used in the EduSphere platform, an advanced educational management and analysis system. The models are designed to manage courses, quizzes, question papers, and profiles of users, among other entities.
 
 ---
+## Database Design Diagram
+![Database Diagram](./Readme_Images/ER-Diagram.png "Database Diagram")
+
 
 ## Table of Contents
 - [Course](#1-course)
