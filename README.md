@@ -518,3 +518,7 @@ Tracks scores for quizzes.
 - **String Representation**: Username, quiz title, and score.
 
 ---
+
+
+# Project Visuals/Images
+![Mark Wise Distribution](./Readme_Images/Marks_wise_Distribution.png "Mark Wise Distribution")
