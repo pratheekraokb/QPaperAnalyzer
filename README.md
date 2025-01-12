@@ -521,4 +521,12 @@ Tracks scores for quizzes.
 
 
 # Project Visuals/Images
-![Mark Wise Distribution](./Readme_Images/Marks_wise_Distribution.png "Mark Wise Distribution")
+![Mark Wise Distribution Diagram](./Readme_Images/Marks_wise_Distribution.png "Mark Wise Distribution")
+![Module Wise Distribution Diagram](./Readme_Images/Module_Wise_Distribution.png "Module Wise Distribution")
+![QPaper Paper Brakedown](./Readme_Images/QPaperBrakedown.png "QPaper Paper Brakedown")
+![Syllabus](./Readme_Images/Syllabus.png "Syllabus")
+
+![Top 5 Topics](./Readme_Images/Top5Topics.png "Top 5 Topics")
+![Topicwise Radar Diagram](./Readme_Images/Topicwise_Radar.png "Topicwise Radar")
+![TopicWise Table](./Readme_Images/TopicWiseTable.png "Topicwise Table")
+![Upload Analyze QPapers](./Readme_Images/Upload_Analyze_QPapers.png "Upload Analyze QPapers")
