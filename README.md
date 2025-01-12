@@ -288,7 +288,6 @@ For any other unexpected errors, the API returns a generic error message.
 
 ##### Response Body Example
 ```json
-Copy code
 {
   "error": "An error occurred: <error_message>"
 }
