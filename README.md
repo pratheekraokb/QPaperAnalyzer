@@ -12,7 +12,7 @@ This API system includes the following endpoints:
 
 ---
 
-## **1. Get Topics for a Module**
+## **1. Get - /api/getTopicsSyllabus/<str:CourseCode>/<int:Module>/**
 
 ### **Description**
 Retrieve the head and syllabus of a specific module for a given course.

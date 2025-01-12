@@ -737,6 +737,7 @@ def WEB_QPaperAnalysis(request, QPaper1ID):
                 "TotalMarks": item['total_marks'],
                 "ModuleName": module_name
             })
+        top_5_topics = sorted(topic_summary_with_modules, key=lambda x: x['TotalMarks'], reverse=True)[:5]
 
         # Mark-wise breakdown
         mark_wise_split = questions.values('Mark').annotate(question_count=Count('ID'))
@@ -774,6 +775,7 @@ def WEB_QPaperAnalysis(request, QPaper1ID):
             "QPaperID": QPaper1ID,
             "TopicSummary": topic_summary_with_modules,  # Add the module name to TopicSummary
             "MarkWiseSplitDown": mark_wise_split_down,
+            "Top5Topics": top_5_topics,
             "ModuleWiseSplitDown": module_wise_split_down,
             "Metadata": metadata  # Add metadata to the response
         }

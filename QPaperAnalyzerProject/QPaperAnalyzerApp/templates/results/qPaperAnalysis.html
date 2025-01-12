@@ -276,6 +276,7 @@
                         <!-- Table rows will be populated dynamically -->
                     </tbody>
                 </table>
+                
             </div>
         </div>
 
@@ -283,6 +284,29 @@
             <div class="col-md">
                 <canvas id="topicSummaryChart"></canvas>
             </div>
+        </div>
+
+        <br>
+        <div>
+            <h3>Top 5 Topics</h3>
+            <table class="table table-bordered" >
+                <thead>
+                    <tr>
+                        <th>Topic</th>
+                        <th>Total Marks</th>
+                        <th>Module Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for topic in Top5Topics %}
+                    <tr>
+                        <td>{{ topic.Topic }}</td>
+                        <td>{{ topic.TotalMarks }}</td>
+                        <td>{{ topic.ModuleName }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
 
     </div>
