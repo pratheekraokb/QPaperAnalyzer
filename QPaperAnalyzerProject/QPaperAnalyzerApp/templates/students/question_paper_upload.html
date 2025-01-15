@@ -92,11 +92,16 @@
             transform: rotate(360deg);
         }
     }
+
+    .maincontent{
+        padding: 20px;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<h1>Upload Question Paper (If Not Present)</h1>
+<div class="maincontent">
+    <h1>Upload Question Paper (If Not Present)</h1>
 
 <form id="uploadForm" enctype="multipart/form-data">
     {% csrf_token %}
@@ -144,6 +149,7 @@
         <button type="submit" class="btn btn-primary" onclick="redirectToAnalysisPage(event)">Analyze</button>
     </div>
 </form>
+</div>
 
 <script>
     function redirectToAnalysisPage(event) {

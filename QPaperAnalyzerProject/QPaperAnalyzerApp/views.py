@@ -1058,7 +1058,7 @@ def student_dashboard(request):
 
 @login_required
 def faculty_dashboard(request):
-    return render(request, 'faculty_dashboard.html', {'user': request.user})
+    return render(request, 'faculty/faculty_dashboard.html', {'user': request.user})
 
 def logout_user(request):
     logout(request)
