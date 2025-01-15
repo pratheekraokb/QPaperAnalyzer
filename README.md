@@ -294,6 +294,44 @@ For any other unexpected errors, the API returns a generic error message.
 ```
 
 
+## 6. POST /api/setupQPaper/
+
+This API endpoint is designed to dynamically generate a question paper based on course code, module requirements, and topics, while ensuring the total marks do not exceed the specified maximum.
+
+## #Endpoint
+
+- **URL**: `/api/setupQPaper/`
+- **Method**: `POST`
+- **Authentication**: None (assuming no authentication is required for this endpoint)
+
+### Request Body (JSON)
+
+The request body must be sent as a JSON object containing the following fields:
+
+#### Parameters:
+
+- **CourseCode** (string, required): The unique course code associated with the question paper.  
+  Example: `"CS101"`
+
+- **MaxMarks** (integer, optional): The maximum marks that the generated question paper can have. The default value is `50` if not provided.
+  Example: `50`
+
+- **module_required** (array of integers, optional): A list of module numbers that are required for the question paper.
+  Example: `[1, 2]`
+
+- **TopicsList** (array of strings, optional): A list of topics that should be included in the question paper. Questions that match any of the provided topics will be included.
+  Example: `["Data Structures", "Algorithms"]`
+
+#### Example Request Body:
+```json
+{
+  "CourseCode": "CS101",
+  "MaxMarks": 50,
+  "module_required": [1, 3],
+  "TopicsList": ["Data Structures", "Algorithms"]
+}
+```
+
 
 
 
