@@ -1,0 +1,281 @@
+{% extends 'faculty/faculty_base.html' %}
+
+{% block title %}Faculty Dashboard{% endblock %}
+{% block style %}
+<style>
+    /* Body Styling */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f7f9;
+        margin: 0;
+        padding: 0;
+        /* color: white; */
+    }
+
+    /* Container for the Right Div */
+    .rightDiv {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 50px 0;
+    }
+
+    /* Form Container */
+    .form-container {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        width: 70%;
+        max-width: 800px;
+        transition: all 0.3s ease;
+    }
+
+    .form-container:hover {
+        transform: scale(1.02);
+    }
+
+    h2 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 20px;
+    }
+
+    /* Input Fields Styling */
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+    .input-group label {
+        font-size: 16px;
+        color: #2c3e50;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .input-group select, .input-group input, .input-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: border 0.3s ease;
+    }
+
+    .input-group select:focus, .input-group input:focus, .input-group textarea:focus {
+        border-color: #3498db;
+        outline: none;
+    }
+
+    /* Button Styling */
+    .submit-btn {
+        width: 100%;
+        background-color: #3498db;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        padding: 15px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .submit-btn:hover {
+        background-color: #2980b9;
+    }
+
+    /* Small Inputs for Module List and Topics List */
+    .module-checkbox, .topic-checkbox {
+        margin-right: 10px;
+    }
+
+    .checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .form-container {
+            width: 90%;
+            padding: 20px;
+        }
+    }
+
+    /* Animation */
+    .fade-in {
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="rightDiv fade-in">
+    <div class="form-container">
+        <h2>Create Question Paper</h2>
+        <form id="question-paper-form">
+            <div class="input-group">
+                <label for="courseCode">Course Code</label>
+                <select id="courseCode" name="CourseCode" required>
+                    <option value="Select">Select a Option</option>
+                    {% for course_code in course_codes %}
+                    <option value="{{ course_code }}">{{ course_code }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="maxMarks">Max Marks</label>
+                <input type="number" id="maxMarks" name="MaxMarks" placeholder="Enter Max Marks" value="50" min="1">
+            </div>
+
+            <!-- Changed the module selection to a multiple select dropdown -->
+            <div class="input-group">
+                <label for="module_required">Modules Required</label>
+                <select class="checkbox-group" id="moduleCheckboxGroup" name="Modules" multiple style="height: 130px;">
+                    <!-- Module options will be populated here dynamically -->
+                    
+                </select>
+            </div>
+
+            <!-- Updated the Topics list to be a multiple select dropdown -->
+            <div class="input-group">
+                <label for="TopicsList">Topics List</label>
+                <select id="TopicsList" name="TopicsList" multiple style="height: 130px">
+                    <!-- Topics will be populated here dynamically based on selected modules -->
+                </select>
+            </div>
+
+            <button type="submit" class="submit-btn">Generate Question Paper</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    // Event listener when the course code is selected
+    document.getElementById('courseCode').addEventListener('change', function() {
+        var courseCode = this.value;
+
+        if (courseCode) {
+            // Fetch module data for the selected course using AJAX
+            $.ajax({
+                url: `/api/getModuleTopicsFromCourseCode/${courseCode}/`,
+                method: 'GET',
+                success: function(data) {
+                    // Clear previous module and topics list
+                    $('#moduleCheckboxGroup').empty();
+                    $('#TopicsList').empty();
+
+                    // Dynamically populate module options in the multi-select dropdown
+                    for (let moduleNumber in data) {
+                        const module = data[moduleNumber];
+                        const optionHTML = `<option value="${moduleNumber}">${module.Heading}</option>`;
+                        $('#moduleCheckboxGroup').append(optionHTML);
+                    }
+
+                    // Attach event listener to update topics when modules are selected
+                    $('#moduleCheckboxGroup').on('change', function() {
+                        updateTopicsList(data);
+                    });
+                },
+                error: function(error) {
+                    console.log('Error fetching module data:', error);
+                }
+            });
+        } else {
+            // If no course is selected, clear the modules and topics list
+            $('#moduleCheckboxGroup').empty();
+            $('#TopicsList').empty();
+        }
+    });
+
+    // Function to update the topics list based on selected modules
+    function updateTopicsList(data) {
+        var selectedModules = $('#moduleCheckboxGroup').val(); // Get selected module values
+        var topicsSelect = $('#TopicsList');
+
+        // Clear previous topics
+        topicsSelect.empty();
+
+        // Add topics to the topics list based on the selected modules
+        selectedModules.forEach(function(moduleNumber) {
+            var syllabus = data[moduleNumber].Syllabus;
+
+            // Add topics to the select dropdown
+            syllabus.forEach(function(topic) {
+                var optionHTML = `<option value="${topic}">${topic}</option>`;
+                topicsSelect.append(optionHTML);
+            });
+        });
+    }
+
+    
+</script>
+
+<script>
+    // Handle form submission and send data as JSON
+    document.getElementById('question-paper-form').addEventListener('submit', function(e) {
+        e.preventDefault();  // Prevent form from submitting traditionally
+
+        // Get the form data
+        const courseCode = document.getElementById('courseCode').value;
+        const maxMarks = document.getElementById('maxMarks').value || 50; // Default to 50 if empty
+
+        // Get selected modules
+        const modulesRequired = [];
+        const moduleSelect = document.querySelector('#moduleCheckboxGroup');
+        const moduleCheckboxes = moduleSelect.selectedOptions;
+
+        Array.from(moduleCheckboxes).forEach(option => modulesRequired.push(parseInt(option.value)));
+
+        // Get selected topics
+        const topicsList = [];
+        const topicSelect = document.getElementById('TopicsList');
+        for (let i = 0; i < topicSelect.selectedOptions.length; i++) {
+            topicsList.push(topicSelect.selectedOptions[i].value);
+        }
+
+        // Create the JSON data object
+        const formData = {
+            "CourseCode": courseCode,
+            "MaxMarks": maxMarks,
+            "module_required": modulesRequired,
+            "TopicsList": topicsList
+        };
+
+        console.log(formData);  // Logging data to console (for debugging)
+
+        // Send the data as JSON via fetch
+        fetch('/api/setupQPaper/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)  // Send form data as JSON
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Question Paper Generated Successfully!');
+                // You can redirect or update UI accordingly
+            } else {
+                alert('Failed to generate question paper.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Something went wrong.');
+        });
+    });
+</script>
+{% endblock %}

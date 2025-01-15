@@ -4,9 +4,9 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import User, Profile, College, QPaper, QPaperQuestions, Course
+from .models import User, Profile, College, QPaper, QPaperQuestions, Course, PrivateQPaper
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.http import HttpResponseServerError
 from django.db import IntegrityError, DatabaseError
 
 from django.shortcuts import get_object_or_404
@@ -561,6 +561,9 @@ def API_SetUpQPaper(request):
         module_required = body.get("module_required", [1,2,3,4,5])
         topics = body.get("TopicsList", [])
 
+
+        print(module_required, topics)
+
         if not course_code:
             return JsonResponse({"error": "Course code is required"}, status=400)
 
@@ -684,7 +687,8 @@ def API_SetUpQPaper(request):
                         if total_marks < max_marks:  # Ensure we don't exceed max marks
                             question["Mark"] += 1
                             total_marks += 1
-
+            print(matching_questions)
+            print(total_marks)
 
             return JsonResponse({
                 "questions": matching_questions,
@@ -1090,3 +1094,53 @@ def qPaperUpload(request):
     # print(qPaperJSON)
     return render(request, 'students/question_paper_upload.html', {'user': request.user, 'QPapers': qPaperJSON})
 
+@login_required
+def generateQPaper(request):
+    try:
+        qpaper_course_codes = QPaper.objects.values('CourseCode').distinct()
+        privateqpaper_course_codes = PrivateQPaper.objects.values('CourseCode').distinct()
+        combined_course_codes = set(code['CourseCode'] for code in qpaper_course_codes) | set(code['CourseCode'] for code in privateqpaper_course_codes)
+        return render(request, "faculty/generateQpaper.html", {'course_codes': combined_course_codes})
+
+    except Exception as e:
+        # Handle errors
+        return HttpResponseServerError(f"An error occurred while fetching the course codes: {str(e)}")
+
+def API_getModuleTopicsFromCourseCode(request, CourseCode):
+    try:
+        # Convert the CourseCode to a string (just in case it's passed differently)
+        course_code_str = str(CourseCode)
+
+        # Fetch the course data using the CourseCode
+        course = Course.objects.get(coursecode=course_code_str)
+
+        # Create the response structure for the modules
+        module_topics = {
+            "1": {
+                "Heading": "Module 1 - " + course.module1Head,
+                "Syllabus": QPaperModule.topicsFromSyllabus(str(course.module1Syllabus))
+            },
+            "2": {
+                "Heading": "Module 2 - " +  course.module2Head,
+                "Syllabus": QPaperModule.topicsFromSyllabus(str(course.module2Syllabus))
+            },
+            "3": {
+                "Heading": "Module 3 - " +  course.module3Head,
+                "Syllabus": QPaperModule.topicsFromSyllabus(str(course.module3Syllabus))
+            },
+            "4": {
+                "Heading": "Module 4 - " +  course.module4Head,
+                "Syllabus": QPaperModule.topicsFromSyllabus(str(course.module4Syllabus))
+            },
+            "5": {
+                "Heading": "Module 5 - " +  course.module5Head,
+                "Syllabus": QPaperModule.topicsFromSyllabus(str(course.module5Syllabus))
+            }
+        }
+
+        # Return the module topics as a JSON response
+        return JsonResponse(module_topics)
+
+    except Exception as e:
+        # Handle errors
+        return HttpResponseServerError(f"An error occurred while fetching the syllabus and module details using course codes: {str(e)}")

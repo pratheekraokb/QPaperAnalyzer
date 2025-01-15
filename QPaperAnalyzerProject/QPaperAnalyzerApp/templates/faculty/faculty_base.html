@@ -75,7 +75,6 @@
             height: 100%;
             background-color: #ffffff;
             color: #333;
-            {% comment %} padding: 20px; {% endcomment %}
             overflow-y: auto;
             transition: width 0.3s ease-in-out, margin-left 0.3s ease-in-out;
         }
@@ -107,8 +106,9 @@
     <div id="dashboard">
         <div id="sidebar">
             <div class="sidebar-content">
-                <h2>QPaperAnalyzer Menu</h2>
-                <button class="sidebar-button" onclick="gotoLink('faculty/dashboard')">Dashboard</button>
+                <h2 style="color:white;">QPaperAnalyzer Menu</h2>
+                <button class="sidebar-button" onclick="gotoLink('faculty/dashboard')">Home Page</button>
+                <button class="sidebar-button" onclick="gotoLink('faculty/generateQPaper')">Generate QPaper</button>
                
                 <button class="sidebar-button" onclick="gotoLink('logout')">Logout</button>
             </div>

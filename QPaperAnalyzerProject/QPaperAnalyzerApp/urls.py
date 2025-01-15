@@ -9,6 +9,8 @@ urlpatterns = [
     path('addCoursesThroughCSV/', views.dataEntryFunc, name='dataEntryFunc'),
     path('api/getQuestionsTopicsAnswer/<int:QPaperID>/', views.API_QuestTopicAns, name='API_QuestTopicAns'),
     path('upload/', views.upload_file, name='upload_file'),
+    # path('api/getModuleTopicsFromCourseCode/<str:CourseCode>/', views.API_getModuleTopicsFromCourseCode, 'API_getModuleTopicsFromCourseCode'),
+    path('api/getModuleTopicsFromCourseCode/<str:CourseCode>/', views.API_getModuleTopicsFromCourseCode, name='API_getModuleTopicsFromCourseCode'),
 
     path('api/setupQPaper/', views.API_SetUpQPaper, name="API_SetUpQPaper"),
 
@@ -24,8 +26,9 @@ urlpatterns = [
     path('qPaperAnalyze/<int:QPaper1ID>/', views.WEB_QPaperAnalysis ,name='WEB_QPaperAnalysis'),
     path('student/qPaperUpload/', views.qPaperUpload, name='qPaperUpload'),
     path('student/dashboard/', views.student_dashboard, name='student_dashboard'),
-    # path('student/dashboard/', views.student_dashboard, name='student_dashboard'),
-    path('faculty/dashboard/', views.faculty_dashboard, name='faculty_dashboard'),   
+
+    path('faculty/dashboard/', views.faculty_dashboard, name='faculty_dashboard'),  
+    path('faculty/generateQPaper/', views.generateQPaper, name='generateQPaper'),
 
 
 
