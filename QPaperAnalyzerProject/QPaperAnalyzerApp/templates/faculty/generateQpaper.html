@@ -124,6 +124,13 @@
             opacity: 1;
         }
     }
+    .questionText{
+        font-weight: bold;
+        font-size: 18px;
+    }
+    .qPaper h1, h2{
+        text-align: center;
+    }
 </style>
 {% endblock %}
 
@@ -132,6 +139,14 @@
     <div class="form-container">
         <h2>Create Question Paper</h2>
         <form id="question-paper-form">
+            <div class="input-group">
+                <label for="ExamName">Exam Name</label>
+                <input type="text" id="examName" name="examName" placeholder="Name of Exam">
+            </div>
+            <div class="input-group">
+                <label for="collegeName">College Name</label>
+                <input type="text" id="collegeName" name="collegeName" placeholder="Name of Exam">
+            </div>
             <div class="input-group">
                 <label for="courseCode">Course Code</label>
                 <select id="courseCode" name="CourseCode" required>
@@ -169,8 +184,7 @@
     </div>
 </div>
 
-<div class="qPaper" id="qPaperDiv" style="padding: 20px;">
-
+<div class="qPaper" id="qPaperDiv" style="padding: 20px; font-family: Arial, sans-serif; border: 1px solid #ddd; margin: 20px; border-radius: 8px; background-color: #f9f9f9;">
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -242,39 +256,49 @@
         }
 
         // Proceed with creating the question paper
+        const qpaperName = document.createElement('h2');
+        qpaperName.textContent = document.getElementById('examName').value;
+
+
+        const collegeName = document.createElement('h1');
+        collegeName.textContent = document.getElementById('collegeName').value;
+
         const totalMarks = document.createElement('h3');
         totalMarks.textContent = `Total Marks: ${data.total_marks}`;
+        qPaperDiv.append(collegeName);
+        qPaperDiv.append(qpaperName);
         qPaperDiv.appendChild(totalMarks);
+
 
         data.questions.forEach((question, index) => {
             const questionDiv = document.createElement('div');
             questionDiv.classList.add('question');
 
-            const serialNumber = document.createElement('p');
-            serialNumber.classList.add('serialNumber');
-            serialNumber.textContent = `Q${index + 1}:`;
+            // const serialNumber = document.createElement('p');
+            // serialNumber.classList.add('serialNumber');
+            // serialNumber.textContent = `Q${index + 1}:`;
 
             const questionText = document.createElement('p');
             questionText.classList.add('questionText');
-            questionText.textContent = question.QuestionText;
+            questionText.textContent = `${index + 1}) ` + question.QuestionText + ` [${question.Mark} Marks, Module - ${question.Module_Number} ]`;
 
             const topic = document.createElement('p');
             topic.classList.add('topic');
             topic.textContent = `Topic: ${question.Topic}`;
 
-            const moduleNumber = document.createElement('p');
-            moduleNumber.classList.add('moduleNumber');
-            moduleNumber.textContent = `Module Number: ${question.Module_Number}`;
+            // const moduleNumber = document.createElement('p');
+            // moduleNumber.classList.add('moduleNumber');
+            // moduleNumber.textContent = `Module Number: ${question.Module_Number}`;
 
-            const marks = document.createElement('p');
-            marks.classList.add('marks');
-            marks.textContent = `Marks: ${question.Mark}`;
+            // const marks = document.createElement('p');
+            // marks.classList.add('marks');
+            // marks.textContent = `Marks: ${question.Mark}`;
 
-            questionDiv.appendChild(serialNumber);
+            // questionDiv.appendChild(serialNumber);
             questionDiv.appendChild(questionText);
             questionDiv.appendChild(topic);
-            questionDiv.appendChild(moduleNumber);
-            questionDiv.appendChild(marks);
+            // questionDiv.appendChild(moduleNumber);
+            // questionDiv.appendChild(marks);
 
             qPaperDiv.appendChild(questionDiv);
         });
