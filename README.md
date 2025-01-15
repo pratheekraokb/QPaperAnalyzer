@@ -294,7 +294,7 @@ For any other unexpected errors, the API returns a generic error message.
 ```
 
 
-## 6. POST /api/setupQPaper/
+## . POST /api/setupQPaper/
 
 This API endpoint is designed to dynamically generate a question paper based on course code, module requirements, and topics, while ensuring the total marks do not exceed the specified maximum.
 

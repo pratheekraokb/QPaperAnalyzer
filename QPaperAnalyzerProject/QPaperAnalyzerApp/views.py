@@ -558,7 +558,7 @@ def API_SetUpQPaper(request):
         # Extract values from the body with default values if not provided
         course_code = body.get("CourseCode", "")
         max_marks = int(body.get("MaxMarks", 50))
-        module_required = body.get("module_required", [])
+        module_required = body.get("module_required", [1,2,3,4,5])
         topics = body.get("TopicsList", [])
 
         if not course_code:
@@ -646,8 +646,10 @@ def API_SetUpQPaper(request):
                             break
 
                         # Add the question to the matching list
+                        question_text = str(question.QuestionText)
+                        # question_text = str(re.sub(r'[^a-zA-Z0-9\s?]', '', question_text))
                         matching_questions.append({
-                            "QuestionText": question.QuestionText,
+                            "QuestionText": question_text,
                             "Topic": question.Topic,
                             "Module_Number": question.Module_Number,
                             "Mark": question.Mark,
