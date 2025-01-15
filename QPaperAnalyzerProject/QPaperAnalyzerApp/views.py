@@ -21,7 +21,7 @@ import os
 
 import requests, json
 
-
+import difflib
 
 # Functions for the Caching
 import hashlib
@@ -37,7 +37,7 @@ from dotenv import load_dotenv
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from django.db.models import Sum, Count
-
+import random
 
 
 load_dotenv()
@@ -547,6 +547,152 @@ def API_get_topics_syllabus(request, CourseCode, Module):
         return JsonResponse({
             "error": str(e)
         }, status=500)
+
+
+@csrf_exempt
+def API_SetUpQPaper(request):
+    if request.method == "POST":
+        # Parse the request body as JSON
+        body = json.loads(request.body)
+
+        # Extract values from the body with default values if not provided
+        course_code = body.get("CourseCode", "")
+        max_marks = int(body.get("MaxMarks", 50))
+        module_required = body.get("module_required", [])
+        topics = body.get("TopicsList", [])
+
+        if not course_code:
+            return JsonResponse({"error": "Course code is required"}, status=400)
+
+        try:
+            # Start building the QPaper filter
+            filter_conditions = {"CourseCode__coursecode": course_code}
+
+            # List to store questions that match all conditions
+            matching_questions = []
+            total_marks = 0  # Initialize total marks to zero
+
+            # To track added questions and avoid duplicates
+            added_question_ids = set()
+
+            # Handle the case when topics are provided
+            if topics:
+                # Loop through all QPapers and their questions
+                qpapers = QPaper.objects.filter(**filter_conditions)
+
+                all_questions = []
+                for qpaper in qpapers:
+                    questions = qpaper.questions.all()
+                    all_questions.extend(questions)
+
+                # Shuffle questions for randomness
+                random.shuffle(all_questions)
+
+                for question in all_questions:
+                    # Check if the question's module is in the module_required list
+                    if module_required and question.Module_Number not in module_required:
+                        continue  # Skip this question if the module is not in the required list
+
+                    # Check for topic similarity
+                    topic_match = False
+                    for topic in topics:
+                        similarity_score = difflib.SequenceMatcher(None, question.Topic, topic).ratio()
+                        if similarity_score > 0.6:  # If similarity is high enough, consider it a match
+                            topic_match = True
+                            break
+                    if not topic_match:
+                        continue  # Skip this question if no topic match
+
+                    # Avoid adding duplicate questions
+                    if question.ID not in added_question_ids:
+                        if total_marks + question.Mark > max_marks:
+                            # If adding this question exceeds the max marks, stop adding more questions
+                            break
+
+                        # Add the question to the matching list
+                        matching_questions.append({
+                            "QuestionText": question.QuestionText,
+                            "Topic": question.Topic,
+                            "Module_Number": question.Module_Number,
+                            "Mark": question.Mark,
+                        })
+                        total_marks += question.Mark  # Add question's marks to the total
+                        added_question_ids.add(question.ID)  # Mark this question as added
+                        if total_marks >= max_marks:
+                            # If the total marks reach the max marks, stop adding more questions
+                            break
+
+            # If no topics are provided, simply fetch all questions and apply module filter
+            else:
+                qpapers = QPaper.objects.filter(**filter_conditions)
+
+                all_questions = []
+                for qpaper in qpapers:
+                    questions = qpaper.questions.all()
+                    all_questions.extend(questions)
+
+                # Shuffle questions for randomness
+                random.shuffle(all_questions)
+
+                for question in all_questions:
+                    # Check if the question's module is in the module_required list
+                    if module_required and question.Module_Number not in module_required:
+                        continue  # Skip this question if the module is not in the required list
+
+                    # Avoid adding duplicate questions
+                    if question.ID not in added_question_ids:
+                        if total_marks + question.Mark > max_marks:
+                            # If adding this question exceeds the max marks, stop adding more questions
+                            break
+
+                        # Add the question to the matching list
+                        matching_questions.append({
+                            "QuestionText": question.QuestionText,
+                            "Topic": question.Topic,
+                            "Module_Number": question.Module_Number,
+                            "Mark": question.Mark,
+                        })
+                        total_marks += question.Mark  # Add question's marks to the total
+                        added_question_ids.add(question.ID)  # Mark this question as added
+                        if total_marks >= max_marks:
+                            # If the total marks reach the max marks, stop adding more questions
+                            break
+            #  Sort the questions by marks in ascending order
+            matching_questions = sorted(matching_questions, key=lambda x: x["Mark"])
+            # Adjust the total marks to exactly match max_marks
+
+            # Adjust the total marks based on the number of questions
+            num_questions = len(matching_questions)
+            if total_marks < max_marks:
+                difference = max_marks - total_marks
+
+                # Case 1: Number of questions >= difference (incremental distribution)
+                if num_questions >= difference:
+                    for question in matching_questions:
+                        if difference <= 0:
+                            break
+                        if total_marks < max_marks:  # Ensure we don't exceed max marks
+                            question["Mark"] += 1
+                            total_marks += 1
+                            difference -= 1
+
+                # Case 2: Number of questions < difference (uniform increment)
+                else:
+                    for question in matching_questions:
+                        if total_marks < max_marks:  # Ensure we don't exceed max marks
+                            question["Mark"] += 1
+                            total_marks += 1
+
+
+            return JsonResponse({
+                "questions": matching_questions,
+                "total_marks": total_marks
+                }, status=200)
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid HTTP method"}, status=405)
 
 # POST API
 @csrf_exempt

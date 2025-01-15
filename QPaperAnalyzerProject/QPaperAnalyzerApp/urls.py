@@ -10,6 +10,8 @@ urlpatterns = [
     path('api/getQuestionsTopicsAnswer/<int:QPaperID>/', views.API_QuestTopicAns, name='API_QuestTopicAns'),
     path('upload/', views.upload_file, name='upload_file'),
 
+    path('api/setupQPaper/', views.API_SetUpQPaper, name="API_SetUpQPaper"),
+
     # Authentication
 
     path('register/', views.register, name='register'),
@@ -24,4 +26,7 @@ urlpatterns = [
     path('student/dashboard/', views.student_dashboard, name='student_dashboard'),
     # path('student/dashboard/', views.student_dashboard, name='student_dashboard'),
     path('faculty/dashboard/', views.faculty_dashboard, name='faculty_dashboard'),   
+
+
+
 ]

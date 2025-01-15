@@ -376,12 +376,16 @@ fetchQuestions(QPaperID);
             const modulesContainer = document.getElementById('modules-container');
             modulesContainer.style.display = 'flex';
             modulesContainer.style.flexDirection = 'column';  // Switch to column view
+
+           
         });
 
         document.getElementById('row-view-btn').addEventListener('click', function () {
             const modulesContainer = document.getElementById('modules-container');
             modulesContainer.style.display = 'flex';
             modulesContainer.style.flexDirection = 'row';  // Switch to row view
+
+            
         });
         const courseCode = "{{ Metadata.CourseCode }}";
         const modules = [1, 2, 3, 4, 5]; // Module numbers (1-5)
@@ -395,26 +399,26 @@ fetchQuestions(QPaperID);
 
                 // Create HTML for the module
                 const moduleHtml = `
-            <div class="collapsible-row">
-                <!-- Module Heading -->
-                <div class="module-heading">
-                    <button class="collapsible-button" data-toggle="collapse" data-target="#module${module}">
-                        Module ${module} - ${moduleData.Heading}
-                    </button>
-                </div>
+                    <div class="collapsible-row">
+                        <!-- Module Heading -->
+                        <div class="module-heading">
+                            <button class="collapsible-button" data-toggle="collapse" data-target="#module${module}">
+                                Module ${module} - ${moduleData.Heading}
+                            </button>
+                        </div>
 
-                <!-- Topics (Collapsible Section) -->
-                <div id="module${module}" class="collapse">
-                    <div class="row">
-                        <div class="col-12">
-                            <ul class="topic-list mt-3">
-                                ${moduleData.Topics.map(topic => `<li>${topic}</li>`).join('')}
-                            </ul>
+                        <!-- Topics (Collapsible Section) -->
+                        <div id="module${module}" class="collapse">
+                            <div class="row">
+                                <div class="col-12">
+                                    <ul class="topic-list mt-3">
+                                        ${moduleData.Topics.map(topic => `<li>${topic}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        `;
+                `;
 
                 // Append the module HTML to the modules container
                 document.getElementById("modules-container").innerHTML += moduleHtml;
@@ -432,6 +436,9 @@ fetchQuestions(QPaperID);
 
         // Call the loadModules function to start fetching and displaying the syllabus
         loadModules();
+
+
+    
 
     </script>
 
