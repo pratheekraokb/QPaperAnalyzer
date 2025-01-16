@@ -13,6 +13,7 @@ urlpatterns = [
     path('api/getModuleTopicsFromCourseCode/<str:CourseCode>/', views.API_getModuleTopicsFromCourseCode, name='API_getModuleTopicsFromCourseCode'),
 
     path('api/setupQPaper/', views.API_SetUpQPaper, name="API_SetUpQPaper"),
+    path('api/comparePublicQPaper/<int:QPaper1ID>/<int:QPaper2ID>/', views.comparePublicQPaper, name='comparePublicQPaper'),
 
     # Authentication
 
@@ -26,6 +27,7 @@ urlpatterns = [
     path('qPaperAnalyze/<int:QPaper1ID>/', views.WEB_QPaperAnalysis ,name='WEB_QPaperAnalysis'),
     path('student/qPaperUpload/', views.qPaperUpload, name='qPaperUpload'),
     path('student/dashboard/', views.student_dashboard, name='student_dashboard'),
+    path('qPaperAnalyze/compareQPapers/', views.compareQPapers, name='compareQPapers'),
 
     path('faculty/dashboard/', views.faculty_dashboard, name='faculty_dashboard'),  
     path('faculty/generateQPaper/', views.generateQPaper, name='generateQPaper'),

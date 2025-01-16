@@ -940,7 +940,150 @@ def WEB_QPaperAnalysis(request, QPaper1ID):
     
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
-    
+
+
+def comparePublicQPaper(request, QPaper1ID, QPaper2ID):
+    try:
+        # Fetch both QPapers
+        print("hai")
+        QPaper1ID = int(QPaper1ID)
+        QPaper2ID = int(QPaper2ID)
+        print(QPaper1ID, QPaper2ID)
+        qpaper1 = QPaper.objects.get(QPaper_ID=QPaper1ID)
+        qpaper2 = QPaper.objects.get(QPaper_ID=QPaper2ID)
+
+        # Fetch courses for both QPapers
+        course1 = qpaper1.CourseCode
+        course2 = qpaper2.CourseCode
+
+        # Fetch questions for both QPapers
+        questions1 = QPaperQuestions.objects.filter(QPaper_ID=qpaper1)
+        questions2 = QPaperQuestions.objects.filter(QPaper_ID=qpaper2)
+        
+        if not questions1.exists() or not questions2.exists():
+            return JsonResponse({"error": "No questions found for one or both QPapers."}, status=404)
+
+        def analyze_questions(questions, course):
+            # Group by Topic and calculate the sum of marks
+            topic_summary = (
+                questions.values('Topic')
+                .annotate(total_marks=Sum('Mark'))
+                .order_by('Topic')
+            )
+
+            # Add module name (module head) based on the topic and syllabus
+            topic_summary_with_modules = []
+            for item in topic_summary:
+                topic = item['Topic']
+
+                def clean_string(s):
+                    return re.sub(r'[^A-Za-z0-9]', '', s)
+
+                cleaned_topic = clean_string(topic)
+
+                # Determine the module name
+                module_name = "Unknown"
+                if cleaned_topic in clean_string(course.module1Syllabus):
+                    module_name = f"Module 1 - {course.module1Head}"
+                elif cleaned_topic in clean_string(course.module2Syllabus):
+                    module_name = f"Module 2 - {course.module2Head}"
+                elif cleaned_topic in clean_string(course.module3Syllabus):
+                    module_name = f"Module 3 - {course.module3Head}"
+                elif cleaned_topic in clean_string(course.module4Syllabus):
+                    module_name = f"Module 4 - {course.module4Head}"
+                elif cleaned_topic in clean_string(course.module5Syllabus):
+                    module_name = f"Module 5 - {course.module5Head}"
+
+                # Add the module info to the topic summary
+                topic_summary_with_modules.append({
+                    "Topic": topic,
+                    "TotalMarks": item['total_marks'],
+                    "ModuleName": module_name,
+                })
+
+            # Mark-wise breakdown
+            mark_wise_split = questions.values('Mark').annotate(question_count=Count('ID'))
+            mark_wise_split_down = {f"{item['Mark']}_Marks": item['question_count'] for item in mark_wise_split}
+
+            # Module-wise breakdown
+            module_wise_split = questions.values('Module_Number').annotate(total_marks=Sum('Mark'))
+            module_wise_split_down = {f"Module{item['Module_Number']}": item['total_marks'] for item in module_wise_split}
+
+            return {
+                "TopicSummary": topic_summary_with_modules,
+                "MarkWiseSplitDown": mark_wise_split_down,
+                "ModuleWiseSplitDown": module_wise_split_down,
+            }
+
+        # Analyze both QPapers
+        analysis1 = analyze_questions(questions1, course1)
+        analysis2 = analyze_questions(questions2, course2)
+
+        # Find similarities and dissimilarities
+        topics1 = {item['Topic'] for item in analysis1['TopicSummary']}
+        topics2 = {item['Topic'] for item in analysis2['TopicSummary']}
+
+        common_topics = topics1 & topics2
+        unique_topics1 = topics1 - topics2
+        unique_topics2 = topics2 - topics1
+
+        similarities = {
+            "CommonTopics": list(common_topics),
+            "TotalCommonTopics": len(common_topics),
+        }
+        print(similarities)
+
+        dissimilarities = {
+            "UniqueToQPaper1": list(unique_topics1),
+            "UniqueToQPaper2": list(unique_topics2),
+        }
+
+        # Combine metadata for both QPapers
+        metadata1 = {
+            "QPaperID": QPaper1ID,
+            "CourseCode": course1.coursecode,
+            "ExamName": qpaper1.Exam_Name,
+            "MonthYear": qpaper1.Month_Year,
+            "SubjectName": course1.subjectname,
+            "MaxMarks": qpaper1.Max_Marks,
+            "ExamType": qpaper1.Exam_Type,
+        }
+
+        metadata2 = {
+            "QPaperID": QPaper2ID,
+            "CourseCode": course2.coursecode,
+            "ExamName": qpaper2.Exam_Name,
+            "MonthYear": qpaper2.Month_Year,
+            "SubjectName": course2.subjectname,
+            "MaxMarks": qpaper2.Max_Marks,
+            "ExamType": qpaper2.Exam_Type,
+        }
+
+        # Prepare the final response
+        response_data = {
+            "QPaper1": {
+                "Metadata": metadata1,
+                "Analysis": analysis1,
+            },
+            "QPaper2": {
+                "Metadata": metadata2,
+                "Analysis": analysis2,
+            },
+            "Comparison": {
+                "Similarities": similarities,
+                "Dissimilarities": dissimilarities,
+            },
+        }
+        print(response_data)
+
+        # Return the comparison as JSON
+        return JsonResponse(response_data)
+
+    except QPaper.DoesNotExist:
+        return JsonResponse({"error": "One or both QPapers not found."}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+ 
 @csrf_exempt
 def upload_file(request):
     try:
@@ -1079,7 +1222,6 @@ def qPaperUpload(request):
         'Month_Year',
     )
     qPaperJSON = {
-
     } 
     for entry in result:
         examNameUpdated = f"{entry['CourseCode__coursecode']}_{entry['CourseCode__subjectname']}_{entry['Month_Year']}_{entry['Exam_Name']}"
@@ -1090,7 +1232,6 @@ def qPaperUpload(request):
             "Course_Name": entry['CourseCode__subjectname'],
             "Examination_Month": entry['Month_Year'],
         } 
-
     # print(qPaperJSON)
     return render(request, 'students/question_paper_upload.html', {'user': request.user, 'QPapers': qPaperJSON})
 
@@ -1113,6 +1254,8 @@ def API_getModuleTopicsFromCourseCode(request, CourseCode):
 
         # Fetch the course data using the CourseCode
         course = Course.objects.get(coursecode=course_code_str)
+
+
 
         # Create the response structure for the modules
         module_topics = {
@@ -1144,3 +1287,7 @@ def API_getModuleTopicsFromCourseCode(request, CourseCode):
     except Exception as e:
         # Handle errors
         return HttpResponseServerError(f"An error occurred while fetching the syllabus and module details using course codes: {str(e)}")
+
+
+def compareQPapers(request):
+    return render(request,"results/compareQPapers.html")
