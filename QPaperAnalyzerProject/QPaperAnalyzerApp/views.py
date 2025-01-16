@@ -1289,5 +1289,34 @@ def API_getModuleTopicsFromCourseCode(request, CourseCode):
         return HttpResponseServerError(f"An error occurred while fetching the syllabus and module details using course codes: {str(e)}")
 
 
-def compareQPapers(request):
-    return render(request,"results/compareQPapers.html")
+def compareQPapers(request, QPaper1ID, QPaper2ID):
+    return render(request,"results/compareQPapers.html", {"QPaperID1": QPaper1ID, "QPaperID2": QPaper2ID })
+
+def FacultyCompareUI(request):
+    question_papers = QPaper.objects.select_related('CourseCode').all()
+    formatted_data = [
+        {
+            "formatted_name": f"{qp.CourseCode.coursecode}_{qp.CourseCode.subjectname}_{qp.Month_Year}_{qp.Exam_Name}",
+            "qpaper_id": qp.QPaper_ID
+        }
+        for qp in question_papers
+    ]
+    print(formatted_data)
+
+    # Pass the formatted data to the template
+    return render(request, "faculty/QPaperCompare.html", {"question_papers": formatted_data})
+
+
+def StudentCompareUI(request):
+    question_papers = QPaper.objects.select_related('CourseCode').all()
+    formatted_data = [
+        {
+            "formatted_name": f"{qp.CourseCode.coursecode}_{qp.CourseCode.subjectname}_{qp.Month_Year}_{qp.Exam_Name}",
+            "qpaper_id": qp.QPaper_ID
+        }
+        for qp in question_papers
+    ]
+    print(formatted_data)
+
+    # Pass the formatted data to the template
+    return render(request, "students/QPaperCompare.html", {"question_papers": formatted_data})

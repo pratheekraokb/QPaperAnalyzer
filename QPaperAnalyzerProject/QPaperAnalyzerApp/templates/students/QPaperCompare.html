@@ -1,0 +1,143 @@
+{% extends 'students/students_base.html' %}
+
+{% block title %}Compare Question Papers{% endblock %}
+{% block style %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .rightDiv {
+        background-color: #f4f4f9;
+        height: 100vh; /* Full viewport height */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+    
+    .centerDiv {
+        background-color: #ffffff;
+        padding: 30px 40px;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 100%;
+        max-width: 60vw;
+        height: 400px;
+        /* max-height: 600px; */
+    }
+
+    .centerDiv h1 {
+        color: #333333;
+        font-size: 24px;
+        font-weight: bolder;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: #555555;
+    }
+
+    .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        font-size: 14px;
+        color: #333333;
+    }
+
+    .form-group select:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    .submit-btn {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 100%;
+    }
+
+    .submit-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .submit-btn:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="rightDiv">
+    <div class="centerDiv">
+        <h1>Select Question Papers to Compare</h1>
+        <form id="compareForm" method="GET" action="{% url 'compareQPapers' 0 0 %}">
+            <div class="form-group">
+                <label for="qpaper1">Select Question Paper 1</label>
+                <select id="qpaper1" name="qpaper1" required>
+                    <option value="" disabled selected>Choose Question Paper 1</option>
+                    {% for qp in question_papers %}
+                    <option value="{{ qp.qpaper_id }}">{{ qp.formatted_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="qpaper2">Select Question Paper 2</label>
+                <select id="qpaper2" name="qpaper2" required>
+                    <option value="" disabled selected>Choose Question Paper 2</option>
+                    {% for qp in question_papers %}
+                    <option value="{{ qp.qpaper_id }}">{{ qp.formatted_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" id="submitBtn" class="submit-btn" disabled>Compare</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const qpaper1 = document.getElementById('qpaper1');
+    const qpaper2 = document.getElementById('qpaper2');
+    const submitBtn = document.getElementById('submitBtn');
+    const form = document.getElementById('compareForm');
+
+    // Enable the submit button only if both dropdowns are selected
+    [qpaper1, qpaper2].forEach(select => {
+        select.addEventListener('change', () => {
+            submitBtn.disabled = !(qpaper1.value && qpaper2.value);
+        });
+    });
+
+    // Dynamically update the form action URL with selected IDs
+    form.addEventListener('submit', (event) => {
+        if (qpaper1.value && qpaper2.value) {
+            const actionUrl = `{% url 'compareQPapers' 0 0 %}`.replace('0/0', `${qpaper1.value}/${qpaper2.value}`);
+            form.action = actionUrl;
+        } else {
+            event.preventDefault(); // Prevent submission if not valid
+        }
+    });
+</script>
+{% endblock %}

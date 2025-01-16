@@ -152,7 +152,12 @@
 
 
     <script>
-        const apiUrl = "http://127.0.0.1:8000/api/comparePublicQPaper/2/3/";
+        // Access variables passed from Django
+        const QPaper1ID = "{{ QPaperID1 }}";
+        const QPaper2ID = "{{ QPaperID2 }}";
+
+        // Construct the API URL dynamically
+        const apiUrl = `http://127.0.0.1:8000/api/comparePublicQPaper/${QPaper1ID}/${QPaper2ID}/`;
 
         // Function to fetch the API data
         async function fetchData() {
@@ -197,15 +202,19 @@
             document.getElementById('q2-type').innerText = data.QPaper2.Metadata.ExamType;
 
             // Populate Comparison Overview
-            document.getElementById('common-topics').innerText = generateNumberedList(data.Comparison.Similarities.CommonTopics);
+            document.getElementById('common-topics').innerHTML= generateNumberedList(data.Comparison.Similarities.CommonTopics);
             document.getElementById('total-common').innerText = data.Comparison.Similarities.TotalCommonTopics;
             document.getElementById('unique-q1').innerHTML = generateNumberedList(data.Comparison.Dissimilarities.UniqueToQPaper1);
             document.getElementById('unique-q2').innerHTML = generateNumberedList(data.Comparison.Dissimilarities.UniqueToQPaper2);
 
             
             function generateNumberedList(array) {
-                return array.map((item, index) => `<li>${index + 1}. ${item}</li>`).join('');
+                if (!Array.isArray(array) || array.length === 0) {
+                    return '<p>No items available.</p>'; // Fallback for empty or invalid input
+                }
+                return `<ul>${array.map((item, index) => `<li>${index + 1}. ${item}</li>`).join('')}</ul>`;
             }
+
             
 
             // Chart.js for Mark-wise Breakdown
