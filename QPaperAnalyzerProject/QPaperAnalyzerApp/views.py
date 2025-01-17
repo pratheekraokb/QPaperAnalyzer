@@ -253,7 +253,7 @@ class QPaperModule:
                 existing_question = QPaperQuestions.objects.filter(QuestionText=question).first()
 
                 if existing_question and existing_question.AnswerText.strip():
-                    # print("No Generation")
+                    print("No Generation")
                     continue
                 
                 # Generate the content for the question
@@ -269,9 +269,12 @@ class QPaperModule:
                     # Update the AnswerText field if the question exists
                     existing_question.AnswerText = response_text
                     existing_question.save()
+                    print("Ans present")
                 else:
                     # If the question does not exist, store the generated response
+                    
                     results[question] = response_text
+                    print("Answer Generated")
 
             return results if results else "All questions were already answered or updated."
         except Exception as e:
@@ -283,8 +286,6 @@ class QPaperModule:
 
     # API QPaper Excel to Database
 
-
-
     def handle_qpaper_creation(meta_data):
         """Handles the creation or retrieval of a QPaper record."""
         month_year = str(meta_data.get("Month_Year", ""))
@@ -292,16 +293,27 @@ class QPaperModule:
         type_exam = QPaperModule.normalize_exam_type(str(meta_data.get("Type_Exam", "")))
         max_marks = int(meta_data.get("Max_Marks", ""))
         exam_name = str(meta_data.get("Exam_Name", ""))
-
+        print(month_year, course_code, type_exam, max_marks, exam_name)
+        print("hai")
+        # Retrieve the Course instance based on course_code with error handling
+        try:
+            course_instance = Course.objects.get(coursecode=course_code)  # Assuming 'code' is the field in Course model
+        except ObjectDoesNotExist:
+            # Handle the case where the course code doesn't exist in the database
+            raise ValueError(f"Course with code {course_code} does not exist.")
+        print("done")
+        # Use get_or_create with the Course instance
         qpaper, created = QPaper.objects.get_or_create(
-            CourseCode=course_code,
+            CourseCode=course_instance,  # Pass the Course instance here
             Exam_Type=type_exam,
             Exam_Name=exam_name,
             Month_Year=month_year,
             defaults={"Max_Marks": max_marks},
         )
+        print("error")
+        
         return qpaper
-    
+
     def normalize_exam_type(type_exam):
         """Normalizes the exam type."""
         if "regular" in type_exam.lower():
@@ -769,12 +781,14 @@ def API_QPaperExcelToDB(request):
             part_b_questions_data = data.get("PartB_Questions", [])
 
             # Handle QPaper creation
+            # print("bye")
             qpaper = QPaperModule.handle_qpaper_creation(meta_data)
+            # print("hai")
             questions_list, module_list, marks_list = QPaperModule.process_questions(
                 qpaper, part_a_questions_data, part_b_questions_data
             )
             QPaperModule.send_questions_to_topic_api(
-                qpaper.CourseCode, questions_list, module_list, marks_list
+                str(qpaper.CourseCode), questions_list, module_list, marks_list
             )
             try:
                 QPaperModule.genAIQuestionsToAnswers(api_key=api_key, question_list=questions_list,mark_list=marks_list)
@@ -1019,6 +1033,15 @@ def comparePublicQPaper(request, QPaper1ID, QPaper2ID):
         analysis1 = analyze_questions(questions1, course1)
         analysis2 = analyze_questions(questions2, course2)
 
+        # Find common and unique questions
+        questions1_set = {f"{q.QuestionText} - [{q.Mark} Marks]" for q in questions1}
+        questions2_set = {f"{q.QuestionText} - [{q.Mark} Marks]" for q in questions2}
+
+        common_questions = questions1_set & questions2_set
+        unique_questions1 = questions1_set - questions2_set
+        unique_questions2 = questions2_set - questions1_set
+
+
         # Find similarities and dissimilarities
         topics1 = {item['Topic'] for item in analysis1['TopicSummary']}
         topics2 = {item['Topic'] for item in analysis2['TopicSummary']}
@@ -1030,12 +1053,16 @@ def comparePublicQPaper(request, QPaper1ID, QPaper2ID):
         similarities = {
             "CommonTopics": list(common_topics),
             "TotalCommonTopics": len(common_topics),
+            "CommonQuestions": list(common_questions),
+            "TotalCommonQuestions": len(common_questions)
         }
         print(similarities)
 
         dissimilarities = {
             "UniqueToQPaper1": list(unique_topics1),
             "UniqueToQPaper2": list(unique_topics2),
+            "UniqueToQPaper1Questions": list(unique_questions1),
+            "UniqueToQPaper2Questions": list(unique_questions2)
         }
 
         # Combine metadata for both QPapers

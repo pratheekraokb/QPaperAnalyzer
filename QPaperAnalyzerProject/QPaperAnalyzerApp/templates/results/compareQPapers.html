@@ -133,7 +133,22 @@
                     <th>Topics Unique to QPaper 2</th>
                     <td id="unique-q2"></td>
                 </tr>
-                
+                <tr>
+                    <th>Common Questions</th>
+                    <th id="common-questions"></th>
+                </tr>
+                <tr>
+                    <th>Total Common Questions</th>
+                    <td id="total-common-questions"></td>
+                </tr>
+                <tr>
+                    <th>Questions Unique to QPaper 1</th>
+                    <td id="questions-unique-q1"></td>
+                </tr>
+                <tr>
+                    <th>Questions Unique to QPaper 2</th>
+                    <td id="questions-unique-q2"></td>
+                </tr>
             </table>
         </div>
 
@@ -203,11 +218,13 @@
 
             // Populate Comparison Overview
             document.getElementById('common-topics').innerHTML= generateNumberedList(data.Comparison.Similarities.CommonTopics);
+            document.getElementById('common-questions').innerHTML = generateNumberedList(data.Comparison.Similarities.CommonQuestions);
             document.getElementById('total-common').innerText = data.Comparison.Similarities.TotalCommonTopics;
+            document.getElementById('total-common-questions').innerText = data.Comparison.Similarities.TotalCommonQuestions;
             document.getElementById('unique-q1').innerHTML = generateNumberedList(data.Comparison.Dissimilarities.UniqueToQPaper1);
             document.getElementById('unique-q2').innerHTML = generateNumberedList(data.Comparison.Dissimilarities.UniqueToQPaper2);
-
-            
+            document.getElementById('questions-unique-q1').innerHTML = generateNumberedList(data.Comparison.Dissimilarities.UniqueToQPaper1Questions);
+            document.getElementById('questions-unique-q2').innerHTML = generateNumberedList(data.Comparison.Dissimilarities.UniqueToQPaper2Questions);
             function generateNumberedList(array) {
                 if (!Array.isArray(array) || array.length === 0) {
                     return '<p>No items available.</p>'; // Fallback for empty or invalid input

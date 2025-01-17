@@ -51,6 +51,8 @@ class QPaperQuestions(models.Model):
     def __str__(self):
         return f"Question {self.ID} for QPaper {self.QPaper_ID}"
     
+    
+    
 class PrivateQPaper(models.Model):
     # EXAM_TYPE_CHOICES = 
     PrivateQPaper_ID = models.AutoField(primary_key=True)
