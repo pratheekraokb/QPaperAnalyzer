@@ -4,20 +4,40 @@
 
 {% block style %}
 <style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
     .upload-container {
         width: 100%;
+        max-width: 800px;
         height: 40vh;
-        /* 40% of the viewport height */
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        border: 2px dashed #007bff;
-        border-radius: 8px;
-        background-color: #f8f9fa;
-        color: #007bff;
+        border: 2px dashed #4f46e5;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: #dbeafe;
         text-align: center;
         font-size: 18px;
+        transition: all 0.3s ease;
+    }
+
+    .upload-container:hover {
+        border-color: #6366f1;
     }
 
     .upload-container input[type="file"] {
@@ -25,35 +45,37 @@
     }
 
     .upload-container label {
-        background-color: #007bff;
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
         color: white;
-        padding: 10px 20px;
-        border-radius: 5px;
+        padding: 12px 24px;
+        border-radius: 8px;
         cursor: pointer;
         font-size: 16px;
+        transition: background 0.3s ease;
     }
 
     .upload-container label:hover {
-        background-color: #0056b3;
+        background: linear-gradient(135deg, #4338ca, #4f46e5);
     }
 
     .filename {
-        margin-top: 10px;
+        margin-top: 12px;
         font-size: 16px;
-        color: #333;
-        font-weight: bold;
+        color: #cbd5e1;
+        font-weight: 500;
     }
 
     .submit-btn {
-        margin-top: 20px;
-        padding: 10px 20px;
+        margin-top: 24px;
+        padding: 12px 24px;
         font-size: 16px;
-        background-color: #007bff;
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
         color: white;
         border: none;
-        border-radius: 5px;
+        border-radius: 8px;
         cursor: pointer;
         opacity: 0.5;
+        transition: all 0.3s ease;
     }
 
     .submit-btn:enabled {
@@ -66,89 +88,147 @@
 
     .processing {
         display: none;
-        /* Initially hidden */
         text-align: center;
-        margin-top: 20px;
+        margin-top: 24px;
     }
 
     .loading-spinner {
         border: 4px solid rgba(255, 255, 255, 0.3);
-        /* Light gray border */
-        border-top: 4px solid #3498db;
-        /* Blue color for the spinner */
+        border-top: 4px solid #4f46e5;
         border-radius: 50%;
         width: 50px;
         height: 50px;
         animation: spin 1s linear infinite;
-        /* Spin animation */
     }
 
     @keyframes spin {
         0% {
             transform: rotate(0deg);
         }
-
         100% {
             transform: rotate(360deg);
         }
     }
 
-    .maincontent{
-        padding: 20px;
+    .maincontent {
+        padding: 40px;
+        max-width: 1000px;
+        margin: auto;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 32px;
+    }
+
+    #infoBox {
+        width: 100%;
+        height: auto;
+        border: 2px solid #4f46e5;
+        margin: 32px 0;
+        border-radius: 12px;
+        text-align: center;
+        padding: 24px;
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    select {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: none;
+        font-size: 16px;
+        background: #1e293b;
+        color: white;
+        outline: none;
+    }
+
+    .button {
+        display: flex;
+        justify-content: center;
+    }
+
+    .btn-primary {
+        padding: 12px 24px;
+        font-size: 16px;
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #4338ca, #4f46e5);
+    }
+    h1{
+        color: whitesmoke;
+    }
+    label{
+        color: wheat;
+    }
+    .infoBox{
+        color: white;
     }
 </style>
+
 {% endblock %}
 
 {% block content %}
 <div class="maincontent">
     <h1>Upload Question Paper (If Not Present)</h1>
 
-<form id="uploadForm" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="upload-container">
-        <div>
-            <p>Upload Excel File</p>
-            <label for="excelFile">Choose an Excel File</label>
-            <input type="file" id="excelFile" name="excel_file" accept=".xlsx, .xls" />
-            <p class="filename" id="filename">No file chosen</p>
-            <button class="submit-btn" id="submitBtn" type="button" disabled>Submit</button>
+    <form id="uploadForm" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="upload-container">
+            <div>
+                <p>Upload Excel File</p>
+                <label for="excelFile">Choose an Excel File</label>
+                <input type="file" id="excelFile" name="excel_file" accept=".xlsx, .xls" />
+                <p class="filename" id="filename">No file chosen</p>
+                <button class="submit-btn" id="submitBtn" type="button" disabled>Submit</button>
+            </div>
+
+            <div class="processing">
+                <p>Please wait, processing...</p>
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+    </form>
+    <br>
+    <h1>Select Question Paper to Perform Analysis</h1>
+
+    <form>
+        <div class="form-group">
+            <label for="qPaperSelect">Select Question Paper:</label>
+            <select class="form-control" id="qPaperSelect" name="selected_qpaper" onchange="updateInfoBox()">
+                {% for id, details in QPapers.items %}
+                <option value="{{ id }}" 
+                        data-questionpaper-name="{{ details.QuestionPaper_Name }}" 
+                        data-course-code="{{ details.Course_Code }}" 
+                        data-course-name="{{ details.Course_Name }}" 
+                        data-examination-month="{{ details.Examination_Month }}">
+                    {{ details.text_to_display }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div id="infoBox">
+            <br>
+            <p>Select a question paper to see details here.</p>
         </div>
 
-        <div class="processing" style="display: none;">
-            <p>Please wait, processing...</p>
-            <div class="loading-spinner"></div>
+        <div class="button">
+            <button type="submit" class="btn-primary" onclick="redirectToAnalysisPage(event)">Analyze</button>
         </div>
-    </div>
-</form>
-
-<h1>Select Question Paper to Perform Analysis</h1>
-<form>
-    
-    <div class="form-group">
-        <label for="qPaperSelect">Select Question Paper:</label>
-        <select class="form-control" id="qPaperSelect" name="selected_qpaper" onchange="updateInfoBox()">
-            {% for id, details in QPapers.items %}
-            <option value="{{ id }}" 
-                    data-questionpaper-name="{{ details.QuestionPaper_Name }}" 
-                    data-course-code="{{ details.Course_Code }}" 
-                    data-course-name="{{ details.Course_Name }}" 
-                    data-examination-month="{{ details.Examination_Month }}">
-                {{ details.text_to_display }}
-            </option>
-            {% endfor %}
-        </select>
-    </div>
-
-    <!-- Rectangle box -->
-    <div id="infoBox"
-        style="width: 100%; height: auto; border: 2px dashed #ccc; margin: 20px 0; text-align: center; padding: 20px;">
-        <p style="color: #666;">Select a question paper to see details here.</p>
-    </div>
-
-    <div class="button" style="display: flex;justify-content: center;">
-        <button type="submit" class="btn btn-primary" onclick="redirectToAnalysisPage(event)">Analyze</button>
-    </div>
-</form>
+    </form>
 </div>
 
 <script>
@@ -177,10 +257,10 @@
         // Update the infoBox content
         const infoBox = document.getElementById("infoBox");
         infoBox.innerHTML = `
-            <p><strong>Question Paper Name:</strong> ${questionPaperName}</p>
-            <p><strong>Course Code:</strong> ${courseCode}</p>
-            <p><strong>Course Name:</strong> ${courseName}</p>
-            <p><strong>Examination Month:</strong> ${examinationMonth}</p>
+            <p style="color:gold;"><strong>Question Paper Name:</strong> ${questionPaperName}</p>
+            <p style="color:gold;"><strong>Course Code:</strong> ${courseCode}</p>
+            <p style="color:gold;"><strong>Course Name:</strong> ${courseName}</p>
+            <p style="color:gold;"><strong>Examination Month:</strong> ${examinationMonth}</p>
         `;
     }
 </script>
