@@ -1,120 +1,167 @@
 {% extends 'faculty/faculty_base.html' %}
 
 {% block title %}Compare Question Papers{% endblock %}
+
 {% block style %}
 <style>
     body {
-        font-family: Arial, sans-serif;
+        font-family: 'Poppins', sans-serif;
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-    }
-
-    .rightDiv {
-        background-color: #f4f4f9;
-        height: 100vh; /* Full viewport height */
+        background: linear-gradient(135deg, #4e54c8, #8f94fb);
+        color: #333;
+        height: 100vh;
         display: flex;
-        justify-content: center;
         align-items: center;
-        padding: 20px;
-    }
-    
-    .centerDiv {
-        background-color: #ffffff;
-        padding: 30px 40px;
-        border-radius: 15px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        width: 100%;
-        max-width: 60vw;
-        height: 400px;
-        /* max-height: 600px; */
+        justify-content: center;
+        perspective: 1500px;
+        animation: backgroundShift 8s infinite alternate;
     }
 
-    .centerDiv h1 {
-        color: #333333;
-        font-size: 24px;
-        font-weight: bolder;
-        margin-bottom: 20px;
+    @keyframes backgroundShift {
+        0% { background: linear-gradient(135deg, #4e54c8, #8f94fb); }
+        100% { background: linear-gradient(135deg, #8f94fb, #4e54c8); }
+    }
+
+    .container {
+        max-width: 900px;
+        width: 100%;
+        background: #fff;
+        border-radius: 30px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        padding: 50px;
+        /* animation: float 4s ease-in-out infinite; */
+        /* transform: rotateY(10deg) rotateX(5deg); */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    
+
+    h1 {
+        text-align: center;
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 40px;
+        background: linear-gradient(90deg, #4e54c8, #8f94fb);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: glowText 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes glowText {
+        from { text-shadow: 0 0 10px rgba(78, 84, 200, 0.8); }
+        to { text-shadow: 0 0 20px rgba(143, 148, 251, 1); }
     }
 
     .form-group {
-        margin-bottom: 20px;
-        text-align: left;
+        margin-bottom: 30px;
     }
 
-    .form-group label {
+    label {
         display: block;
-        font-weight: bold;
-        margin-bottom: 8px;
-        color: #555555;
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: #555;
+        font-size: 18px;
     }
 
-    .form-group select {
+    select {
         width: 100%;
-        padding: 10px;
-        border: 1px solid #cccccc;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-        font-size: 14px;
-        color: #333333;
+        padding: 15px 20px;
+        border: 3px solid transparent;
+        border-radius: 15px;
+        font-size: 18px;
+        transition: all 0.3s;
+        appearance: none;
+        background: #f9f9f9;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
     }
 
-    .form-group select:focus {
+    select:focus {
         outline: none;
-        border-color: #007bff;
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        border-color: #4e54c8;
+        box-shadow: 0 0 15px rgba(78, 84, 200, 0.6);
+    }
+
+    select option {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    select:hover option {
+        animation: scrollOption 5s linear infinite;
+    }
+
+    @keyframes scrollOption {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-100%); }
     }
 
     .submit-btn {
-        background-color: #007bff;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
+        display: inline-block;
         width: 100%;
-    }
-
-    .submit-btn:hover {
-        background-color: #0056b3;
+        padding: 18px;
+        border: none;
+        border-radius: 15px;
+        background: linear-gradient(90deg, #4e54c8, #8f94fb);
+        color: white;
+        font-size: 22px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .submit-btn:disabled {
-        background-color: #cccccc;
+        background: #ccc;
         cursor: not-allowed;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 15px 30px rgba(78, 84, 200, 0.5);
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="rightDiv">
-    <div class="centerDiv">
-        <h1>Select Question Papers to Compare</h1>
-        <form id="compareForm" method="GET" action="{% url 'compareQPapers' 0 0 %}">
-            <div class="form-group">
-                <label for="qpaper1">Select Question Paper 1</label>
-                <select id="qpaper1" name="qpaper1" required>
-                    <option value="" disabled selected>Choose Question Paper 1</option>
-                    {% for qp in question_papers %}
-                    <option value="{{ qp.qpaper_id }}">{{ qp.formatted_name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="qpaper2">Select Question Paper 2</label>
-                <select id="qpaper2" name="qpaper2" required>
-                    <option value="" disabled selected>Choose Question Paper 2</option>
-                    {% for qp in question_papers %}
-                    <option value="{{ qp.qpaper_id }}">{{ qp.formatted_name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <button type="submit" id="submitBtn" class="submit-btn" disabled>Compare</button>
-        </form>
-    </div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div class="container">
+    <h1>Compare Question Papers</h1>
+    <form id="compareForm" method="GET" action="{% url 'compareQPapers' 0 0 %}">
+        <div class="form-group">
+            <label for="qpaper1">Select Question Paper 1</label>
+            <select id="qpaper1" name="qpaper1" required>
+                <option value="" disabled selected>Choose Question Paper 1</option>
+                {% for qp in question_papers %}
+                <option value="{{ qp.qpaper_id }}" title="{{ qp.formatted_name }}">{{ qp.formatted_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="qpaper2">Select Question Paper 2</label>
+            <select id="qpaper2" name="qpaper2" required>
+                <option value="" disabled selected>Choose Question Paper 2</option>
+                {% for qp in question_papers %}
+                <option value="{{ qp.qpaper_id }}" title="{{ qp.formatted_name }}">{{ qp.formatted_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" id="submitBtn" class="submit-btn" disabled>Compare</button>
+    </form>
 </div>
 
 <script>
@@ -123,20 +170,18 @@
     const submitBtn = document.getElementById('submitBtn');
     const form = document.getElementById('compareForm');
 
-    // Enable the submit button only if both dropdowns are selected
     [qpaper1, qpaper2].forEach(select => {
         select.addEventListener('change', () => {
             submitBtn.disabled = !(qpaper1.value && qpaper2.value);
         });
     });
 
-    // Dynamically update the form action URL with selected IDs
     form.addEventListener('submit', (event) => {
         if (qpaper1.value && qpaper2.value) {
             const actionUrl = `{% url 'compareQPapers' 0 0 %}`.replace('0/0', `${qpaper1.value}/${qpaper2.value}`);
             form.action = actionUrl;
         } else {
-            event.preventDefault(); // Prevent submission if not valid
+            event.preventDefault();
         }
     });
 </script>
