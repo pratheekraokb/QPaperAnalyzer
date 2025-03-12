@@ -1207,7 +1207,7 @@ def register(request):
         except Exception as e:
             return render(request, 'authentication/register.html', {'colleges': colleges, 'error': f'An unexpected error occurred: {e}'})
 
-    return render(request, 'students/register.html', {'colleges': colleges})
+    return render(request, 'authentication/register.html', {'colleges': colleges})
 
 def login_user(request):
     if request.method == 'POST':
