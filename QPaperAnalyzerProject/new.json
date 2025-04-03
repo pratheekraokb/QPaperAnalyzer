@@ -1,0 +1,241 @@
+{
+    "QPaper1": {
+      "Analysis": {
+        "TopicSummary": [
+          {
+            "Topic": "Absolute and Comparative advantage theory",
+            "TotalMarks": 7,
+            "ModuleName": "Module 5 - International Trade"
+          },
+          {
+            "Topic": "Circular flow of economic activities",
+            "TotalMarks": 14,
+            "ModuleName": "Module 4 - Macroeconomic concepts"
+          },
+          {
+            "Topic": "Consumer surplus and producer surplus (Concepts).Taxation and deadweight loss",
+            "TotalMarks": 7,
+            "ModuleName": "Module 1 - Basic Concepts and Demand and Supply Analysis"
+          },
+          {
+            "Topic": "Cost concepts – Social cost: private cost and external cost",
+            "TotalMarks": 6,
+            "ModuleName": "Module 2 - Production and cost"
+          },
+          {
+            "Topic": "Demand and its determinants – law of demand – elasticity of demand",
+            "TotalMarks": 3,
+            "ModuleName": "Module 1 - Basic Concepts and Demand and Supply Analysis"
+          },
+          {
+            "Topic": "Equilibrium – Changes in demand and supply and its effects",
+            "TotalMarks": 7,
+            "ModuleName": "Module 1 - Basic Concepts and Demand and Supply Analysis"
+          },
+          {
+            "Topic": "Long-run cost curves",
+            "TotalMarks": 7,
+            "ModuleName": "Module 2 - Production and cost"
+          },
+          {
+            "Topic": "Methods of measuring national income",
+            "TotalMarks": 3,
+            "ModuleName": "Module 4 - Macroeconomic concepts"
+          },
+          {
+            "Topic": "Monopoly, regulation of monopoly, monopolistic competition (features and equilibrium of a firm)",
+            "TotalMarks": 7,
+            "ModuleName": "Module 3 - Market Structure"
+          },
+          {
+            "Topic": "National Income",
+            "TotalMarks": 7,
+            "ModuleName": "Module 4 - Macroeconomic concepts"
+          },
+          {
+            "Topic": "Non-price competition",
+            "TotalMarks": 7,
+            "ModuleName": "Module 3 - Market Structure"
+          },
+          {
+            "Topic": "Oligopoly, Kinked demand curve",
+            "TotalMarks": 3,
+            "ModuleName": "Module 3 - Market Structure"
+          },
+          {
+            "Topic": "PPC",
+            "TotalMarks": 17,
+            "ModuleName": "Module 1 - Basic Concepts and Demand and Supply Analysis"
+          },
+          {
+            "Topic": "Predatory pricing",
+            "TotalMarks": 3,
+            "ModuleName": "Module 3 - Market Structure"
+          },
+          {
+            "Topic": "Product pricing – Cost-plus pricing",
+            "TotalMarks": 14,
+            "ModuleName": "Module 3 - Market Structure"
+          },
+          {
+            "Topic": "Production function – law of variable proportion",
+            "TotalMarks": 7,
+            "ModuleName": "Module 2 - Production and cost"
+          },
+          {
+            "Topic": "Revenue (concepts)",
+            "TotalMarks": 7,
+            "ModuleName": "Module 2 - Production and cost"
+          },
+          {
+            "Topic": "Short run cost curves",
+            "TotalMarks": 7,
+            "ModuleName": "Module 2 - Production and cost"
+          },
+          {
+            "Topic": "Three sectors of an economy",
+            "TotalMarks": 10,
+            "ModuleName": "Module 4 - Macroeconomic concepts"
+          },
+          {
+            "Topic": "Trade policy – Free trade versus protection",
+            "TotalMarks": 27,
+            "ModuleName": "Module 5 - International Trade"
+          }
+        ]
+      }
+    },
+    "QPaper2": {
+      "Analysis": {
+        "TopicSummary": [
+          {
+            "Topic": "Advantages and disadvantages of international trade",
+            "TotalMarks": 3,
+            "ModuleName": "Module 5 - International Trade"
+          },
+          {
+            "Topic": "Balance of payments – Components",
+            "TotalMarks": 10,
+            "ModuleName": "Module 5 - International Trade"
+          },
+          {
+            "Topic": "Circular flow of economic activities",
+            "TotalMarks": 13,
+            "ModuleName": "Module 4 - Macroeconomic concepts"
+          },
+          {
+            "Topic": "Cost concepts – Social cost: private cost and external cost",
+            "TotalMarks": 3,
+            "ModuleName": "Module 2 - Production and cost"
+          },
+          {
+            "Topic": "Explicit and implicit cost",
+            "TotalMarks": 4,
+            "ModuleName": "Module 2 - Production and cost"
+          },
+          {
+            "Topic": "Firms and its objectives – types of firms",
+            "TotalMarks": 3,
+            "ModuleName": "Module 1 - Basic Concepts and Demand and Supply Analysis"
+          },
+          {
+            "Topic": "Heckscher-Ohlin theory",
+            "TotalMarks": 21,
+            "ModuleName": "Module 5 - International Trade"
+          },
+          {
+            "Topic": "Isoquants, isocost line and producer’s equilibrium",
+            "TotalMarks": 10,
+            "ModuleName": "Module 2 - Production and cost"
+          },
+          {
+            "Topic": "Methods of measuring national income",
+            "TotalMarks": 3,
+            "ModuleName": "Module 4 - Macroeconomic concepts"
+          },
+          {
+            "Topic": "Money market and Capital market",
+            "TotalMarks": 4,
+            "ModuleName": "Module 4 - Macroeconomic concepts"
+          },
+          {
+            "Topic": "Monopoly, regulation of monopoly, monopolistic competition (features and equilibrium of a firm)",
+            "TotalMarks": 10,
+            "ModuleName": "Module 3 - Market Structure"
+          },
+          {
+            "Topic": "National Income",
+            "TotalMarks": 4,
+            "ModuleName": "Module 4 - Macroeconomic concepts"
+          },
+          {
+            "Topic": "Non-price competition",
+            "TotalMarks": 3,
+            "ModuleName": "Module 3 - Market Structure"
+          },
+          {
+            "Topic": "PPC Curve",
+            "TotalMarks": 20,
+            "ModuleName": "Module 1 - Basic Concepts and Demand and Supply Analysis"
+          },
+          {
+            "Topic": "Predatory pricing",
+            "TotalMarks": 3,
+            "ModuleName": "Module 3 - Market Structure"
+          },
+          {
+            "Topic": "Price skimming",
+            "TotalMarks": 4,
+            "ModuleName": "Module 3 - Market Structure"
+          },
+          {
+            "Topic": "Product pricing – Cost-plus pricing",
+            "TotalMarks": 14,
+            "ModuleName": "Module 3 - Market Structure"
+          },
+          {
+            "Topic": "Production function – law of variable proportion",
+            "TotalMarks": 13,
+            "ModuleName": "Module 2 - Production and cost"
+          },
+          {
+            "Topic": "Revenue (concepts)",
+            "TotalMarks": 4,
+            "ModuleName": "Module 2 - Production and cost"
+          },
+          {
+            "Topic": "Scarcity and choice - Basic economic problems",
+            "TotalMarks": 3,
+            "ModuleName": "Module 1 - Basic Concepts and Demand and Supply Analysis"
+          },
+          {
+            "Topic": "Supply, law of supply and determinants of supply",
+            "TotalMarks": 4,
+            "ModuleName": "Module 1 - Basic Concepts and Demand and Supply Analysis"
+          },
+          {
+            "Topic": "Three sectors of an economy",
+            "TotalMarks": 10,
+            "ModuleName": "Module 4 - Macroeconomic concepts"
+          },
+          {
+            "Topic": "Utility – Law of diminishing marginal utility",
+            "TotalMarks": 4,
+            "ModuleName": "Module 1 - Basic Concepts and Demand and Supply Analysis"
+          }
+        ],
+        "MarkWiseSplitDown": {
+          "3_Marks": 10,
+          "10_Marks": 10,
+          "4_Marks": 10
+        },
+        "ModuleWiseSplitDown": {
+          "Module1": 34,
+          "Module2": 34,
+          "Module3": 34,
+          "Module4": 34,
+          "Module5": 34
+        }
+      }
+    }
+  }

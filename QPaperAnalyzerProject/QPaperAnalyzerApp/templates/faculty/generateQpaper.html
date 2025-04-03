@@ -18,6 +18,7 @@
         flex-direction: column;
         align-items: center;
         padding: 50px 0;
+        background-color: rgb(219, 212, 212);
     }
 
     /* Form Container */
@@ -135,6 +136,10 @@
         text-align: center;
     }
 
+    .chart-container {
+        margin: 30px 0;
+    }
+
     .qPaper {
         padding: 20px;
         font-family: Arial, sans-serif;
@@ -150,14 +155,14 @@
             visibility: hidden;
             /* Hide everything by default */
         }
-
-        #qPaperDiv,
+   
+        #qPaperDiv, 
         #qPaperDiv * {
             visibility: visible;
             /* Show only the content to print */
         }
 
-        #qPaperDiv {
+        #qPaperDiv{
             position: absolute;
             left: 0;
             top: 0;
@@ -234,9 +239,15 @@
             <button type="submit" class="submit-btn">Generate Question Paper</button>
             <br>
             <br>
-            <button onclick="printContent()" style="background-color: skyblue;" class="submit-btn">Download PDF</button>
+            <div>
+                <button onclick="printContent()" style="background-color: skyblue;" class="submit-btn">Download Question Paper PDF</button>
+                <!-- <button onclick="printAnalysisContent()" style="background-color: skyblue;" class="submit-btn">Download Analysis Report</button> -->
+               
+                
+            </div>
+
         </form>
-        
+
     </div>
     <br>
     <br>
@@ -247,6 +258,35 @@
     style="padding: 20px; font-family: Arial, sans-serif; border: 1px solid #ddd; margin: 20px; border-radius: 8px; background-color: #f9f9f9;">
 </div>
 
+<div class="rightDiv">
+    <div class="chart-container" style="width: 60vw; margin: auto; text-align: center; font-family: Arial, sans-serif;" id="QPaperGenAnalysis">
+        
+        <h2 style="text-align: center; font-weight: bold; color: #2c3e50; margin-bottom: 20px;">📑 Generated Question Paper Analytics</h2>
+        <h4 style="color: #3498db; margin-top: 30px;">📊 Topic-wise Marks Distribution</h4>
+        <p style="color: #555; font-size: 14px;">This chart provides a breakdown of the total marks allocated to different topics, helping to identify which topics were emphasized more in the question paper.</p>
+        <canvas id="topicMarksChart" style="width: 100%; max-width: 600px; margin: auto;"></canvas>
+        
+        <h4 style="color: #e67e22; margin-top: 30px;">📈 Overall Mark Distribution</h4>
+        <p style="color: #555; font-size: 14px;">Visualizing the frequency of different mark allocations. Understand how many questions were assigned 3 marks, 5 marks, etc., to analyze the mark weightage distribution.</p>
+        <canvas id="markDistributionChart" style="width: 100%; max-width: 600px; margin: auto;"></canvas>
+        
+        <h4 style="color: #27ae60; margin-top: 30px;">📌 Module-wise Marks Analysis</h4>
+        <p style="color: #555; font-size: 14px;">Gain insights into the distribution of marks across different modules. Identify which modules received higher weightage in the exam.</p>
+        <canvas id="moduleMarksChart" style="width: 100%; max-width: 500px; margin: auto;"></canvas>
+        
+        
+        <h4 style="color: #8e44ad; margin-top: 30px;">📚 Module vs Topics Breakdown</h4>
+        <p style="color: #555; font-size: 14px;">Analyze how topics are distributed across modules. Understand the variety of topics covered from each module in the question paper.</p>
+        <canvas id="moduleTopicsChart" style="width: 100%; max-width: 500px; margin: auto;"></canvas>
+        <br>
+        <br>
+    
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
@@ -339,21 +379,19 @@
             // serialNumber.classList.add('serialNumber');
             // serialNumber.textContent = `Q${index + 1}:`;
 
-            const questionText = document.createElement('p');
+            const questionText = document.createElement('pre');
             questionText.classList.add('questionText');
-            questionText.textContent = `${index + 1}) ` + question.QuestionText + ` [${question.Mark} Marks, Module - ${question.Module_Number} ]`;
+            questionText.style.whiteSpace = 'pre-wrap'; // Ensures text wraps properly without horizontal scrolling
+            questionText.textContent = `${index + 1}) ${question.QuestionText} [${question.Mark} Marks, Module - ${question.Module_Number}]`;
 
             const topic = document.createElement('p');
             topic.classList.add('topic');
             topic.textContent = `Topic: ${question.Topic}`;
 
-            // const moduleNumber = document.createElement('p');
-            // moduleNumber.classList.add('moduleNumber');
-            // moduleNumber.textContent = `Module Number: ${question.Module_Number}`;
-
-            // const marks = document.createElement('p');
-            // marks.classList.add('marks');
-            // marks.textContent = `Marks: ${question.Mark}`;
+            // console.log("Topic-wise Marks:", data["response_data"].topic_marks);
+            // console.log("Module-wise Marks:", data["response_data"].module_marks);
+            // console.log("Module-wise Topics Covered:", data["response_data"].module_topics);
+            // console.log("Mark-wise Question Distribution:", data["response_data"].mark_distribution);
 
             // questionDiv.appendChild(serialNumber);
             questionDiv.appendChild(questionText);
@@ -362,6 +400,77 @@
             // questionDiv.appendChild(marks);
 
             qPaperDiv.appendChild(questionDiv);
+        });
+        const responseData = data["response_data"];
+
+        plotBarChart('topicMarksChart', 'Topic-wise Marks', responseData.topic_marks, false);
+        plotBarChart('moduleMarksChart', 'Module-wise Marks', responseData.module_marks);
+        plotBarChart(
+            'moduleTopicsChart',
+            'Module-wise Topics Covered',
+            Object.keys(responseData.module_topics).reduce((acc, key) => {
+                acc[key] = responseData.module_topics[key].length;
+                return acc;
+            }, {})
+        );
+        plotBarChart('markDistributionChart', 'Mark-wise Question Distribution', responseData.mark_distribution);
+
+    }
+    function plotBarChart(canvasId, title, dataObject, showXAxis = true) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    
+    // Clear the canvas completely
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Destroy existing chart instance if present
+    if (canvas.chartInstance) {
+        canvas.chartInstance.destroy();
+    }
+    
+    // Create and store new chart instance
+    canvas.chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(dataObject),
+            datasets: [{
+                label: title,
+                data: Object.values(dataObject),
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    ticks: { display: showXAxis }, // Toggle x-axis labels
+                    grid: { drawBorder: false, display: showXAxis } // Toggle x-axis grid lines
+                },
+                y: { beginAtZero: true }
+            }
+        }
+    });
+}
+
+
+    // Function to create a Pie Chart
+    function plotPieChart(canvasId, title, dataObject) {
+        const ctx = document.getElementById(canvasId).getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: Object.keys(dataObject),
+                datasets: [{
+                    label: title,
+                    data: Object.values(dataObject),
+                    backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff'],
+                }]
+            },
+            options: {
+                responsive: true
+            }
         });
     }
 
@@ -429,7 +538,16 @@
     function printContent() {
         window.print(); // Open print dialog
     }
+    function printAnalysisSection(){
+        const originalContents = document.body.innerHTML;
+        const printContents = document.querySelector('.print-analysis').innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+        location.reload();
+    }
 
+ 
 
 
 </script>

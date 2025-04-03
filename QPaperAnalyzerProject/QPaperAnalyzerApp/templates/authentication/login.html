@@ -96,10 +96,10 @@
         <form method="post">
             {% csrf_token %}
             <label for="username">Username</label>
-            <input type="text" id="username" name="username" required>
+            <input type="text" id="username" name="username" placeholder="eg:- abcdef" required>
 
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password" placeholder="eg:- xyz@123" required>
 
             <button type="submit">Login</button>
         </form>

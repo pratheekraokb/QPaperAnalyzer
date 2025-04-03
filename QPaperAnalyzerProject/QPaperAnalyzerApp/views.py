@@ -12,7 +12,7 @@ from django.db import IntegrityError, DatabaseError
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from .models import Course, College, Quiz, QnA
-
+from collections import defaultdict
 import re
 import json
 import pandas as pd
@@ -574,7 +574,7 @@ def API_SetUpQPaper(request):
         topics = body.get("TopicsList", [])
 
 
-        print(module_required, topics)
+        # print(module_required, topics)
 
         if not course_code:
             return JsonResponse({"error": "Course code is required"}, status=400)
@@ -699,12 +699,59 @@ def API_SetUpQPaper(request):
                         if total_marks < max_marks:  # Ensure we don't exceed max marks
                             question["Mark"] += 1
                             total_marks += 1
-            print(matching_questions)
-            print(total_marks)
+            # print(matching_questions)
+            # print(total_marks)
+                            
+            # print("Hai")
+            # print(matching_questions)
+            
+            # for eachquest in matching_questions:
+            #     topic = str(eachquest["Topic"])
+            #     module = f"Module {eachquest["Module_Number"]}"
+            #     mark = eachquest["Mark"]
+            
+            # def process_questions(matching_questions):
+         
+            topic_marks = defaultdict(int)  # Topic-wise marks
+            module_marks = defaultdict(int)  # Module-wise marks
+            module_topics = defaultdict(set)  # Topics covered per module
+            mark_distribution = defaultdict(int)  # Number of questions for each mark
+
+            for eachquest in matching_questions:
+                topic = str(eachquest["Topic"])
+                module = f"Module {eachquest['Module_Number']}"
+                mark = eachquest["Mark"]
+
+                # Aggregate marks per topic
+                topic_marks[topic] += mark
+
+                # Aggregate marks per module
+                module_marks[module] += mark
+
+                # Track unique topics per module
+                module_topics[module].add(topic)
+
+                # Count number of questions for each mark type
+                mark_distribution[f"{mark} Marks"] += 1
+
+            # Convert sets to list for JSON serialization
+            module_topics = {module: list(topics) for module, topics in module_topics.items()}
+
+            # Prepare response
+            response_data = {
+                "topic_marks": topic_marks,  # How many marks were asked for each topic
+                "module_marks": module_marks,  # How many marks were asked from each module
+                "module_topics": module_topics,  # How many topics were covered in each module
+                "mark_distribution": mark_distribution,  # How many questions of each mark type
+            }
+
+            # return JsonResponse(response_data)
+                
 
             return JsonResponse({
                 "questions": matching_questions,
-                "total_marks": total_marks
+                "total_marks": total_marks,
+                "response_data": response_data
                 }, status=200)
 
         except Exception as e:
