@@ -14,6 +14,7 @@ urlpatterns = [
 
     path('api/setupQPaper/', views.API_SetUpQPaper, name="API_SetUpQPaper"),
     path('api/comparePublicQPaper/<int:QPaper1ID>/<int:QPaper2ID>/', views.comparePublicQPaper, name='comparePublicQPaper'),
+    path('api/createQuiz/', views.create_quiz, name='create_quiz'),
 
     # Authentication
 
@@ -32,6 +33,7 @@ urlpatterns = [
 
     path('faculty/dashboard/', views.faculty_dashboard, name='faculty_dashboard'),  
     path('faculty/generateQPaper/', views.generateQPaper, name='generateQPaper'),
-    path('faculty/compareQPaper/', views.FacultyCompareUI, name='FacultyCompareUI')
+    path('faculty/compareQPaper/', views.FacultyCompareUI, name='FacultyCompareUI'),
+    path('faculty/createQuiz/', views.createQuiz, name='createQuiz')
 
 ]

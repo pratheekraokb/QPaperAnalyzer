@@ -11,7 +11,7 @@ from django.db import IntegrityError, DatabaseError
 
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from .models import Course, College
+from .models import Course, College, Quiz, QnA
 
 import re
 import json
@@ -959,7 +959,7 @@ def WEB_QPaperAnalysis(request, QPaper1ID):
 def comparePublicQPaper(request, QPaper1ID, QPaper2ID):
     try:
         # Fetch both QPapers
-        print("hai")
+        # print("hai")
         QPaper1ID = int(QPaper1ID)
         QPaper2ID = int(QPaper2ID)
         print(QPaper1ID, QPaper2ID)
@@ -1347,3 +1347,45 @@ def StudentCompareUI(request):
 
     # Pass the formatted data to the template
     return render(request, "students/QPaperCompare.html", {"question_papers": formatted_data})
+
+@login_required
+def createQuiz(request):
+    return render(request, "faculty/createQuiz.html")
+
+@csrf_exempt
+def create_quiz(request):
+    if request.method == 'POST':
+        data = request.POST
+        quiz = Quiz.objects.create(
+            quiz_title=data.get('quiz_title'),
+            scheduled_date=data.get('scheduled_date'),
+            max_score=data.get('max_score'),
+            created_by=Profile.objects.get(user=request.user),
+            course_id=Course.objects.first(),
+            college_id=College.objects.first(),
+        )
+
+        questions = zip(
+            request.POST.getlist('question_text'),
+            request.POST.getlist('option_1'),
+            request.POST.getlist('option_2'),
+            request.POST.getlist('option_3'),
+            request.POST.getlist('option_4'),
+            request.POST.getlist('correct_option'),
+            request.POST.getlist('mark')
+        )
+
+        for q_text, op1, op2, op3, op4, correct, mark in questions:
+            QnA.objects.create(
+                quiz=quiz,
+                question_text=q_text,
+                option_1=op1,
+                option_2=op2,
+                option_3=op3,
+                option_4=op4,
+                correct_option=int(correct),
+                mark=int(mark)
+            )
+
+        return JsonResponse({'message': 'Quiz created successfully!', 'quiz_id': quiz.id})
+    return JsonResponse({'error': 'Invalid request'}, status=400)
